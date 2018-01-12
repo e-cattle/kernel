@@ -15,4 +15,4 @@ var router= express.Router();
 app.use(cors());
 app.use('/api', router);
 app.listen(port);
-console.log('Rest API is running  at port: '+ port);
+console.log('Rest API E-Cattle is running  at port: '+ port);

@@ -11,6 +11,6 @@
 	{ "type": "ambient_temperature", "descriptor": "Temperatura ambiente.", "unix": "amb_temp" },
 	{ "type": "ambient_humidity", "descriptor": "Umidade ambiente.", "unix": "amb_hum" },
 	{ "type": "animal_skin_temperature", "descriptor": "Temperatura esquerda.", "unix": "temp_left" },
-	{ "type": "animal_skin_temperature", "descriptor": "Temperatura direita.", "unix": "temp_right" },
+	{ "type": "animal_skin_temperature", "descriptor": "Temperatura direita.", "unix": "temp_right" }
 ]
 }

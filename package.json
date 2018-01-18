@@ -1,17 +1,27 @@
 {
   "name": "api-kernel",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Kernel",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/server.js"
   },
+  "author": "Virmerson Bento dos Santos",
+  "license": "ISC", 
+
   "dependencies": {
-    "express": "~4.0.0",
-    "body-parser": "~1.0.1",
-    "cors": "2.8.1",
-    "mongoose": "~3.6.13"
+    "azure-storage": "^2.1.0",
+    "body-parser": "^1.17.2",
+    "debug": "^2.6.8",
+    "express": "^4.15.3",
+    "guid": "0.0.12",
+    "http": "0.0.0",
+    "jsonwebtoken": "^7.4.0",
+    "md5": "^2.2.1",
+    "mongoose": "^4.11.0",
+    "sendgrid": "^2.0.0"
   },
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }

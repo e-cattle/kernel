@@ -32,9 +32,9 @@ ValidationContract.prototype.isEmail = (value, message) => {
         errors.push({ message: message });
 }
 
-//example: 00:27:0e:2a:b9:aa, 00-27-0E-2A-B9-AA, 0.27.e.2a.b9.aa ...
+//example: 00:27:0e:2a:b9:aa, ...
 ValidationContract.prototype.isMac = (value, message) => {
-    var reg = new RegExp(/^([0-9a-F]{1,2}[\.:-]){5}([0-9a-F]{1,2})$/);
+    var reg = new RegExp(/^[0-9a-f]{1,2}([\.:-])(?:[0-9a-f]{1,2}\1){4}[0-9a-f]{1,2}$/);
     if (!reg.test(value))
         errors.push({ message: message });
 }

@@ -53,6 +53,12 @@ const schema = new Schema({
         type: String,
         required: true
     },
+
+    enable:{
+        type: Boolean,
+        default:true
+       
+    },
  
     mac: {
         type: String,

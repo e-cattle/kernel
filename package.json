@@ -4,7 +4,7 @@
   "description": "Kernel",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/server.js"
+    "start": "nodemon ./bin/server.js"
   },
   "author": "Virmerson Bento dos Santos",
   "license": "ISC", 

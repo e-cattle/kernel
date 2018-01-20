@@ -4,7 +4,7 @@
 	"branch": "Coimma",
 	"model": "BP-17-5",
 "mac": "38:F2:0E:34:80:5B",
-"schema": [
+"sensors": [
 	{ "type": "animal_weight", "descriptor": "Peso do animal a campo.", "unix": "weight" },
 	{ "type": "hoof_temperature", "descriptor": "Temperatura do casco.", "unix": "hoof_temp" },
 	{ "type": "passage_status", "descriptor": "Estado da passagem.", "unix": "gate_opened" },

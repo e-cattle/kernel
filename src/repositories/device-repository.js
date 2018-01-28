@@ -9,7 +9,7 @@ exports.create = async(data) => {
 
 
 exports.getAll = async() => {
-    const res = await Device.find({}, "name mac");
+    const res = await Device.find({}, "name  mac enable version");
     return res;
 }
 

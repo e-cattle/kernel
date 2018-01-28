@@ -25,18 +25,27 @@ exports.post = async(req, res, next) => {
         //Cadastra o Dispositivo
         await repository.create({
             name: req.body.name,
-            mac: req.body.mac
+            mac: req.body.mac,
+            version: req.body.version
            
         });
+
+        //#TODO Cadastra o  Contrato
+       
 
         //Envia mensagem
         res.status(201).send({
             message: 'Dispositivo Cadastrado!'
         });
     } catch (e) {
+        let messageCode ="";
+       if (e.code==11000){
+           messageCode = "'Campos  Duplicados'"; 
+       }
         //Envia mensagem de falha
         res.status(500).send({
-            message: 'Falha ao processar sua requisição'
+            message: 'Falha ao processar sua requisição '+ messageCode
+            
         });
     }
 };

@@ -66,10 +66,10 @@ const device = new Schema({
         index: true,
         unique: true
     }, 
-    // version:{
-    //         type: Number,
-    //         required:true
-    // }, 
+    version:{
+            type: Number
+          
+    }, 
     sensors: [
         {
             type:{

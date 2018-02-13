@@ -10,6 +10,11 @@ const sensorType= new Schema({
         required: true, 
         index:true,
         unique:true
+    }, 
+
+    description:{
+        type: String,
+        required: true  
     }
     
 });

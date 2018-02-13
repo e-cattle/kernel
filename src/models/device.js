@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
 
 // const schema = new Schema({
 //     name: {
@@ -48,10 +48,10 @@ const Schema = mongoose.Schema;
 
 
 
-const device = new Schema({
+const device = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: [true, 'porque sem nome?']
     },
 
     enable:{
@@ -67,15 +67,17 @@ const device = new Schema({
         unique: true
     }, 
     version:{
-            type: Number
+            type: Number,
+            required:true
           
     }, 
     sensors: [
+        
         {
+           
             type:{
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'SensorType',
-                required: true
+                ref: 'SensorType'
             }, 
             descriptor:{
                 type: String,
@@ -90,5 +92,10 @@ const device = new Schema({
        
 
 });
+
+device.path('sensors').validate(function(v) {
+    return v.length > 0;
+  });
+
 
 module.exports = mongoose.model('Device', device);

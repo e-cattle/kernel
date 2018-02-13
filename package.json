@@ -4,11 +4,11 @@
   "description": "Kernel",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./bin/server.js"
+    "start": "nodemon ./bin/server.js",
+    "test": "mocha || true"
   },
   "author": "Virmerson Bento dos Santos",
-  "license": "ISC", 
-
+  "license": "ISC",
   "dependencies": {
     "azure-storage": "^2.1.0",
     "body-parser": "^1.17.2",
@@ -22,6 +22,9 @@
     "sendgrid": "^2.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "nodemon": "*",
+    "mocha": "*",
+    "chai": "*",
+    "should": "*"
   }
 }

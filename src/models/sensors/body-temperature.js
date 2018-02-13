@@ -1,9 +1,7 @@
 'use strict'
 
 const mongoose =  require('mongoose');
-const Schema =  mongoose.Schema;
-
-const bodyTemperature =  new Schema({
+const bodyTemperature =  new mongoose.Schema({
     mac:{
         type:String, 
         required:true

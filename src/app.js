@@ -8,7 +8,7 @@ const app = express();
 const router = express.Router();
 
 // Connecta ao banco
-mongoose.connect(config.connectionString);
+mongoose.connect(config.db.development);
 
 // Carrega os Models
 const Device = require('./models/device');

@@ -14,13 +14,12 @@ const contract = new Schema({
         default:true
        
     },
- 
-    mac: {
-        type: String,
-        required: true,  
-        index: true,
-        unique: true
+    type:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Device',
+        required: true
     }
+
 });
 
 

@@ -6,8 +6,9 @@ var Device = require('../src/models/device');
 var SensorType = require('../src/models/sensor-type');
 
 
-describe("#Device#", function () {
+describe("#Device Repository#", function () {
     it('Deve salvar um device', function (done) {
+        //Criando um BodyTemperature
         var sensorBodyTemperature = new SensorType({
             name: 'BodyTemperature',
             description: 'Temperatura corporal do animal'
@@ -30,6 +31,7 @@ describe("#Device#", function () {
                 });
 
             device.save(done);
+
 
         })
     })

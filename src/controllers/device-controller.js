@@ -1,60 +1,90 @@
 'use strict';
 
 const ValidationContract = require('../validators/fluent-validator');
-const repository = require('../repositories/device-repository');
+const deviceRepository = require('../repositories/device-repository');
+const contractRepository = require('../repositories/contract-repository');
+const sensorTypeRepository = require('../repositories/sensor-type-repository');
+
 const authService = require('../services/auth-service');
 
 
 /**
  * Cadastra o Device 
  */
-exports.post = async(req, res, next) => {
-    let contract = new ValidationContract();
-    contract.hasMinLen(req.body.name, 3, 'O nome deve conter pelo menos 3 caracteres');
-    contract.isMac(req.body.mac, 'Mac inválido');
-    //TODO: inserir todas validacoes aqui
+exports.create = async(req, res, next) => {
+   
+    //1) Validacao 
+        let contract = new ValidationContract();
+        contract.hasMinLen(req.body.name, 3, 'O nome deve conter pelo menos 3 caracteres');
+       // contract.isMac(req.body.mac, 'Mac inválido');
+    
+        if (!contract.isValid()) {
+            res.status(400).send(contract.errors()).end();
+            return;
+        }
 
-    // Se os dados forem inválidos
-    if (!contract.isValid()) {
-        res.status(400).send(contract.errors()).end();
-        return;
-    }
+        // Validar o vetor de sensores (Sensor Type)
+        for (let index = 0; index < req.body.sensors.length; index++) {
+            let sensor = req.body.sensors[index];
+            try {
+                let result = await sensorTypeRepository.getBySensorName(sensor.type);
+                if(result.length <= 0){
+                    res.status(400).send(`Sensor Type inválido: ${sensor.type}`);
+                    return;
+                }
+            } catch (error) {
+                res.status(500).send(error);
+                return;
+            }
+        }
+        //2) Cadastro do Dispositivo
+        try {
 
-    try {
+            //Cadastra o Dispositivo
+            let devideCreated = await deviceRepository.create({
+                name: req.body.name,
+                mac: req.body.mac,
+                version: req.body.version,
+                sensors: req.body.sensors
+            });
 
-        //Cadastra o Dispositivo
-        await repository.create({
-            name: req.body.name,
-            mac: req.body.mac,
-            version: req.body.version
-           
-        });
+          //3)  Geração do Token
 
-        //#TODO Cadastra o  Contrato
-       
 
-        //Envia mensagem
-        res.status(201).send({
-            message: 'Dispositivo Cadastrado!'
-        });
-    } catch (e) {
-        let messageCode ="";
-       if (e.code==11000){
-           messageCode = "'Campos  Duplicados'"; 
-       }
-        //Envia mensagem de falha
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição '+ messageCode
+            //Gera o token valido para o dispositivo
+            const token = await authService.generateToken({
+                id: devideCreated._id,
+                name: devideCreated.name
             
-        });
-    }
+            });
+        
+            //Envia o token para o dispositivo
+            res.status(201).send({
+                token: token
+               
+            });
+
+            return ;
+            
+        } catch (error) {
+            res.status(500).send(error);
+            return;
+        }
+
+    //     //Cadastra o  Contrato
+    //    contractRepository.create({
+    //         name:"contrato",
+    //         enable:true,
+    //         device:devideCreated
+    
+    //    })
 };
 
 
-exports.get =  async (req, res, next)=>{
+exports.getAll =  async (req, res, next)=>{
 
     try{
-            const devices = await repository.getAll();
+            const devices = await deviceRepository.getAll();
             if (!devices){
                res.status(404).send({message:'Dipositivos não encontrados'});
                return;
@@ -71,7 +101,7 @@ exports.get =  async (req, res, next)=>{
 exports.authenticate = async(req, res, next) => {
     try {
         //Le o mac do dispositivo e valida se existe
-        const device = await repository.authenticate({
+        const device = await deviceRepository.authenticate({
             mac: req.body.mac
         });
         //Envia mensagem de erro se não encontrar dispositivo
@@ -114,7 +144,7 @@ exports.refreshToken = async(req, res, next) => {
         const token = req.body.token || req.query.token || req.headers['x-access-token'];
         const data = await authService.decodeToken(token);
 
-        const device = await repository.getById(data.id);
+        const device = await deviceRepository.getById(data.id);
 
         if (!device) {
             res.status(404).send({

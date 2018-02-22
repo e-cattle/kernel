@@ -22,9 +22,10 @@
     "sendgrid": "^2.0.0"
   },
   "devDependencies": {
-    "nodemon": "*",
-    "mocha": "*",
     "chai": "*",
-    "should": "*"
+    "mocha": "*",
+    "nodemon": "*",
+    "should": "*",
+    "supertest": "^3.0.0"
   }
 }

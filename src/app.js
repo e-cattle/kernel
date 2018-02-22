@@ -12,10 +12,13 @@ mongoose.connect(config.db.development);
 
 // Carrega os Models
 const Device = require('./models/device');
+const Constract = require('./models/contract');
+const SensorType = require('./models/sensor-type');
 
 // Carrega as Rotas
 const indexRoute = require('./routes/index-route');
 const deviceRoute = require('./routes/device-route');
+
 
 //Conversor de Json
 app.use(bodyParser.json());

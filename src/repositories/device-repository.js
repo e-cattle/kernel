@@ -4,7 +4,7 @@ const Device = mongoose.model('Device');
 
 exports.create = async(data) => {
     var device = new Device(data);
-    await device.save();
+   return await device.save();
 }
 
 

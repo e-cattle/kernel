@@ -2,10 +2,7 @@
 
 const mongoose =  require('mongoose');
 const bodyTemperature =  new mongoose.Schema({
-    mac:{
-        type:String, 
-        required:true
-    }, 
+
     uid:{
         type:String,
         required:true

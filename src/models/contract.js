@@ -8,19 +8,23 @@ const contract = new Schema({
         type: String,
         required: true
     },
+    date:{
+        type: Date,
+        default:Date.now()
+       
+    },
 
     enable:{
         type: Boolean,
         default:true
        
     },
-    type:{
+    device:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Device',
         required: true
     }
-
 });
 
 
-module.exports = mongoose.model('Constract', contract);
+module.exports = mongoose.model('Contract', contract);

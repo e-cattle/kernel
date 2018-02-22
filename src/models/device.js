@@ -3,51 +3,6 @@
 const mongoose = require('mongoose');
 
 
-// const schema = new Schema({
-//     name: {
-//         type: String,
-//         required: true
-//     },
-//     description: {
-//         type: String,
-//         required: true
-//     },
-//     branch: {
-//         type: String,
-//         required: true
-//     },
-
-//     model: {
-//         type: String,
-//         required: true
-//     },
-
-//     mac: {
-//         type: String,
-//         required: true,
-        // index: true,
-            // unique: true
-//     },
-    // schema: [
-    //     {
-    //         type:{
-    //             type: String,
-    //             required: true
-    //         }, 
-    //         descriptor:{
-    //             type: String,
-    //             required: true
-    //         },
-    //         unix:{
-    //             type: String,
-    //             required: true
-    //         }
-
-    //     }]
-// });
-
-
-
 const device = new mongoose.Schema({
     name: {
         type: String,
@@ -76,8 +31,8 @@ const device = new mongoose.Schema({
         {
            
             type:{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'SensorType'
+                type: String,
+                required: true
             }, 
             descriptor:{
                 type: String,
@@ -93,9 +48,9 @@ const device = new mongoose.Schema({
 
 });
 
-device.path('sensors').validate(function(v) {
-    return v.length > 0;
-  });
+// device.path('sensors').validate(function(v) {
+//     return v.length > 0;
+//   });
 
 
 module.exports = mongoose.model('Device', device);

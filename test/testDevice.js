@@ -12,7 +12,7 @@ describe("#Device#", function () {
             name: 'BodyTemperature',
             description: 'Temperatura corporal do animal'
         });
-        //Salvando um tipo de Sensor
+        //Salvando um tipo de Sensor 
         sensorBodyTemperature.save(function (err, sensorTypePersistido) {
            
            //Salvando um dispositivo com array de sensores

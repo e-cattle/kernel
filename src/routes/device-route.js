@@ -6,7 +6,8 @@ const router = express.Router();
 const controller = require('../controllers/device-controller');
 const authService = require('../services/auth-service');
 
-router.post('/', controller.create);
+router.post('/', controller.save);
+router.put('/', controller.save);
 router.get('/', controller.getAll);
 router.post('/authenticate', controller.authenticate);
 router.post('/refresh-token', authService.authorize, controller.refreshToken);

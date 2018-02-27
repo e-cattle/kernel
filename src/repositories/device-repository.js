@@ -5,6 +5,7 @@ const Device = mongoose.model('Device');
 exports.create = async(data) => {
     var device = new Device(data);
    return await device.save();
+
 }
 
 
@@ -20,7 +21,7 @@ exports.getById = async(id) => {
 
 exports.getByMac = async(mac) => {
     const res = await Device.findOne({
-        mac: data.mac
+        mac: mac
     });
     return res;
 }

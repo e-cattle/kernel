@@ -9,21 +9,20 @@ const authService = require('../services/auth-service');
 
 
 /**
- * Cadastra o Device 
+ * Cadastra ou Altera o Device 
  */
-exports.create = async(req, res, next) => {
-   
+exports.save = async(req, res, next) => {
+    
         //1) Validacao 
 
         let contract = new ValidationContract();
         contract.hasMinLen(req.body.name, 3, 'O nome deve conter pelo menos 3 caracteres');
        // contract.isMac(req.body.mac, 'Mac inválido');
-    
+      
         if (!contract.isValid()) {
             res.status(400).send(contract.errors()).end();
             return;
         }
-
        
         // Validar o vetor de sensores (Sensor Type)
         for (let index = 0; index < req.body.sensors.length; index++) {
@@ -48,31 +47,51 @@ exports.create = async(req, res, next) => {
                 return;
             }
         }
-        //2) Cadastro do Dispositivo
+       
+        //2) Cadastro ou Altera o Dispositivo
         try {
 
+            //Localiza o Disposito caso já exista
+            let device =  await deviceRepository.getByMac(req.body.mac);
+           
+            //senao existe cria um novo
+            if (!device){
+                device = {};
+                device.version=1;
+                device.mac= req.body.mac;
+            }else { //se existe
+                //Pega a versão atual e gera uma nova
+                device.version =  device.version +1;
+            }
+            
+            //Atualizando com os dados HTTP
+            device.name = req.body.name;
+            device.sensors= req.body.sensors;
+
             //Cadastra o Dispositivo
-            let devideCreated = await deviceRepository.create({
-                name: req.body.name,
-                mac: req.body.mac,
-                version: req.body.version,
-                sensors: req.body.sensors
-            });
+            let deviceCreated = await deviceRepository.create(device);
 
-          //3)  Geração do Token
-
-
+            //3)  Geração do Token
             //Gera o token valido para o dispositivo
             const token = await authService.generateToken({
-                id: devideCreated._id,
-                name: devideCreated.name
-            
+                id: deviceCreated._id,
+                name: deviceCreated.name
             });
+
+
+            //4) Gera o Contrato
+            let contractCreated = await contractRepository.create({
+                name: deviceCreated.name,
+                mac: deviceCreated.mac,
+                version: deviceCreated.version,
+                sensors:deviceCreated.sensors, 
+                token: token
+            });
+
         
-            //Envia o token para o dispositivo
+            //Envia o novo token para o dispositivo
             res.status(201).send({
                 token: token
-               
             });
 
             return ;
@@ -81,17 +100,7 @@ exports.create = async(req, res, next) => {
             res.status(500).send(error);
             return;
         }
-
-    //     //Cadastra o  Contrato
-    //    contractRepository.create({
-    //         name:"contrato",
-    //         enable:true,
-    //         device:devideCreated
-    
-    //    })
 };
-
-
 exports.getAll =  async (req, res, next)=>{
 
     try{
@@ -134,8 +143,7 @@ exports.authenticate = async(req, res, next) => {
             token: token,
             data: {
                 id: device._id,
-                name: device.name
-              
+                name: device.name 
             }
         });
     } catch (e) {

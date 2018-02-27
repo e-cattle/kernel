@@ -1,3 +1,5 @@
+import { Mongoose, SchemaType, SchemaTypes } from 'mongoose';
+
 'use strict'
 
 const mongoose =  require('mongoose');
@@ -23,7 +25,11 @@ const bodyTemperature =  new mongoose.Schema({
     dataStorage:{
         type:Date,
         required:true
-    } 
+    } , 
+    device:{
+        type:Schema.Types.ObjectId,
+        ref:'Device'
+    }
 });
 
 module.exports =  mongoose.model ('BodyTemperature', bodyTemperature);

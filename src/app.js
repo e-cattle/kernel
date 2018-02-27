@@ -16,8 +16,9 @@ const Constract = require('./models/contract');
 const SensorType = require('./models/sensor-type');
 
 // Carrega as Rotas
-const indexRoute = require('./routes/index-route');
-const deviceRoute = require('./routes/device-route');
+const indexRoute = require('./routes/index-route'); //Rotas da pagina inicial
+const deviceRoute = require('./routes/device-route'); //Cadastro de Dispositivos
+const bodyTemperatureRoute = require('./routes/body-temperature'); //Cadastro de dados dos Sensores
 
 
 //Conversor de Json
@@ -37,6 +38,7 @@ app.use(function (req, res, next) {
 //Registrando as rotas
 app.use('/', indexRoute);
 app.use('/devices', deviceRoute);
+app.use('/body-temperature', bodyTemperatureRoute);
 
 
 module.exports = app;

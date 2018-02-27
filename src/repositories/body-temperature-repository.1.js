@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
-const SensorType = mongoose.model('SensorType');
+const BodyTemperature = mongoose.model('BodyTemperature');
 
 exports.create = async(data) => {
     var device = new SensorType(data);
@@ -14,10 +14,5 @@ exports.getAll = async() => {
 
 exports.getById = async(id) => {
     const res = await SensorType.findById(id);
-    return res;
-}
-
-exports.getBySensorName = async(name) => {
-    const res = await SensorType.find({name: name});
     return res;
 }

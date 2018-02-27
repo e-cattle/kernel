@@ -14,11 +14,12 @@ mongoose.connect(config.db.development);
 const Device = require('./models/device');
 const Constract = require('./models/contract');
 const SensorType = require('./models/sensor-type');
+const BodyTemperature = require('./models/body-temperature');
 
 // Carrega as Rotas
 const indexRoute = require('./routes/index-route'); //Rotas da pagina inicial
 const deviceRoute = require('./routes/device-route'); //Cadastro de Dispositivos
-const bodyTemperatureRoute = require('./routes/body-temperature'); //Cadastro de dados dos Sensores
+const measureRoute = require('./routes/measure-route'); //Cadastro de dados dos Sensores
 
 
 //Conversor de Json
@@ -38,7 +39,7 @@ app.use(function (req, res, next) {
 //Registrando as rotas
 app.use('/', indexRoute);
 app.use('/devices', deviceRoute);
-app.use('/body-temperature', bodyTemperatureRoute);
+app.use('/measures', measureRoute);
 
 
 module.exports = app;

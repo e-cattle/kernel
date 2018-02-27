@@ -67,29 +67,3 @@ exports.authorize = function (req, res, next) {
         });
     }
 };
-
-exports.deviceValidade =  function (){
-     
-        // Validar o vetor de sensores (Sensor Type)
-        for (let index = 0; index < req.body.sensors.length; index++) {
-            let sensor = req.body.sensors[index];
-            try {
-                let result = await sensorTypeRepository.getBySensorName(sensor.type);
-                if(result.length <= 0){
-
-                    let error = {
-                        errors:{
-                           
-                            message: `Sensor Type inválido: ${sensor.type}`,
-                            name: 'ValidatorError'
-                         }}
-                        
-                        return error;  //retorna o primeiro que falhar e não uma lista com todos 
-                  
-                }
-            } catch (error) {
-                //erro de execucao da busca por sensor
-                return error; 
-            }
-        }
-}

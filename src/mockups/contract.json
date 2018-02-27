@@ -10,7 +10,7 @@
       {
         "type": "ambient_humidity",
         "descriptor": "Umidade ambiente.",
-        "unix": "amb_hum"
+        "unix": "amb_hum"	
       },
       {
         "type": "animal_skin_temperature",

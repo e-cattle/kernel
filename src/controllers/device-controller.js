@@ -13,7 +13,7 @@ const authService = require('../services/auth-service');
  */
 exports.create = async(req, res, next) => {
    
-    //1) Validacao 
+        //1) Validacao 
 
         let contract = new ValidationContract();
         contract.hasMinLen(req.body.name, 3, 'O nome deve conter pelo menos 3 caracteres');
@@ -25,29 +25,29 @@ exports.create = async(req, res, next) => {
         }
 
        
-        // // Validar o vetor de sensores (Sensor Type)
-        // for (let index = 0; index < req.body.sensors.length; index++) {
-        //     let sensor = req.body.sensors[index];
-        //     try {
-        //         let result = await sensorTypeRepository.getBySensorName(sensor.type);
-        //         if(result.length <= 0){
+        // Validar o vetor de sensores (Sensor Type)
+        for (let index = 0; index < req.body.sensors.length; index++) {
+            let sensor = req.body.sensors[index];
+            try {
+                let result = await sensorTypeRepository.getBySensorName(sensor.type);
+                if(result.length <= 0){
 
-        //             let error = {
-        //                 errors:{
+                    let error = {
+                        errors:{
                            
-        //                     message: `Sensor Type inválido: ${sensor.type}`,
-        //                     name: 'ValidatorError'
-        //                  }}
+                            message: `Sensor Type inválido: ${sensor.type}`,
+                            name: 'ValidatorError'
+                         }}
 
                     
-        //             res.status(400).send(error);
-        //             return;
-        //         }
-        //     } catch (error) {
-        //         res.status(500).send(error);
-        //         return;
-        //     }
-        // }
+                    res.status(400).send(error);
+                    return;
+                }
+            } catch (error) {
+                res.status(500).send(error);
+                return;
+            }
+        }
         //2) Cadastro do Dispositivo
         try {
 

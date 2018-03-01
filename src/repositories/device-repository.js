@@ -4,10 +4,9 @@ const Device = mongoose.model('Device');
 
 exports.create = async(data) => {
     var device = new Device(data);
-   return await device.save();
-
+    return await device.save();
+    
 }
-
 
 exports.getAll = async() => {
     const res = await Device.find({}, "name  mac enable version");
@@ -25,7 +24,6 @@ exports.getByMac = async(mac) => {
     });
     return res;
 }
-
 
 exports.authenticate = async(data) => {
     const res = await Device.findOne({

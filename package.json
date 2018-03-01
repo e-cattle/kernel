@@ -4,7 +4,7 @@
   "description": "Kernel",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./bin/server.js",
+    "start": "./node_modules/.bin/nodemon ./bin/server.js",
     "test": "mocha || true"
   },
   "author": "Virmerson Bento dos Santos",

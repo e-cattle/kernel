@@ -11,19 +11,15 @@ const contract = new Schema({
     date:{
         type: Date,
         default:Date.now()
-       
     },
-
     version:{
         type: Number,
         required:true
       
     },
-
     enable:{
         type: Boolean,
         default:true
-       
     },
     mac: {
         type: String,
@@ -31,6 +27,5 @@ const contract = new Schema({
         index: true     
     }, 
 });
-
 
 module.exports = mongoose.model('Contract', contract);

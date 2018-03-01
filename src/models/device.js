@@ -8,13 +8,11 @@ const device = new mongoose.Schema({
         type: String,
         required: [true, 'porque sem nome?']
     },
-
     enable:{
         type: Boolean,
         default:true
-       
+        
     },
- 
     mac: {
         type: String,
         required: true,  
@@ -22,30 +20,24 @@ const device = new mongoose.Schema({
         unique: true
     }, 
     version:{
-            type: Number,
-            required:true
-          
-    }, 
-    sensors: [
+        type: Number,
+        required:true
         
-        {
-           
-            type:{
-                type: String,
-                required: true
-            }, 
-            descriptor:{
-                type: String,
-                required: true
-            },
-            unix:{
-                type: String,
-                required: true
-            }
-
-        }]
-       
-
+    }, 
+    sensors: [{
+        type:{
+            type: String,
+            required: true
+        }, 
+        descriptor:{
+            type: String,
+            required: true
+        },
+        unix:{
+            type: String,
+            required: true
+        }
+    }]
 });
 
 // device.path('sensors').validate(function(v) {

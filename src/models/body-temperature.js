@@ -6,14 +6,20 @@ const Schema = mongoose.Schema;
 const bodyTemperature = new Schema({
     uid:{
         type:String,
-        required:true
+        required:true,
+        unique: true
     }, 
+    mac:{
+        type:String,
+        required:true
+    },
     value:{
         type:Number,
         required:true
     },
     unity: {
         type:String,
+        default: "Kg",
         required:true
     },
     dateRegister:{
@@ -23,12 +29,9 @@ const bodyTemperature = new Schema({
     },
     dataStorage:{
         type:Date,
+        default: Date.now,
         required:true
-    } , 
-    device:{
-        type:Schema.Types.ObjectId,
-        ref:'Device'
     }
 });
 
-module.exports =  mongoose.model ('BodyTemperature', bodyTemperature);
+module.exports =  mongoose.model ('body-temperature', bodyTemperature);

@@ -21,7 +21,6 @@ const indexRoute = require('./routes/index-route'); //Rotas da pagina inicial
 const deviceRoute = require('./routes/device-route'); //Cadastro de Dispositivos
 const measureRoute = require('./routes/measure-route'); //Cadastro de dados dos Sensores
 
-
 //Conversor de Json
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -40,6 +39,5 @@ app.use(function (req, res, next) {
 app.use('/', indexRoute);
 app.use('/devices', deviceRoute);
 app.use('/measures', measureRoute);
-
 
 module.exports = app;

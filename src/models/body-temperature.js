@@ -19,7 +19,7 @@ const bodyTemperature = new Schema({
     },
     unity: {
         type:String,
-        default: "Kg",
+        default: "C",
         required:true
     },
     dateRegister:{

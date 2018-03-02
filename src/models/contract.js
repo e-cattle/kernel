@@ -25,7 +25,20 @@ const contract = new Schema({
         type: String,
         required: true,  
         index: true     
-    }, 
+    }, sensors: [{
+        type:{
+            type: String,
+            required: true
+        }, 
+        descriptor:{
+            type: String,
+            required: true
+        }, 
+        unix:{
+            type: String,
+            required: true
+        }
+    }]
 });
 
 module.exports = mongoose.model('Contract', contract);

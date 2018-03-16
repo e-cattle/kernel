@@ -6,11 +6,33 @@ const contractRepository = require('../repositories/contract-repository');
 const sensorTypeRepository = require('../repositories/sensor-type-repository');
 const authService = require('../services/auth-service');
 
+
+
+function getTypeSensors (){
+
+    var mongoose = require('mongoose');
+    
+    var collections = mongoose.connections[0].collections;
+    var names = [];
+
+    Object.keys(collections).forEach(function(k) {
+        if (k.indexOf("type-")==0){
+            names.push(k);
+        }
+    });
+
+    return names;
+}
 /**
 * Cadastra ou Altera o Device 
 */
 exports.save = async(req, res, next) => {
-    
+    //Pegar lista de collections
+    var collections = getTypeSensors ();
+    console.log(collections);
+    console.log ("###")
+
+
     //1) Validacao 
     
     let contract = new ValidationContract();
@@ -26,8 +48,15 @@ exports.save = async(req, res, next) => {
     for (let index = 0; index < req.body.sensors.length; index++) {
         let sensor = req.body.sensors[index];
         try {
-            let result = await sensorTypeRepository.getBySensorName(sensor.type);
-            if(result.length <= 0){
+            
+            var achou =  false;
+            for (let i=0 ; i< collections.length ; i++ ){
+             if (sensor.type== collections[i]){
+                achou= true;
+             }
+            }
+
+            if(!achou){
                 let error = {
                     errors:{
                         message: `Sensor Type inválido: ${sensor.type}`,

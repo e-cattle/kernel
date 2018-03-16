@@ -34,4 +34,4 @@ const bodyTemperature = new Schema({
     }
 });
 
-module.exports =  mongoose.model ('body-temperature', bodyTemperature);
+module.exports =  mongoose.model ('type-body-temperature', bodyTemperature);

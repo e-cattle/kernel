@@ -67,7 +67,8 @@ exports.save = async(req, res, next) => {
         //Gera o token valido para o dispositivo
         const token = await authService.generateToken({
             id: deviceCreated._id,
-            name: deviceCreated.name
+            name: deviceCreated.name,
+            mac: deviceCreated.mac
         });
         
         //4) Gera o Contrato

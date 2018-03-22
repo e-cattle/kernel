@@ -14,18 +14,21 @@ exports.generateToken = generateToken;
 /**
 *  Retorna os dados decodificados inseridos no token  
 */
-exports.decodeToken = async (token) => {
+var decodeToken = async (token) => {
     var data = await jwt.verify(token, global.SALT_KEY);
     return data;
 }
 
+exports.decodeToken = decodeToken;
+
 /*
 valida se o token é valido
 */
-exports.authorize = function (req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+exports.authorize = async function (req, res, next) {
+    let token = req.body.token || req.query.token || req.headers['x-access-token'];
+    let mac = req.body.mac || req.query.mac;
     
-    if (!token) {
+    if (!token || !mac) {
         res.status(401).json({
             message: 'Acesso Restrito'
         });
@@ -33,35 +36,21 @@ exports.authorize = function (req, res, next) {
         jwt.verify(token, global.SALT_KEY, function (error, decoded) {
             if (error) {
                 res.status(401).json({
-                    message: 'Token Inválido'
+                    message: 'Token inválido'
                 });
             } else {
-                next();
-            }
-        });
-    }
-};
-
-/*
-valida se o token é valido e se Device tem permissão sobre o Schema
-*/
-exports.authorizeDevice = function (req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
-    
-    if (!token) {
-        res.status(401).json({
-            message: 'Acesso Restrito'
-        });
-    } else {
-        jwt.verify(token, global.SALT_KEY, function (error, decoded) {
-            if (error) {
-                res.status(401).json({
-                    message: 'Token Inválido'
+                let device = decodeToken(token).then((device) => {
+                    if(mac == device.mac) next();
+                    else{
+                        res.status(401).json({
+                            message: 'MAC não confere com o token'
+                        });
+                    }
+                }).catch((err) => {
+                    res.status(500).json({
+                        message: `Erro ao extrair o MAC do token: ${err}`
+                    });
                 });
-            } else {
-                //Verifica se Dispositivo tem permissão.
-                
-                next();
             }
         });
     }
@@ -73,27 +62,27 @@ estiver expirado
 */
 exports.renewToken = async function (req, res) {
     var mac = req.body.mac;
-
+    
     if(!mac){
         res.status(401).json({
             message: 'O MAC do dispositivo deve ser informado'
         });
         return;
     }
-
+    
     var device = await DeviceRepository.getByMacEnabled(mac);
-
+    
     if(!device){
         res.status(401).json({
             message: 'Dispositivo não encontrado ou não habilitado'
         });
         return;
     }
-
+    
     var token = await generateToken({
         id: device._id,
         name: device.name
     });
-
+    
     res.json({token: token});
 };

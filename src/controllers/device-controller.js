@@ -9,13 +9,14 @@ const authService = require('../services/auth-service');
 
 
 function getTypeSensors (){
-
+    //importando mongoose
     var mongoose = require('mongoose');
-    
-    var collections = mongoose.connections[0].collections;
+    //lendo todas as validCollections crias pelo mongoose
+    var validCollections = mongoose.connections[0].validCollections;
     var names = [];
-
-    Object.keys(collections).forEach(function(k) {
+    //Filtrando as collection em array com as collection que iniciam com o 
+    //prefixo 'type-'
+    Object.keys(validCollections).forEach(function(k) {
         if (k.indexOf("type-")==0){
             names.push(k);
         }
@@ -27,9 +28,9 @@ function getTypeSensors (){
 * Cadastra ou Altera o Device 
 */
 exports.save = async(req, res, next) => {
-    //Pegar lista de collections
-    var collections = getTypeSensors ();
-    console.log(collections);
+    //Pegar lista de validCollections de tipos de sensores (Sensor Type)
+    var validCollections = getTypeSensors ();
+    console.log(validCollections);
     console.log ("###")
 
 
@@ -44,19 +45,22 @@ exports.save = async(req, res, next) => {
         return;
     }
     
-    // Validar o vetor de sensores (Sensor Type)
+    // Validar o vetor de sensores vindo no json requestm(Sensor Type)
     for (let index = 0; index < req.body.sensors.length; index++) {
         let sensor = req.body.sensors[index];
         try {
-            
-            var achou =  false;
-            for (let i=0 ; i< collections.length ; i++ ){
-             if (sensor.type== collections[i]){
-                achou= true;
+           
+            //Valida se o Json tem os sensores validos (função contains)
+            var found =  false;
+            for (let i=0 ; i< validCollections.length ; i++ ){
+             if (sensor.type== validCollections[i]){
+                found= true;
              }
             }
+            //Resposta quando não encontra ou dá algum erro
+            if(!found){
 
-            if(!achou){
+                // Resposta quando não encontra o tipo informado na coleção valida
                 let error = {
                     errors:{
                         message: `Sensor Type inválido: ${sensor.type}`,
@@ -65,6 +69,7 @@ exports.save = async(req, res, next) => {
                     res.status(400).send(error);
                     return;
                 }
+           
             } catch (error) {
                 res.status(500).send(error);
                 return;

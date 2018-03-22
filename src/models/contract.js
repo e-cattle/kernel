@@ -15,7 +15,7 @@ const contract = new Schema({
     version:{
         type: Number,
         required:true
-      
+        
     },
     enable:{
         type: Boolean,
@@ -25,7 +25,8 @@ const contract = new Schema({
         type: String,
         required: true,  
         index: true     
-    }, sensors: [{
+    }, 
+    sensors: [{
         type:{
             type: String,
             required: true

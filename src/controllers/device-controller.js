@@ -34,26 +34,26 @@ exports.save = async(req, res, next) => {
             res.status(400).json(contract.errors().concat(sensorTypeValidator.errors()));
             return;
         }
-
+        
     }catch(err){
         console.log(err);
         res.status(500).json({message: "Erro na validação dos dados sensoriais: Erro na validação dos tipos sensoriais"});
     }
     
-    //2) Cadastro ou Altera o Dispositivo
+    //2) Cadastra ou altera o dispositivo
     try {
         
-        //Localiza o Disposito caso já exista
+        //Localiza o disposito caso já exista
         let device =  await deviceRepository.getByMac(req.body.mac);
         
         //senao existe cria um novo
         if (!device){
             device = {};
-            device.version=1;
-            device.mac= req.body.mac;
+            device.version = 1;
+            device.mac = req.body.mac;
         }else { //se existe
             //Pega a versão atual e gera uma nova
-            device.version =  device.version +1;
+            device.version =  device.version + 1;
         }
         
         //Atualizando com os dados HTTP
@@ -75,8 +75,7 @@ exports.save = async(req, res, next) => {
             name: deviceCreated.name,
             mac: deviceCreated.mac,
             version: deviceCreated.version,
-            sensors:deviceCreated.sensors, 
-            token: token
+            sensors: deviceCreated.sensors
         });
         
         //Envia o novo token para o dispositivo

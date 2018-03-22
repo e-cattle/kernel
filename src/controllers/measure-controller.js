@@ -2,15 +2,17 @@
 
 const mongoose = require('mongoose');
 
-const ValidationContract = require('../validators/fluent-validator');
-const deviceRepository = require('../repositories/device-repository');
+const SensorTypeValidator = require('../validators/sensor-type-validator');
 
+const deviceRepository = require('../repositories/device-repository');
 const contractRepository = require('../repositories/contract-repository');
 const authService = require('../services/auth-service');
 const deviceService = require('../services/device-service');
 
 exports.create = async (req, res, next) => {
         
+        let sensorTypeValidator = new SensorTypeValidator();   
+
         //Le o mac do dispositivo e valida se existe
         const device = await deviceRepository.authenticate({mac: req.body.mac});
         
@@ -29,20 +31,23 @@ exports.create = async (req, res, next) => {
         }
         
         //Verifica se o dispositivo tem autorização para os dados dos sensores que ele enviou
-        for (let i = 0; i < measures.length; i++) {
-                let sensor = measures[i];
-                let authorized = await deviceService.hasDeviceAccess(sensor.name, device);
-                if(!authorized){
-                        res.status(404).send({message: `Sensor: ${sensor.name} inexistente ou não autorizado para este dispositivo`});
+        try{
+                sensorTypeValidator.validadeMeasures(req.body.measures);
+                
+                if (!sensorTypeValidator.isValid()) {
+                        res.status(400).json(sensorTypeValidator.errors());
                         return;
                 }
+        }catch(err){
+                console.log(err);
+                res.status(500).json({message: `Erro na validação dos dados sensoriais: ${err}`});
         }
         
         //Salva os dados sensoriais
         for (let i = 0; i < measures.length; i++) {
                 let sensor = measures[i];
                 //Solicita o schema pelo nome dinâmicamente
-                let Schema = mongoose.model(sensor.name);
+                let Schema = mongoose.model(sensor.type);
                 let newMesure = new Schema(sensor.datas);
                 console.log(newMesure);
                 let savedMeasure = await newMesure.save();

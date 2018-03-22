@@ -25,6 +25,14 @@ exports.getByMac = async(mac) => {
     return res;
 }
 
+exports.getByMacEnabled = async(mac) => {
+    const res = await Device.findOne({
+        mac: mac,
+        enable: true
+    });
+    return res;
+}
+
 exports.authenticate = async(data) => {
     const res = await Device.findOne({
         mac: data.mac,

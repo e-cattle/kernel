@@ -25,7 +25,7 @@ function getTypeSensors (){
     return names;
 }
 
-SensorTypeValidator.prototype.validadeMeasures = (sensors) => {
+SensorTypeValidator.prototype.validadeSensors = (sensors) => {
     let validCollections = getTypeSensors();
     
     // Validar o vetor de sensores vindo no json requestm(Sensor Type)

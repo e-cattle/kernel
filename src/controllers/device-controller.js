@@ -27,7 +27,7 @@ exports.save = async(req, res, next) => {
         
         contract.hasMinLen(req.body.name, 3, 'O nome deve conter pelo menos 3 caracteres');
         contract.isMac(req.body.mac, 'Mac inválido');
-        sensorTypeValidator.validadeMeasures(req.body.sensors);
+        sensorTypeValidator.validadeSensors(req.body.sensors);
         
         if (!contract.isValid() || !sensorTypeValidator.isValid()) {
             console.log("Erro");

@@ -29,9 +29,9 @@ exports.create = async (req, res, next) => {
                 return;
         }
         
-        //Verifica se o dispositivo tem autorização para os dados dos sensores que ele enviou
+        //Verifica se os sensores das medidas são válidos
         try{
-                sensorTypeValidator.validadeMeasures(req.body.measures);
+                sensorTypeValidator.validadeSensors(req.body.measures);
                 
                 if (!sensorTypeValidator.isValid()) {
                         res.status(400).json(sensorTypeValidator.errors());
@@ -48,7 +48,6 @@ exports.create = async (req, res, next) => {
                 //Solicita o schema pelo nome dinâmicamente
                 let Schema = mongoose.model(sensor.type);
                 let newMesure = new Schema(sensor.datas);
-                console.log(newMesure);
                 let savedMeasure = await newMesure.save();
                 if(!savedMeasure) res.status(500).send({message: `Falha ao salvar dado sensorial: ${sensor.name}`, data: e});
                 else res.status(201).send({message: `Dado sensorial salvo com sucesso`, data: savedMeasure});

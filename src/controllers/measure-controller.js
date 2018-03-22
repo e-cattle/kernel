@@ -7,7 +7,6 @@ const SensorTypeValidator = require('../validators/sensor-type-validator');
 const deviceRepository = require('../repositories/device-repository');
 const contractRepository = require('../repositories/contract-repository');
 const authService = require('../services/auth-service');
-const deviceService = require('../services/device-service');
 
 exports.create = async (req, res, next) => {
         

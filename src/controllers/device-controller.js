@@ -104,3 +104,39 @@ exports.getAll =  async (req, res, next)=>{
         res.status(500).send({message:'Falha na requisição', data: e});
     }
 };
+
+exports.enable =  async (req, res, next)=>{
+    if(!req.params.mac){
+        res.status(401).json({message: "MAC não fornecido"});
+        return;
+    }
+    try{
+        const mac = req.params.mac;
+        const device = await deviceRepository.enableByMac(mac);
+        if (!device){
+            res.status(404).json({message:'Dipositivo não encontrado'});
+            return;
+        }
+        res.status(200).json(device);
+    }catch(e){
+        res.status(500).json({message:'Falha na requisição', data: e});
+    }
+};
+
+exports.disable =  async (req, res, next)=>{
+    if(!req.params.mac){
+        res.status(401).json({message: "MAC não fornecido"});
+        return;
+    }
+    try{
+        const mac = req.params.mac;
+        const device = await deviceRepository.disableByMac(mac);
+        if (!device){
+            res.status(404).json({message:'Dipositivo não encontrado'});
+            return;
+        }
+        res.status(200).json(device);
+    }catch(e){
+        res.status(500).json({message:'Falha na requisição', data: e});
+    }
+};

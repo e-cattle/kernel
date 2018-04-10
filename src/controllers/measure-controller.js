@@ -11,7 +11,7 @@ const authService = require('../services/auth-service');
 exports.create = async (req, res, next) => {
         
         let sensorTypeValidator = new SensorTypeValidator();   
-
+        
         //Le o mac do dispositivo e valida se existe
         const device = await deviceRepository.authenticate({mac: req.body.mac});
         
@@ -64,5 +64,46 @@ exports.getAll = async (req, res, next)=>{
                 res.status(200).send (devices);
         }catch(e){
                 res.status(500).send({message:'Falha na requisição', data: e});
+        }
+};
+
+exports.getAllUnsynced =  async (req, res, next)=>{
+        let sensorTypeValidator = new SensorTypeValidator();   
+        let sensors = [];
+        try{
+                const sensorsName = await sensorTypeValidator.getTypeSensors()
+                for (let i = 0; i < sensorsName.length; i++) {
+                        
+                        let sensorName = sensorsName[i];
+                        let Schema = mongoose.model(sensorName);
+                        let sensor = { name: sensorName, measures: [] }
+                        sensor.measures = await Schema.find({ syncedAt: undefined })
+                        sensors.push(sensor)
+                }
+                res.json(sensors);
+        }catch(err){
+                res.status(500).send({message:'Falha na requisição', data: err});
+                throw err
+        }
+};
+
+exports.setSynced =  async (req, res, next)=>{
+        if(!req.body.sensors){
+                res.status(401).json({message: "Sensores atualizados não fornecidos"});
+                return;
+        }
+        try{
+                let sensors = req.body.sensors;
+                for (let i = 0; i < sensors.length; i++) {
+                        const sensor = sensors[i];
+                        let Schema = mongoose.model(sensor.name);
+                        for (let i = 0; i < sensor.measures.length; i++) {
+                                let measure = sensor.measures[i];
+                                await Schema.findByIdAndUpdate(measure._id, { syncedAt: new Date()})
+                        }
+                }
+                res.json({ message: 'Dados atualizados com sucesso' });
+        }catch(e){
+                res.status(500).json({message:'Falha na requisição', data: e});
         }
 };

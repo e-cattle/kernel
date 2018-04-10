@@ -4,16 +4,14 @@ const Contract = mongoose.model('Contract');
 
 exports.create = async(data) => {
     var contract = new Contract(data);
-    await contract.save();
+    return await contract.save();
 }
 
 
 exports.getAll = async() => {
-    const res = await Contract.find({});
-    return res;
+    return await Contract.find({});
 }
 
 exports.getById = async(id) => {
-    const res = await Contract.findById(id);
-    return res;
+    return await Contract.findById(id);
 }

@@ -8,7 +8,7 @@ function SensorTypeValidator() {
     propertieErrors = [];
 }
 
-function getTypeSensors (){
+async function getTypeSensors (){
     //importando mongoose
     var mongoose = require('mongoose');
     //lendo todas as collections crias pelo mongoose
@@ -16,17 +16,26 @@ function getTypeSensors (){
     var names = [];
     //Filtrando as collection em array com as collection que iniciam com o 
     //prefixo 'type-'
-    Object.keys(collections).forEach(function(k) {
-        if (k.indexOf("type-")==0){
-            names.push(k);
+    for (let i = 0; i < Object.keys(collections).length; i++) {
+        const e = Object.keys(collections)[i];
+        if (e.indexOf("type-")==0){
+            names.push(e);
         }
-    });
-    
+    }
     return names;
+    
+    // Object.keys(collections).forEach(function(k, i) {
+    //     if (k.indexOf("type-")==0){
+    //         names.push(k);
+    //     }
+    //     if(i+1 == collections.length) return names;
+    // });
 }
 
-SensorTypeValidator.prototype.validadeSensors = (sensors) => {
-    let validCollections = getTypeSensors();
+SensorTypeValidator.prototype.getTypeSensors = getTypeSensors;
+
+SensorTypeValidator.prototype.validadeSensors = async (sensors) => {
+    let validCollections = await getTypeSensors();
     
     // Validar o vetor de sensores vindo no json requestm(Sensor Type)
     for (let index = 0; index < sensors.length; index++) {

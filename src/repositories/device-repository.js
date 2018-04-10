@@ -1,11 +1,24 @@
 'use strict';
 const mongoose = require('mongoose');
 const Device = mongoose.model('Device');
+const Contract = mongoose.model('Contract');
+
+exports.save = async(data) => {
+    if(data._id){
+        await Device.update(data);
+        return await Device.findById(data._id);
+    }
+    else return await new Device(data).save();
+}
 
 exports.create = async(data) => {
     var device = new Device(data);
     return await device.save();
-    
+}
+
+exports.update = async(data) => {
+    await Device.update(data);
+    return await Device.findById(data._id);
 }
 
 exports.getAll = async() => {
@@ -23,6 +36,14 @@ exports.getByMac = async(mac) => {
         mac: mac
     });
     return res;
+}
+
+exports.getAllUnsynced = async() => {
+    return await Device.find().or([{ syncedAt: undefined }, { hasToSync: true }]);
+}
+
+exports.setSyncedByMac = async(mac) => {
+    return await Device.findOneAndUpdate( {mac: mac}, {syncedAt: new Date(), hasToSync: false} );
 }
 
 exports.getByMacEnabled = async(mac) => {

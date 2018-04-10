@@ -8,6 +8,18 @@ const device = new mongoose.Schema({
         type: String,
         required: [true, 'porque sem nome?']
     },
+    description:{
+        type: String,
+        required: true
+    },
+    branch:{
+        type: String,
+        required: true
+    },
+    model:{
+        type: String,
+        required: true
+    },
     enable:{
         type: Boolean,
         default:true
@@ -22,8 +34,20 @@ const device = new mongoose.Schema({
     version:{
         type: Number,
         required:true
-        
     }, 
+    contractId:{
+        type: String
+    },
+    contractDate:{
+        type: Date
+    },
+    syncedAt:{
+        type: Date        
+    },
+    hasToSync: {
+        type: Boolean,
+        default: true
+    },
     sensors: [{
         type:{
             type: String,

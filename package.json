@@ -16,7 +16,9 @@
     "express": "^4.15.3",
     "guid": "0.0.12",
     "http": "0.0.0",
+    "is-online": "^7.0.0",
     "jsonwebtoken": "^7.4.0",
+    "macaddress": "^0.2.8",
     "md5": "^2.2.1",
     "mongoose": "^4.11.0",
     "sendgrid": "^2.0.0"

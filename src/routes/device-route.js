@@ -9,7 +9,7 @@ const authService = require('../services/auth-service');
 router.post('/', controller.save);
 router.put('/', controller.save);
 router.get('/', controller.getAll);
-router.get('/sync', controller.getAllUnsynced);
+router.get('/sync', controller.syncDevices);
 router.get('/synced/:mac', controller.setSynced);
 router.get('/enable/:mac', controller.enable);
 router.get('/disable/:mac', controller.disable);

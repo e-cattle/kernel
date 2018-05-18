@@ -13,6 +13,7 @@ mongoose.connect(config.db.development, {useMongoClient: true});
 // Carrega os Models
 const Device = require('./models/device');
 const Constract = require('./models/contract');
+const Config = require('./models/config');
 const BodyTemperature = require('./models/body-temperature');
 
 // Carrega as Rotas

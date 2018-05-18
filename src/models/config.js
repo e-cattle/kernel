@@ -3,15 +3,19 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const contract = new Schema({
-    apiHost: {
-        type: String,
-        required: true
+const config = new Schema({
+    name: {
+        type: String
+    },
+    apiAddress: {
+        type: String
+    },
+    apiAddressProtocol: {
+        type: String
     },
     token:{
-        type: Date,
-        default:Date.now()
+        type: String
     }
 });
 
-module.exports = mongoose.model('Config', contract);
+module.exports = mongoose.model('Config', config);

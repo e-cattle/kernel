@@ -21,6 +21,7 @@
     "macaddress": "^0.2.8",
     "md5": "^2.2.1",
     "mongoose": "^4.11.0",
+    "node-fetch": "^2.1.2",
     "sendgrid": "^2.0.0"
   },
   "devDependencies": {

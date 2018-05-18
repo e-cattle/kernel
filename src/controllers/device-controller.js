@@ -1,16 +1,19 @@
 'use strict';
 
+const fetch = require('node-fetch');
+
 const ValidationContract = require('../validators/fluent-validator');
 const SensorTypeValidator = require('../validators/sensor-type-validator');
 const deviceRepository = require('../repositories/device-repository');
 const contractRepository = require('../repositories/contract-repository');
 const authService = require('../services/auth-service');
+const infoService = require('../services/info-service');
 
 async function validade(device){
     try{
         let contract = new ValidationContract();
         let sensorTypeValidator = new SensorTypeValidator();
-
+        
         sensorTypeValidator.validadeProperties(device);
         
         if (!sensorTypeValidator.isPropertiesValid()) return sensorTypeValidator.propertieErrors();
@@ -20,7 +23,7 @@ async function validade(device){
         sensorTypeValidator.validadeSensors(device.sensors);
         
         if (!contract.isValid() || !sensorTypeValidator.isValid()) return contract.errors().concat(sensorTypeValidator.errors());
-
+        
         return;
         
     }catch(err){
@@ -49,7 +52,7 @@ exports.save = async(req, res, next) => {
             device.sensors = req.body.sensors;
             device.hasToSync = true;
         }
-
+        
         //Validação
         let errors = await validade(device);
         if(errors){
@@ -107,18 +110,34 @@ exports.getAll =  async (req, res, next)=>{
     }
 };
 
-exports.getAllUnsynced =  async (req, res, next)=>{
+exports.syncDevices = async(req, res, next) => {
     try{
-        const devices = await deviceRepository.getAllUnsynced();
-        if (!devices){
-            res.status(404).send({message:'Dipositivos não encontrados'});
-            return;
+        let message = "";
+        let macaddress = await infoService.getMacAddress();
+        let devices = await deviceRepository.getAllUnsynced();
+        if(devices.length <= 0) res.status(200).send("Todos os dispositivos sincronizados.<br>");
+        for (let i = 0; i < devices.length; i++) {
+            
+            let device = devices[i];
+            device.kernelMac = macaddress;
+
+            let body = { token: this.token, device: device, kernelMac: macaddress }
+            let resp = await fetch('http://httpbin.org/post', 
+            { 
+                method: 'POST',
+                body:    JSON.stringify(body),
+                headers: { 'Content-Type': 'application/json' },
+            });
+            let response = await this.$http.post(`${this.apiProtocol}${this.apiAddress}devices-sync/`,  { token: this.token, device: device, kernelMac: this.macaddress })
+            if(!response.data.syncedAt) message += "Erro ao sincronizar dispositivo.<br>"
+            else this.$http.get(`${this.$store.kernelHost}devices/synced/${device.mac}`)
         }
-        res.status(200).send (devices);
+        return;
     }catch(e){
-        res.status(500).send({message:'Falha na requisição', data: e});
+        res.status(500).send("Erro ao sincronizar devices");
+        console.log(e);
     }
-};
+}
 
 exports.setSynced =  async (req, res, next)=>{
     if(!req.params.mac){

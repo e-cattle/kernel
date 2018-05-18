@@ -10,24 +10,24 @@
   "author": "Virmerson Bento dos Santos",
   "license": "ISC",
   "dependencies": {
-    "azure-storage": "^2.1.0",
+    "azure-storage": "^2.8.2",
     "body-parser": "^1.17.2",
     "debug": "^2.6.8",
-    "express": "^4.15.3",
+    "express": "^4.16.3",
     "guid": "0.0.12",
     "http": "0.0.0",
     "is-online": "^7.0.0",
     "jsonwebtoken": "^7.4.0",
     "macaddress": "^0.2.8",
     "md5": "^2.2.1",
-    "mongoose": "^4.11.0",
     "node-fetch": "^2.1.2",
+    "mongoose": "^4.13.12",
     "sendgrid": "^2.0.0"
   },
   "devDependencies": {
     "chai": "*",
-    "mocha": "*",
-    "nodemon": "*",
+    "mocha": "^5.1.1",
+    "nodemon": "^1.17.4",
     "should": "*",
     "supertest": "^3.0.0"
   }

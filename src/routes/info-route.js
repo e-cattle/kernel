@@ -39,8 +39,9 @@ router.get('/config', async (req, resp) => {
 
 router.post('/config', async (req, resp) => {
     try {
-        await configRepository.save(req.body);
-        resp.json({ msg: "Configuração salva com sucesso!" });
+        if(req.body.apiAddress && req.body.apiAddress.lastIndexOf("/") <= 0) req.body.apiAddress += "/"; // Concatena o caracter "/" no final da string, caso não haja
+        let result = await configRepository.save(req.body);
+        resp.json({ msg: "Configuração salva com sucesso!", kernel: result});
     } catch (error) {
         console.log(error);
         resp.status(500).send("Erro ao salvar configurações do kernel");

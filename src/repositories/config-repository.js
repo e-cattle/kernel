@@ -13,7 +13,8 @@ async function create (data) {
 }
 
 async function update (data) {
-    return await Config.update({_id: data._id}, data);
+    await Config.update({_id: data._id}, data);
+    return await Config.findById(data._id)
 }
 
 exports.getConfig = async () => {

@@ -1,10 +1,12 @@
 'use strict';
 
 const fetch = require('node-fetch');
+const axios = require('axios');
 
 const ValidationContract = require('../validators/fluent-validator');
 const SensorTypeValidator = require('../validators/sensor-type-validator');
 const deviceRepository = require('../repositories/device-repository');
+const configRepository = require('../repositories/config-repository');
 const contractRepository = require('../repositories/contract-repository');
 const authService = require('../services/auth-service');
 const infoService = require('../services/info-service');
@@ -112,27 +114,38 @@ exports.getAll =  async (req, res, next)=>{
 
 exports.syncDevices = async(req, res, next) => {
     try{
-        let message = "";
+        let errors = "";
         let macaddress = await infoService.getMacAddress();
         let devices = await deviceRepository.getAllUnsynced();
+        let config = await configRepository.getConfig();
         if(devices.length <= 0) res.status(200).send("Todos os dispositivos sincronizados.<br>");
+        
         for (let i = 0; i < devices.length; i++) {
             
             let device = devices[i];
             device.kernelMac = macaddress;
+            let body = { token: config.token, device: device, kernelMac: macaddress }
+            console.log(`Sincronizando dispositivo: ${device.name}`)
+            let response = await axios.post(`${config.apiAddressProtocol}${config.apiAddress}devices-sync/`, body);
+            if(!response.data.syncedAt) errors += `Erro ao sincronizar dispositivo: ${device.name}`
+            else setSynced(device.mac);
 
-            let body = { token: this.token, device: device, kernelMac: macaddress }
-            let resp = await fetch('http://httpbin.org/post', 
-            { 
-                method: 'POST',
-                body:    JSON.stringify(body),
-                headers: { 'Content-Type': 'application/json' },
-            });
-            let response = await this.$http.post(`${this.apiProtocol}${this.apiAddress}devices-sync/`,  { token: this.token, device: device, kernelMac: this.macaddress })
-            if(!response.data.syncedAt) message += "Erro ao sincronizar dispositivo.<br>"
-            else this.$http.get(`${this.$store.kernelHost}devices/synced/${device.mac}`)
+            // let resp = await fetch('http://httpbin.org/post', 
+            // { 
+            //     method: 'POST',
+            //     body:    JSON.stringify(body),
+            //     headers: { 'Content-Type': 'application/json' },
+            // });
+            // let response = await this.$http.post(`${this.apiProtocol}${this.apiAddress}devices-sync/`,  { token: this.token, device: device, kernelMac: this.macaddress })
+            // if(!response.data.syncedAt) message += "Erro ao sincronizar dispositivo.<br>"
+            // else this.$http.get(`${this.$store.kernelHost}devices/synced/${device.mac}`)
         }
+
+        if(errors == "") res.send({message: "Todos os dispositivos foram sincronizados"});
+        else res.status(500).send({errors: errors});
+        
         return;
+
     }catch(e){
         res.status(500).send("Erro ao sincronizar devices");
         console.log(e);
@@ -143,19 +156,29 @@ exports.setSynced =  async (req, res, next)=>{
     if(!req.params.mac){
         res.status(401).json({message: "MAC não fornecido"});
         return;
+    }else{
+        try {
+            await setSynced(req.params.mac);
+            res.send("Ok")
+        } catch (error) {
+            res.status(500).send("Erro ao atualizar device")            
+        }
+
     }
+   
+};
+
+async function setSynced(mac){
     try{
-        let mac = req.params.mac;
         let device = await deviceRepository.setSyncedByMac(mac);
         if (!device){
-            res.status(404).json({message:'Dipositivo não encontrado'});
-            return;
+            throw "Erro ao atualizar dispositivo: " + mac;
         }
-        res.status(200).json(device);
+        return device;
     }catch(e){
-        res.status(500).json({message:'Falha na requisição', data: e});
+        throw e;
     }
-};
+}
 
 exports.enable =  async (req, res, next)=>{
     if(!req.params.mac){

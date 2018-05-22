@@ -22,7 +22,7 @@ exports.update = async(data) => {
 }
 
 exports.getAll = async() => {
-    const res = await Device.find({}, "name description branch model mac enable version sensors");
+    const res = await Device.find({});
     return res;
 }
 
@@ -43,7 +43,13 @@ exports.getAllUnsynced = async() => {
 }
 
 exports.setSyncedByMac = async(mac) => {
-    return await Device.findOneAndUpdate( {mac: mac}, {syncedAt: new Date(), hasToSync: false} );
+    try {
+        let device = await Device.find({mac: mac})
+        return await Device.findOneAndUpdate( {mac: mac}, { $set: {syncedAt: new Date(), hasToSync: false}} );
+    } catch (error) {
+        throw error;
+    }
+    
 }
 
 exports.getByMacEnabled = async(mac) => {

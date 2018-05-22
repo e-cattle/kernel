@@ -10,6 +10,7 @@
   "author": "Virmerson Bento dos Santos",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "azure-storage": "^2.8.2",
     "body-parser": "^1.17.2",
     "debug": "^2.6.8",
@@ -20,8 +21,8 @@
     "jsonwebtoken": "^7.4.0",
     "macaddress": "^0.2.8",
     "md5": "^2.2.1",
-    "node-fetch": "^2.1.2",
     "mongoose": "^4.13.12",
+    "node-fetch": "^2.1.2",
     "sendgrid": "^2.0.0"
   },
   "devDependencies": {

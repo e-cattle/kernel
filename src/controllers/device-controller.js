@@ -129,16 +129,6 @@ exports.syncDevices = async(req, res, next) => {
             let response = await axios.post(`${config.apiAddressProtocol}${config.apiAddress}devices-sync/`, body);
             if(!response.data.syncedAt) errors += `Erro ao sincronizar dispositivo: ${device.name}`
             else setSynced(device.mac);
-
-            // let resp = await fetch('http://httpbin.org/post', 
-            // { 
-            //     method: 'POST',
-            //     body:    JSON.stringify(body),
-            //     headers: { 'Content-Type': 'application/json' },
-            // });
-            // let response = await this.$http.post(`${this.apiProtocol}${this.apiAddress}devices-sync/`,  { token: this.token, device: device, kernelMac: this.macaddress })
-            // if(!response.data.syncedAt) message += "Erro ao sincronizar dispositivo.<br>"
-            // else this.$http.get(`${this.$store.kernelHost}devices/synced/${device.mac}`)
         }
 
         if(errors == "") res.send({message: "Todos os dispositivos foram sincronizados"});

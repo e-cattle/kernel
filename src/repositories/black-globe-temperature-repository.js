@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
-const AirTemperature = mongoose.model('AirTemperature');
+const BlackGlobeTemperature = mongoose.model('BlackGlobeTemperature');
 
 exports.create = async(data) => {
     var device = new SensorType(data);

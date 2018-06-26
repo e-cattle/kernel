@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const bodyTemperature = new Schema({
+const windSpeed = new Schema({
     uid:{
         type:String,
         required:true,
@@ -14,13 +14,15 @@ const bodyTemperature = new Schema({
         required:true
     },
     value:{
-        type:Number,
-        required:true
-    },
-    unity: {
-        type:String,
-        default: "ºC",
-        required:true
+        speed:{
+            type:Number,
+            default: "m/s",
+            required:true
+        },
+        direction:{
+            type:String,
+            required:false
+        }
     },
     dateRegister:{
         type:Date,
@@ -35,6 +37,6 @@ const bodyTemperature = new Schema({
     syncedAt:{
         type: Date        
     },
-},{collection: "type-body-temperature"});
+},{collection: "type-wind-speed"});
 
-module.exports =  mongoose.model ('type-body-temperature', bodyTemperature);
+module.exports =  mongoose.model ('type-wind-speed', windSpeed);

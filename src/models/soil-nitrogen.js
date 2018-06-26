@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const bodyTemperature = new Schema({
+const soilNitrogen = new Schema({
     uid:{
         type:String,
         required:true,
@@ -19,7 +19,7 @@ const bodyTemperature = new Schema({
     },
     unity: {
         type:String,
-        default: "ºC",
+        default: "%",
         required:true
     },
     dateRegister:{
@@ -35,6 +35,6 @@ const bodyTemperature = new Schema({
     syncedAt:{
         type: Date        
     },
-},{collection: "type-body-temperature"});
+},{collection: "type-soil-nitrogen"});
 
-module.exports =  mongoose.model ('type-body-temperature', bodyTemperature);
+module.exports =  mongoose.model ('type-soil-nitrogen', soilNitrogen);

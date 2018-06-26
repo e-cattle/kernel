@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const bodyTemperature = new Schema({
+const gateOpened = new Schema({
     uid:{
         type:String,
         required:true,
@@ -14,12 +14,7 @@ const bodyTemperature = new Schema({
         required:true
     },
     value:{
-        type:Number,
-        required:true
-    },
-    unity: {
-        type:String,
-        default: "ºC",
+        type:Boolean,
         required:true
     },
     dateRegister:{
@@ -35,6 +30,6 @@ const bodyTemperature = new Schema({
     syncedAt:{
         type: Date        
     },
-},{collection: "type-body-temperature"});
+},{collection: "type-gate-opened"});
 
-module.exports =  mongoose.model ('type-body-temperature', bodyTemperature);
+module.exports =  mongoose.model ('type-gate-opened', gateOpened);

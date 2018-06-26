@@ -20,6 +20,27 @@ const AnimalSpeed = require('./models/animal-speed');
 const AnimalWeight = require('./models/animal-weight');
 const BlackGlobeTemperature = require('./models/black-globe-temperature');
 const BodyTemperature = require('./models/body-temperature');
+const CH4 = require('./models/ch4');
+const CO2 = require('./models/co2');
+const DewPointTemperature = require('./models/dew-point-temperature');
+const DryBulbTemperature = require('./models/dry-bulb-temperature');
+const GateOpened = require('./models/gate-opened');
+const GDOP = require('./models/gdop');
+const GeographicCoordinate = require('./models/geographic-coordinate');
+const HeartRate = require('./models/heart-rate');
+const PH = require('./models/ph');
+const Precipitation = require('./models/precipitation');
+const RelativeHumidity = require('./models/relative-humidity');
+const RespiratoryFrequency = require('./models/respiratory-frequency');
+const RetalTemperature = require('./models/retal-temperature');
+const SoilMoisture = require('./models/soil-moisture');
+const SoilNitrogen = require('./models/soil-nitrogen');
+const SoilTemperature = require('./models/soil-temperature');
+const SoilWaterPotencial = require('./models/soil-water-potencial');
+const SolarRadiation = require('./models/solar-radiation');
+const WaterTemperature = require('./models/water-temperature');
+const WetBulbTemperature = require('./models/wet-bulb-temperature');
+const WindSpeed = require('./models/wind-speed');
 
 // Carrega as Rotas
 const indexRoute = require('./routes/index-route'); //Rotas da pagina inicial

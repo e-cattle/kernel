@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const bodyTemperature = new Schema({
+const dryBulbTemperature = new Schema({
     uid:{
         type:String,
         required:true,
@@ -35,6 +35,6 @@ const bodyTemperature = new Schema({
     syncedAt:{
         type: Date        
     },
-},{collection: "type-body-temperature"});
+},{collection: "type-dry-bulb-temperature"});
 
-module.exports =  mongoose.model ('type-body-temperature', bodyTemperature);
+module.exports =  mongoose.model ('type-dry-bulb-temperature', dryBulbTemperature);

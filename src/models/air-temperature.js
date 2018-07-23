@@ -15,6 +15,9 @@ const airTemperature = new Schema({
     },
     value:{
         type:Number,
+        min: -99,
+        max: 1999,
+        validate: /^-?\d{0,4}(\.\d{1,2})?$/,
         required:true
     },
     unity: {
@@ -24,7 +27,6 @@ const airTemperature = new Schema({
     },
     dateRegister:{
         type:Date,
-        default: Date.now,
         required:true
     },
     dataStorage:{

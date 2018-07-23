@@ -15,6 +15,9 @@ const respiratoryFrequency = new Schema({
     },
     value:{
         type:Number,
+        min: 0,
+        max: 200,
+        validate: /^\d{0,3}?$/,
         required:true
     },
     unity: {
@@ -24,7 +27,6 @@ const respiratoryFrequency = new Schema({
     },
     dateRegister:{
         type:Date,
-        default: Date.now,
         required:true
     },
     dataStorage:{

@@ -30,27 +30,49 @@ exports.create = async (req, res, next) => {
         }
         
         //Verifica se os sensores das medidas são válidos
-        try{
+        try{                
                 sensorTypeValidator.validadeSensors(req.body.measures);
                 
-                if (!sensorTypeValidator.isValid()) {
+                if (!sensorTypeValidator.isValid()) {                        
                         res.status(400).json(sensorTypeValidator.errors());
                         return;
-                }
+                }                
         }catch(err){
                 console.log(err);
                 res.status(500).json({message: `Erro na validação dos dados sensoriais: ${err}`});
         }
         
-        //Salva os dados sensoriais
-        for (let i = 0; i < measures.length; i++) {
-                let sensor = measures[i];
-                //Solicita o schema pelo nome dinâmicamente
-                let Schema = mongoose.model(sensor.type);
-                let newMesure = new Schema(sensor.datas);
-                let savedMeasure = await newMesure.save();
-                if(!savedMeasure) res.status(500).send({message: `Falha ao salvar dado sensorial: ${sensor.name}`, data: e});
-                else res.status(201).send({message: `Dado sensorial salvo com sucesso`, data: savedMeasure});
+        try
+        {
+                let hasError = false;
+                let sensorsError = [];
+
+                //Salva os dados sensoriais
+                for (let i = 0; i < measures.length; i++) {                
+                        let sensor = measures[i];
+                        //Solicita o schema pelo nome dinâmicamente
+                        let Schema = mongoose.model(sensor.type);
+                        let newMesure = new Schema(sensor.datas);
+                        let savedMeasure = await newMesure.save();
+                        
+                        if(!savedMeasure)
+                        {
+                                hasError = true;
+                                sensorsError.push(savedMeasure);
+                        }
+
+                        // if(!savedMeasure) res.status(500).send({message: `Falha ao salvar dado sensorial: ${sensor.name}`, data: e});
+                        // else res.status(201).send({message: `Dado sensorial salvo com sucesso`, data: savedMeasure});
+                }
+
+                if (!hasError)
+                        res.status(201).send({message: `Todos os dados sensoriais foram salvos com sucesso`});
+                else
+                        res.status(500).send({message: `Falha ao salvar dado sensorial:`, data: sensorsError});
+        }
+        catch(err)
+        {
+                res.status(500).json({message: `${err}`});
         }
 };
 

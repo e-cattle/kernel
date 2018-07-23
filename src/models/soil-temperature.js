@@ -15,6 +15,9 @@ const soilTemperature = new Schema({
     },
     value:{
         type:Number,
+        min: 0,
+        max: 100,
+        validate: /^\d{0,3}(\.\d{1,2})?$/,
         required:true
     },
     unity: {
@@ -24,7 +27,6 @@ const soilTemperature = new Schema({
     },
     dateRegister:{
         type:Date,
-        default: Date.now,
         required:true
     },
     dataStorage:{

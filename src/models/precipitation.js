@@ -15,6 +15,8 @@ const precipitation = new Schema({
     },
     value:{
         type:Number,
+        min: 0,
+        validate: /^\d+?$/,
         required:true
     },
     unity: {
@@ -24,7 +26,6 @@ const precipitation = new Schema({
     },
     dateRegister:{
         type:Date,
-        default: Date.now,
         required:true
     },
     dataStorage:{

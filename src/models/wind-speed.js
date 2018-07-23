@@ -13,20 +13,21 @@ const windSpeed = new Schema({
         type:String,
         required:true
     },
-    value:{
+    value:[{
         speed:{
             type:Number,
-            default: "m/s",
+            min: 0,
+            max: 125,
+            validate: /^\d{0,3}(\.\d{1,2})?$/,            
             required:true
         },
         direction:{
             type:String,
             required:false
         }
-    },
+    }],
     dateRegister:{
         type:Date,
-        default: Date.now,
         required:true
     },
     dataStorage:{

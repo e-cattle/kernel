@@ -35,7 +35,7 @@ const contract = new Schema({
             type: String,
             required: true
         }, 
-        unix:{
+        name:{
             type: String,
             required: true
         }

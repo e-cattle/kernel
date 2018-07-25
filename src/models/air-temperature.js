@@ -8,6 +8,40 @@ const airTemperature = new Schema({
         type:String,
         required:true,
         unique: true
+    },
+    value:{
+        type:Number,
+        min: -99,
+        max: 1999,
+        validate: /^-?\d{0,4}(\.\d{1,2})?$/,
+        required:true
+    },
+    date:{
+        type:String,
+        required:true
+    },
+    resource: {
+        type:String,        
+        required:false
+    },    
+    dataStorage:{
+        type:Date,
+        default: Date.now,
+        required:true
+    },
+    syncedAt:{
+        type: Date        
+    },
+},{collection: "type-air-temperature"});
+
+module.exports =  mongoose.model ('type-air-temperature', airTemperature);
+
+/*
+const airTemperature = new Schema({
+    uid:{
+        type:String,
+        required:true,
+        unique: true
     }, 
     mac:{
         type:String,
@@ -40,3 +74,4 @@ const airTemperature = new Schema({
 },{collection: "type-air-temperature"});
 
 module.exports =  mongoose.model ('type-air-temperature', airTemperature);
+*/

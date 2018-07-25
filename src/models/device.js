@@ -57,7 +57,7 @@ const device = new mongoose.Schema({
             type: String,
             required: true
         },
-        unix:{
+        name:{
             type: String,
             required: true
         }

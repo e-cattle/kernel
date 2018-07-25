@@ -115,9 +115,9 @@ SensorTypeValidator.prototype.validadeProperties = (obj) => {
                     name: 'PropertiesError'
                 });
             }
-            if(!('unix' in sensor)){
+            if(!('name' in sensor)){
                 propertieErrors.push({
-                    message: `Propriedade unix não encontrada na coleção sensors[${i}]`,
+                    message: `Propriedade name não encontrada na coleção sensors[${i}]`,
                     name: 'PropertiesError'
                 });
             }

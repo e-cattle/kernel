@@ -21,7 +21,7 @@ const airTemperature = new Schema({
         required:true
     },
     resource: {
-        type:String,        
+        type:String,
         required:false
     },    
     dataStorage:{

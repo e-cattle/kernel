@@ -8,28 +8,55 @@ A validação de dados sensoriais consiste em
 + O que foi enviado está de acordo com o contrato?
 + Os dados das medidas estão corretos?
 
-## Envio de dados sensoriais
-
-A medida deve ser enviada através de uma requisição HTTP pelo método POST com o seguinte padrão:
-
+## Modelo do contrato
+Para se fazer um contrato com o e-cattle, deve-se fazer uma requisição HTTP pelo método POST no endpoint /devices/ com o seguinte padrão:
 ```json
     {
-    "mac": "38:F2:0E:34:80:5B",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhOTg1M2NmMmY1ZTRiM2IyMmY2MzRmZCIsIm5hbWUiOiJCYWxQYXNzIiwiaWF0IjoxNTE5OTMyMzY3LCJleHAiOjE1MjAwMTg3Njd9.Yqn0uiML3aSIxvo0nqvBx4YZbtsnhSeozfT46kRv5EM",
-    "measures":[
-    	{
-    		"name": "body-temperature",
-    		"datas": {
-    			"mac":"38:F2:0E:34:80:5B", 
-    			"uid":"1", 
-    			"value":10.5,
-    			"unity": "Kg",
-    			"dateRegister": "2018-02-23",
-    			"dataStorage":"2018-02-23" 
-			}
-    	}
-    ]
-}
+        "name":"Snooper",
+        "description":"dispositivo de medicao", 
+        "branch":"embrapa", 
+        "model":"snooper1.0" , 
+        "mac":"2c:3a:e8:1b:03:41" ,
+        "sensors":[
+            {"type":"type-air-temperature" , "descriptor":"temperatura da estufa" , "name":"dht22_1"},
+            {"type":"type-air-temperature" , "descriptor":"temperatura da estufa" , "name":"termopar"},
+            {"type":"type-relative-humidity" , "descriptor":"humidade" , "name":"dht22_2"},
+            {"type":"type-co2" , "descriptor":"detecção de gases inflamaveis" , "name":"MQ-2"}
+        ]
+    }
+```
+
+## Envio de dados sensoriais
+
+A medida deve ser enviada através de uma requisição HTTP pelo método POST no endpoint /measures/ com o seguinte padrão:
+
+```json
+   {
+        "mac":"2c:3a:e8:1b:01:50",
+        "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNThiNDNjZTAwMTlmMDM3OGIwNjZlZiIsIm5hbWUiOiJTbm9vcGVyIiwibWFjIjoiMmM6M2E6ZTg6MWI6MDE6NTAiLCJpYXQiOjE1MzI1NDczMzUsImV4cCI6MTUzMjYzMzczNX0.jdvLTfSiThR28cawXMPQ3nCdjrnDXDOcBLCbgZW6cd4",
+        "measures":[
+            {
+                "name":"dht22_1",
+                "value" : 20.0,
+                "date": 123344567
+            },
+            {
+                "name":"termopar",
+                "value" : 21.3,
+                "date": 123344567
+            },
+            {
+                "name":"dht22_2",
+                "value" : 48.3,
+                "date": 123344567
+            },
+            {
+                "name":"MQ-2",
+                "value": 0.0,
+                "date":  123344567
+            }
+        ]
+    }
 ```
 
 ### Fluxo

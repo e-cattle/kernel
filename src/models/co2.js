@@ -8,23 +8,18 @@ const co2 = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:{
         type:Number,
         required:true
     },
-    unity: {
+    date:{
         type:String,
-        default: "ppm",
         required:true
     },
-    dateRegister:{
-        type:Date,
-        required:true
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

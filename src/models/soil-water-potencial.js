@@ -8,10 +8,6 @@ const soilWaterPotencial = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:{
         type:Number,
@@ -20,14 +16,13 @@ const soilWaterPotencial = new Schema({
         validate: /^\d{0,3}?$/,
         required:true
     },
-    unity: {
+    date:{
         type:String,
-        default: "Cbar",
         required:true
     },
-    dateRegister:{
-        type:Date,
-        required:true
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

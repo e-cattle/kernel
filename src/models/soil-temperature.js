@@ -8,10 +8,6 @@ const soilTemperature = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:{
         type:Number,
@@ -20,14 +16,13 @@ const soilTemperature = new Schema({
         validate: /^\d{0,3}(\.\d{1,2})?$/,
         required:true
     },
-    unity: {
+    date:{
         type:String,
-        default: "ºC",
         required:true
     },
-    dateRegister:{
-        type:Date,
-        required:true
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

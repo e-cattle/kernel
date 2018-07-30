@@ -8,10 +8,6 @@ const solarRadiation = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:{
         type:Number,
@@ -20,14 +16,13 @@ const solarRadiation = new Schema({
         validate: /^\d{0,4}?$/,
         required:true
     },
-    unity: {
+    date:{
         type:String,
-        default: "W/m2",
         required:true
     },
-    dateRegister:{
-        type:Date,
-        required:true
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

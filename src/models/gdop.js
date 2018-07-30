@@ -8,10 +8,6 @@ const gdop = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:[{
         hdop:{
@@ -43,9 +39,13 @@ const gdop = new Schema({
             required:true
         }
     }],
-    dateRegister:{
-        type:Date,
+    date:{
+        type:String,
         required:true
+    },
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

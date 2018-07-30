@@ -43,32 +43,46 @@ exports.create = async (req, res, next) => {
         }
         
         try
-        {
-                let hasError = false;
+        {                
                 let sensorsError = [];
+                let sensorsValid = [];
+                let sensorsNoValid = [];
 
                 //Salva os dados sensoriais
-                for (let i = 0; i < measures.length; i++) {                
+                for (let i = 0; i < measures.length; i++) {
                         let sensor = measures[i];
-                        //Solicita o schema pelo nome dinâmicamente
-                        let Schema = mongoose.model(sensor.type);
-                        let newMesure = new Schema(sensor.datas);
-                        let savedMeasure = await newMesure.save();
+                        let sensorsContract = device.sensors;
+                        let hasSensor = false;
                         
-                        if(!savedMeasure)
-                        {
-                                hasError = true;
-                                sensorsError.push(savedMeasure);
-                        }
+                        //verifica se existe o sensor no contrato
+                        for (let j = 0; j < sensorsContract.length; j++)
+                        {                                
+                                if (sensorsContract[j].name == sensor.name)
+                                {                                        
+                                        hasSensor = true;
 
-                        // if(!savedMeasure) res.status(500).send({message: `Falha ao salvar dado sensorial: ${sensor.name}`, data: e});
-                        // else res.status(201).send({message: `Dado sensorial salvo com sucesso`, data: savedMeasure});
+                                        var guid = require('crypto').randomBytes(30).toString('base64');
+                                        sensor.datas = {uid: guid, value: sensor.value, date: sensor.date, resource: sensor.resource};
+
+                                        let Schema = mongoose.model(sensorsContract[j].type)
+                                        let newMeasure = new Schema(sensor.datas);
+                                        let savedMeasure = await newMeasure.save();
+
+                                        if(savedMeasure)
+                                                sensorsValid.push(sensorsContract[j].type);
+                                        else
+                                                sensorsError.push(savedMeasure);
+                                }                                        
+                        }
+                
+                        if (!hasSensor)
+                                sensorsNoValid.push(sensor.name);
                 }
 
-                if (!hasError)
+                if (sensorsNoValid.length == 0 && sensorsError == 0)
                         res.status(201).send({message: `Todos os dados sensoriais foram salvos com sucesso`});
                 else
-                        res.status(500).send({message: `Falha ao salvar dado sensorial:`, data: sensorsError});
+                        res.status(500).send({sucess: sensorsValid, notfound: sensorsNoValid, erros: sensorsError});
         }
         catch(err)
         {

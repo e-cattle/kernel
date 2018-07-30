@@ -8,18 +8,18 @@ const gateOpened = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:{
         type:Boolean,
         required:true
     },
-    dateRegister:{
-        type:Date,
+    date:{
+        type:String,
         required:true
+    },
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

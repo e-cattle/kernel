@@ -8,10 +8,6 @@ const retalTemperature = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:{
         type:Number,
@@ -20,14 +16,13 @@ const retalTemperature = new Schema({
         validate: /^-?\d{0,2}(\.\d{1,2})?$/,
         required:true
     },
-    unity: {
+    date:{
         type:String,
-        default: "ºC",
         required:true
     },
-    dateRegister:{
-        type:Date,
-        required:true
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

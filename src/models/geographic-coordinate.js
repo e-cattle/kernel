@@ -8,10 +8,6 @@ const geographicCoordinate = new Schema({
         type:String,
         required:true,
         unique: true        
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:[{
         altitude:{
@@ -33,9 +29,13 @@ const geographicCoordinate = new Schema({
             required:false
         }
     }],
-    dateRegister:{
-        type:Date,
+    date:{
+        type:String,
         required:true
+    },
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

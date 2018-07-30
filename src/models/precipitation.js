@@ -8,10 +8,6 @@ const precipitation = new Schema({
         type:String,
         required:true,
         unique: true
-    }, 
-    mac:{
-        type:String,
-        required:true
     },
     value:{
         type:Number,
@@ -19,14 +15,13 @@ const precipitation = new Schema({
         validate: /^\d+?$/,
         required:true
     },
-    unity: {
+    date:{
         type:String,
-        default: "mm",
         required:true
     },
-    dateRegister:{
-        type:Date,
-        required:true
+    resource: {
+        type:String,
+        required:false
     },
     dataStorage:{
         type:Date,

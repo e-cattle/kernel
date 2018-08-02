@@ -1,0 +1,1 @@
+Estes binários devem ser instalados na bigboxx, como no tutorial em https://docs.google.com/document/d/1px9JgHPzbnnX6L5C1e1WRwh48fo-J5ayD9I8UiUOG24/edit

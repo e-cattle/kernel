@@ -148,8 +148,9 @@ ssh-keygen -t rsa -C "update@cnpgc.embrapa.br" -b 4096
 vi ~/.ssh/id_rsa.pub
 ```
 
-* Criar pasta "/var/bigboxx" e clonar repositórios Kernel.
-* Dar o "npm install" e "npm update" no repositório.
+* Criar diretório "/var/bigboxx" e clonar repositórios Kernel.
+* clonar também o repositório api.
+* Dar o "npm install" e "npm update" nos repositórios.
 
 ## Habilitando a inicialização do kernel junto ao SO
 
@@ -163,7 +164,8 @@ $ vim /usr/lib/systemd/scripts/start_ecattle.sh
 ```sh
 #!/bin/bash
 
-node /var/bigboxx/kernel/bin/server.js        <--linha de comando para executar o script no  node
+rm /var/lib/mongodb/mongod.lock               <--remover arquivo .lock caso exista (evita muitos problemas)
+node /var/bigboxx/kernel/bin/server.js & node /var/bigboxx/api/bin/server.js && fg   <--executar os scripts do node em paralelo 
 
 exit 0
 

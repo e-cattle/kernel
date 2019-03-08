@@ -17,6 +17,9 @@ const contract = new Schema({
         required:true
         
     },
+    deviceId:{
+        type: String
+    },
     enable:{
         type: Boolean,
         default:true

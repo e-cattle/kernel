@@ -52,6 +52,7 @@ exports.create = async (req, res, next) => {
                 for (let i = 0; i < measures.length; i++) {
                         let sensor = measures[i];
                         let sensorsContract = device.sensors;
+                        let deviceId = device._id;
                         let hasSensor = false;
                         
                         //verifica se existe o sensor no contrato
@@ -61,8 +62,8 @@ exports.create = async (req, res, next) => {
                                 {                                        
                                         hasSensor = true;
 
-                                        var guid = require('crypto').randomBytes(30).toString('base64');
-                                        sensor.datas = {uid: guid, value: sensor.value, date: sensor.date, resource: sensor.resource};
+                                        // var guid = require('crypto').randomBytes(30).toString('base64');
+                                        sensor.datas = {uid: deviceId, value: sensor.value, date: sensor.date, resource: sensor.resource};
 
                                         let Schema = mongoose.model(sensorsContract[j].type)
                                         let newMeasure = new Schema(sensor.datas);

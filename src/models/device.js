@@ -35,12 +35,6 @@ const device = new mongoose.Schema({
         type: Number,
         required:true
     }, 
-    contractId:{
-        type: String
-    },
-    contractDate:{
-        type: Date
-    },
     syncedAt:{
         type: Date        
     },

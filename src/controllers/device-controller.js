@@ -78,6 +78,7 @@ exports.save = async(req, res, next) => {
             name: deviceCreated.name,
             mac: deviceCreated.mac,
             version: deviceCreated.version,
+            deviceId: deviceCreated._id,
             sensors: deviceCreated.sensors
         });
         

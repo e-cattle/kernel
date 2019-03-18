@@ -78,12 +78,12 @@ exports.save = async(req, res, next) => {
             name: deviceCreated.name,
             mac: deviceCreated.mac,
             version: deviceCreated.version,
-            deviceId: deviceCreated._id,
+            devices: deviceCreated._id,
             sensors: deviceCreated.sensors
         });
         
         deviceCreated.contractDate = contractCreated.date;
-        deviceCreated.contractId = contractCreated._id;
+        //deviceCreated.contractId = contractCreated._id;
         await deviceRepository.save(deviceCreated);
         
         //Envia o novo token para o dispositivo

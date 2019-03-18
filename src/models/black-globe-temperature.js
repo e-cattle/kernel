@@ -4,10 +4,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const blackGlobeTemperature = new Schema({
-    uid:{
-        type:String,
+    deviceId: {
+        type: Schema.Types.ObjectId,
         required:true,
-        unique: true
     },
     value:{
         type:Number,

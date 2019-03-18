@@ -63,7 +63,7 @@ exports.create = async (req, res, next) => {
                                         hasSensor = true;
 
                                         // var guid = require('crypto').randomBytes(30).toString('base64');
-                                        sensor.datas = {uid: deviceId, value: sensor.value, date: sensor.date, resource: sensor.resource};
+                                        sensor.datas = {deviceId: deviceId, value: sensor.value, date: sensor.date, resource: sensor.resource};
 
                                         let Schema = mongoose.model(sensorsContract[j].type)
                                         let newMeasure = new Schema(sensor.datas);

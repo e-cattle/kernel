@@ -8,8 +8,13 @@ const app = express();
 const router = express.Router();
 
 // Connecta ao banco
-mongoose.connect(config.db.development, {useMongoClient: true});
-mongoose.Promise = Promise;
+if(process.env.NODE_ENV == 'production'){
+    mongoose.connect( config.db.production, {useMongoClient: true});
+} else if(process.env.NODE_ENV == 'docker'){
+    mongoose.connect( config.db.docker, {useMongoClient: true});
+} else{
+    mongoose.connect( config.db.development, {useMongoClient: true});
+}
 
 // Carrega os Models
 const Device = require('./models/device');

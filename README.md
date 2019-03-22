@@ -211,3 +211,59 @@ $systemctl daemon-reload
 $systemctl enable ecattle.service
 ```
 
+# Criando ambiente Bigboxx com Docker
+
+Nos passos abaixo, será demonstrado como subir mongodb, os módulos api e kernel do Bigboxx utilizando docker.
+
+## Pré-requisitos para implantação
+
+* Docker 1.17.2 ou superior;
+* Docker-compose
+* Descompactador ZIP
+* Baixar o zip https://github.com/e-cattle/install/blob/master/BigboxxDocker.zip?raw=true 
+
+## Procedimentos
+
+* Criar pasta *bigboxx* e descompactar o zip *BigboxxDocker.zip*
+
+```shell
+$ mkdir bigboxx
+$ cd bigboxx
+$ unzip BigboxxDocker.zip
+```
+
+* Executar o docker-compose build para criar as imagens dos módulos api e kernel
+
+```shell
+$ docker-compose build
+bigboxx-mongo uses an image, skipping
+Building bigboxx-kernel
+Step 1/8 : FROM node:8.15-alpine
+ ---> ee8b4f3c67fa
+Step 2/8 : MAINTAINER Bruno A. Caceres <brunoacaceres@gmail.com>
+ ---> Running in 643b98403b3a
+Removing intermediate container 643b98403b3a
+.
+.
+.
+```
+
+* Subir os serviços com docker-compose up -d
+
+```shell
+$ docker-compose up
+Creating network "install_default" with the default driver
+Creating bigboxx-kernel ... done
+Creating bigboxx-api    ... done
+Creating bigboxx-mongo  ... done
+Attaching to bigboxx-mongo, bigboxx-api, bigboxx-kernel
+bigboxx-mongo     | 2019-03-22T17:12:44.561-0400 I CONTROL  [initandlisten] MongoDB starting : pid=1 port=27017 dbpath=/data/db 64-bit host=bigboxx-mongo
+bigboxx-mongo     | 2019-03-22T17:12:44.567-0400 I CONTROL  [initandlisten] db version v3.6.11
+bigboxx-mongo     | 2019-03-22T17:12:44.567-0400 I CONTROL  [initandlisten] git version: b4339db12bf57ffee5b84a95c6919dbd35fe31c9
+.
+.
+.
+```
+
+* Acessar as URLS http://localhost:3000 e http://localhost:3001 para verificar se os serviç
+os subiram com sucesso.

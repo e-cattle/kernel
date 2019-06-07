@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-
+const Schema = mongoose.Schema;
 
 const device = new mongoose.Schema({
     name: {
@@ -35,12 +35,6 @@ const device = new mongoose.Schema({
         type: Number,
         required:true
     }, 
-    contractId:{
-        type: String
-    },
-    contractDate:{
-        type: Date
-    },
     syncedAt:{
         type: Date        
     },
@@ -61,7 +55,12 @@ const device = new mongoose.Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    // contract: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Contract',
+    //     required: true
+    //   }
 });
 
 // device.path('sensors').validate(function(v) {

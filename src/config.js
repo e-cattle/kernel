@@ -5,7 +5,8 @@ module.exports = {
     
     db: {
         production: "mongodb://localhost:27017/ecattle-kernel",
-        development: "mongodb://localhost:27017/ecattle-kernel",
+        docker: "mongodb://bigboxx-mongo:27017/ecattle-kernel",
+        development: "mongodb://mongo:ecattle2019@ds163255.mlab.com:63255/ecattle-kernel",
         test: "mongodb://localhost:27017/ecattle-kernel",
     }
     

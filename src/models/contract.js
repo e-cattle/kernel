@@ -39,7 +39,13 @@ const contract = new Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    devices: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'Device'
+        }
+      ]
 });
 
 module.exports = mongoose.model('Contract', contract);

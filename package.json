@@ -14,11 +14,11 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.19.0",
     "debug": "^2.6.8",
-    "express": "^4.17.0",
+    "express": "^4.17.1",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
     "guid": "0.0.12",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
-    "nodemon": "^1.19.0",
+    "nodemon": "^1.19.1",
     "should": "^13.2.3",
     "supertest": "^3.4.2"
   }

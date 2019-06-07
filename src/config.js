@@ -4,10 +4,17 @@ global.EMAIL_TMPL = 'Olá, <strong>{0}</strong>, seja bem vindo à plataforma Io
 module.exports = {
     
     db: {
-        production: "mongodb://localhost:27017/ecattle-kernel",
-        docker: "mongodb://bigboxx-mongo:27017/ecattle-kernel",
-        development: "mongodb://mongo:ecattle2019@ds163255.mlab.com:63255/ecattle-kernel",
-        test: "mongodb://localhost:27017/ecattle-kernel",
+        production: "mongodb://localhost:27017/e-cattle",
+        docker: "mongodb://localhost:27017/e-cattle",
+        development: "mongodb://localhost:27017/e-cattle",
+        test: "mongodb://localhost:27017/e-cattle",
     }
+
+    // db: {
+    //     production: "mongodb://localhost:27017/ecattle-kernel",
+    //     docker: "mongodb://bigboxx-mongo:27017/ecattle-kernel",
+    //     development: "mongodb://mongo:ecattle2019@ds163255.mlab.com:63255/ecattle-kernel",
+    //     test: "mongodb://localhost:27017/ecattle-kernel",
+    // }
     
 }

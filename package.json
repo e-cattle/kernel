@@ -1,6 +1,6 @@
 {
   "name": "ecattle-bigboxx-kernel",
-  "version": "1.19.08",
+  "version": "1.19.8",
   "description": "e-Cattle BigBoxx: Kernel Component",
   "main": "index.js",
   "scripts": {

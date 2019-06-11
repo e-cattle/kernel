@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const windSpeed = new Schema({
     deviceId: {
         type: Schema.Types.ObjectId,
-        required:true,
+        required:true
     },
     value:[{
         speed:{

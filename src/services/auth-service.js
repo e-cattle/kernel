@@ -43,7 +43,7 @@ exports.authorize = async function (req, res, next) {
                     if(mac == device.mac) next();
                     else{
                         res.status(401).json({
-                            message: 'MAC não confere com o token'
+                            message: 'MAC não confere com o token: ' + mac + ' | ' + device.mac
                         });
                     }
                 }).catch((err) => {
@@ -81,7 +81,8 @@ exports.renewToken = async function (req, res) {
     
     var token = await generateToken({
         id: device._id,
-        name: device.name
+        name: device.name,
+        mac: device.mac
     });
     
     res.json({token: token});

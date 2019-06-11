@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const soilNitrogen = new Schema({
     deviceId: {
         type: Schema.Types.ObjectId,
-        required:true,
+        required:true
     },
     value:{
         type:Number,

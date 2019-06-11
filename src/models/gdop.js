@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const gdop = new Schema({
     deviceId: {
         type: Schema.Types.ObjectId,
-        required:true,
+        required:true
     },
     value:[{
         hdop:{

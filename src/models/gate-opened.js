@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const gateOpened = new Schema({
     deviceId: {
         type: Schema.Types.ObjectId,
-        required:true,
+        required:true
     },
     value:{
         type:Boolean,

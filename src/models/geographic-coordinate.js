@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const geographicCoordinate = new Schema({
     deviceId: {
         type: Schema.Types.ObjectId,
-        required:true,
+        required:true
     },
     value:[{
         altitude:{

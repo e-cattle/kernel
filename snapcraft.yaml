@@ -1,0 +1,46 @@
+name: bigboxx-kernel
+base: core18
+version: git
+summary: Kernel module of IoT middleware from e-Cattle platform for livestock farms
+description: |
+  e-Cattle BigBoxx is a middleware to receive, rank, segment, persist and provide sensory data
+  for IoT applications in livetstock farms. This module, named Kernel, has the role to collect
+  sensor data and persist it.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+#environment:
+#  SNAPCRAFT_ENABLE_DEVELOPER_DEBUG: "yes"
+
+apps:
+  mongo:
+    command: env LC_ALL=C mongod --bind_ip 0.0.0.0 --port=27017 --pidfilepath $SNAP_USER_DATA/mongod.pid --journal --dbpath $SNAP_USER_DATA/mongo
+    daemon: simple
+    restart-condition: always
+
+  kernel:
+    command: node $SNAP/bin/server.js
+    daemon: simple
+    restart-condition: always
+  
+#  backup:
+#    command: mongodump --db ecattle-kernel --archive
+
+hooks:
+  install:
+    plugs: [home, network, network-bind]
+
+plugs:
+  home:
+  network:
+  network-bind:
+
+parts:
+  kernel:
+    source: .
+    plugin: nodejs
+    nodejs-version: 10.16.0
+    nodejs-package-manager: npm
+    stage-packages:
+      - mongodb-server

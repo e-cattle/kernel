@@ -10,7 +10,10 @@ description: |
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
-architectures: [amd64, arm64, ppc64el]
+environment:
+  SNAPCRAFT_ENABLE_DEVELOPER_DEBUG: "yes"
+
+architectures: [amd64, arm64]
 
 apps:
   mongo:
@@ -19,9 +22,10 @@ apps:
     restart-condition: always
 
   node:
-    command: node $SNAP/bin/server.js
+    command: env NODE_ENV=production node $SNAP/bin/server.js
     daemon: simple
     restart-condition: always
+    after: [mongo]
   
 #  backup:
 #    command: mongodump --db e-cattle --archive
@@ -39,7 +43,6 @@ parts:
   kernel:
     source: .
     plugin: nodejs
-    nodejs-version: 10.16.0
     nodejs-package-manager: npm
     stage-packages:
       - mongodb-server

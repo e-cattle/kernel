@@ -1,16 +1,37 @@
 const app = require('../src/app');
 const debug = require('debug')('e-cattle:server');
 const http = require('http');
+const mongoose = require('mongoose');
+const config = require('../src/config');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+let delay = process.env.NODE_ENV == 'production' ? 30000 : 1;
+
+// Connecta ao banco
+setTimeout(function() {
+  if(process.env.NODE_ENV == 'production'){
+      mongoose.connect( config.db.production, {useMongoClient: true});
+  } else if(process.env.NODE_ENV == 'docker'){
+      mongoose.connect( config.db.docker, {useMongoClient: true});
+  } else{
+      mongoose.connect( config.db.development, {useMongoClient: true});
+  }
+
+  mongoose.connection.once('open', function() {
+    app.emit('ready'); 
+  });
+}, delay);
+
 const server = http.createServer(app);
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-console.log('API rodando na porta ' + port);
+app.on('ready', function() {
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+  console.log('API rodando na porta ' + port);
+});
 
 function normalizePort(val) {
   const port = parseInt(val, 10);

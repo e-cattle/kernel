@@ -2,19 +2,8 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const config = require('./config');
 const app = express();
 const router = express.Router();
-
-// Connecta ao banco
-if(process.env.NODE_ENV == 'production'){
-    mongoose.connect( config.db.production, {useMongoClient: true});
-} else if(process.env.NODE_ENV == 'docker'){
-    mongoose.connect( config.db.docker, {useMongoClient: true});
-} else{
-    mongoose.connect( config.db.development, {useMongoClient: true});
-}
 
 // Carrega os Models
 const Device = require('./models/device');

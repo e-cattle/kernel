@@ -44,9 +44,17 @@ router.get('/system', (req, res, next) => {
 });
 
 router.get('/disk', (req, res, next) => {
-    diskspace.check('/', (err, result) => {
+    diskspace.check('/writable', (err, result) => {
         res.status(200).send(result);
     });
+});
+
+router.get('/data-by-type', (req, res, next) => {
+    res.status(200).send({});
+});
+
+router.get('/data-by-day', (req, res, next) => {
+    res.status(200).send({});
 });
 
 module.exports = router;

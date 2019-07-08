@@ -44,7 +44,9 @@ router.get('/system', (req, res, next) => {
 });
 
 router.get('/disk', (req, res, next) => {
-    diskspace.check('/writable', (err, result) => {
+    var mount = process.env.NODE_ENV != 'production' ? '/' : '/writable'
+
+    diskspace.check(mount, (err, result) => {
         res.status(200).send(result);
     });
 });
@@ -55,6 +57,22 @@ router.get('/data-by-type', (req, res, next) => {
 
 router.get('/data-by-day', (req, res, next) => {
     res.status(200).send({});
+});
+
+const deviceRepository = require('../repositories/device-repository');
+
+router.get('/devices', async (req, res, next) => {
+    try{
+        const devices = await deviceRepository.getAll();
+
+        if (!devices) {
+            res.status(404).send({message:'Dipositivos não encontrados'});
+            return;
+        }
+        res.status(200).send (devices);
+    }catch(e){
+        res.status(500).send({message:'Falha na requisição', data: e});
+    }
 });
 
 module.exports = router;

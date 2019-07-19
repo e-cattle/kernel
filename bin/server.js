@@ -3,6 +3,7 @@ const debug = require('debug')('e-cattle:server');
 const http = require('http');
 const mongoose = require('mongoose');
 const config = require('../src/config');
+var lorawan = require('lorawan-js');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
@@ -26,11 +27,21 @@ setTimeout(function() {
 
 const server = http.createServer(app);
 
+const lora = new lorawan.Server({ port: 3005 });
+
 app.on('ready', function() {
+  // HTTP Server
   server.listen(port);
   server.on('error', onError);
   server.on('listening', onListening);
-  console.log('API rodando na porta ' + port);
+  console.log('API HTTP Ready. Port: ', port);
+
+  // LoRa Server
+  lora.start();
+  lora.on('pushdata_rxpk', onPushData);
+  lora.on('ready', (info, loraServer) => {
+    console.log('API LoRa Ready: ', info);
+  });
 });
 
 function normalizePort(val) {
@@ -76,4 +87,32 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+function onPushData (message, clientInfo)
+{
+  console.log('clientInfo: ', clientInfo)
+  var pdata = message.data.rxpk[0].data;
+  var buff = new Buffer(pdata, 'Base64');
+
+  var MYpacket = lorawan.Packet(buff);
+
+  console.log("[Upstream] IN pushdata RXPK - ", MYpacket.MType.Description ," from: ", MYpacket.Buffers.MACPayload.FHDR.DevAddr);
+
+  if (MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex')=="be7a0000") {
+     var NwkSKey = new Buffer('000102030405060708090A0B0C0D0E0F', 'hex');
+     var AppSKey = new Buffer('000102030405060708090A0B0C0D0E0F', 'hex');
+
+     var MYdec = MYpacket.decryptWithKeys(AppSKey, NwkSKey);
+
+     console.log("MY Time: " + MYdec.readUInt32LE(0).toString() + " Battery: " + MYdec.readUInt8(4).toString() + " Temperature: " + MYdec.readUInt8(5).toString() + " Lat: " + MYdec.readUInt32LE(6).toString() + " - Long: " + MYdec.readUInt32LE(10).toString());
+  } else if(MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex')=="03ff0001") {
+    var NwkSKey = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
+    var AppSKey = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
+
+    var MYdec = MYpacket.decryptWithKeys(AppSKey, NwkSKey);
+    console.log("MYdec: ", MYdec.toString('utf8'), " - ", MYdec.length);
+  }  else {
+    console.log("New device: ", MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex'));
+  }
 }

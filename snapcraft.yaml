@@ -22,11 +22,11 @@ apps:
     restart-condition: always
 
   node:
-    command: env NODE_ENV=production node $SNAP/bin/server.js
+    command: env NODE_ENV=production node $SNAP/server.js
     daemon: simple
     restart-condition: always
     after: [mongo]
-  
+
 #  backup:
 #    command: mongodump --db e-cattle --archive
 

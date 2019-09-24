@@ -1,8 +1,8 @@
-const app = require('../src/app');
+const app = require('./src/app');
 const debug = require('debug')('e-cattle:server');
 const http = require('http');
 const mongoose = require('mongoose');
-const config = require('../src/config');
+const config = require('./src/config');
 var lorawan = require('lorawan-js');
 
 const port = normalizePort(process.env.PORT || '3000');
@@ -21,7 +21,7 @@ setTimeout(function() {
   }
 
   mongoose.connection.once('open', function() {
-    app.emit('ready'); 
+    app.emit('ready');
   });
 }, delay);
 

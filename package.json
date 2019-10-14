@@ -18,28 +18,28 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.19.0",
     "body-parser": "^1.19.0",
-    "debug": "^2.6.8",
+    "debug": "^4.1.1",
     "diskspace": "^2.0.0",
     "express": "^4.17.1",
     "guid": "0.0.12",
-    "is-online": "^7.0.0",
+    "is-online": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "lorawan-js": "^0.1.1",
     "macaddress": "^0.2.9",
     "md5": "^2.2.1",
-    "mongoose": "^4.13.18",
+    "mongoose": "^5.7.1",
     "node-fetch": "^2.6.0",
     "os-utils": "0.0.14",
     "sendgrid": "^5.2.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^5.2.0",
-    "nodemon": "^1.19.1",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.2",
     "should": "^13.2.3",
-    "supertest": "^3.4.2"
+    "supertest": "^4.0.2"
   }
 }

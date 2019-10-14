@@ -11,16 +11,16 @@ app.set('port', port);
 let delay = process.env.NODE_ENV == 'production' ? 30000 : 1;
 
 // Connecta ao banco
-setTimeout(function() {
-  if(process.env.NODE_ENV == 'production'){
-      mongoose.connect( config.db.production, {useMongoClient: true});
-  } else if(process.env.NODE_ENV == 'docker'){
-      mongoose.connect( config.db.docker, {useMongoClient: true});
-  } else{
-      mongoose.connect( config.db.development, {useMongoClient: true});
+setTimeout(function () {
+  if (process.env.NODE_ENV == 'production') {
+    mongoose.connect(config.db.production);
+  } else if (process.env.NODE_ENV == 'docker') {
+    mongoose.connect(config.db.docker);
+  } else {
+    mongoose.connect(config.db.development);
   }
 
-  mongoose.connection.once('open', function() {
+  mongoose.connection.once('open', function () {
     app.emit('ready');
   });
 }, delay);
@@ -29,7 +29,7 @@ const server = http.createServer(app);
 
 const lora = new lorawan.Server({ port: 3005 });
 
-app.on('ready', function() {
+app.on('ready', function () {
   // HTTP Server
   server.listen(port);
   server.on('error', onError);
@@ -44,7 +44,7 @@ app.on('ready', function() {
   });
 });
 
-function normalizePort(val) {
+function normalizePort (val) {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -58,7 +58,7 @@ function normalizePort(val) {
   return false;
 }
 
-function onError(error) {
+function onError (error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -81,7 +81,7 @@ function onError(error) {
   }
 }
 
-function onListening() {
+function onListening () {
   const addr = server.address();
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
@@ -89,30 +89,29 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-function onPushData (message, clientInfo)
-{
+function onPushData (message, clientInfo) {
   console.log('clientInfo: ', clientInfo)
   var pdata = message.data.rxpk[0].data;
   var buff = new Buffer(pdata, 'Base64');
 
   var MYpacket = lorawan.Packet(buff);
 
-  console.log("[Upstream] IN pushdata RXPK - ", MYpacket.MType.Description ," from: ", MYpacket.Buffers.MACPayload.FHDR.DevAddr);
+  console.log("[Upstream] IN pushdata RXPK - ", MYpacket.MType.Description, " from: ", MYpacket.Buffers.MACPayload.FHDR.DevAddr);
 
-  if (MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex')=="be7a0000") {
-     var NwkSKey = new Buffer('000102030405060708090A0B0C0D0E0F', 'hex');
-     var AppSKey = new Buffer('000102030405060708090A0B0C0D0E0F', 'hex');
+  if (MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex') == "be7a0000") {
+    var NwkSKey = new Buffer('000102030405060708090A0B0C0D0E0F', 'hex');
+    var AppSKey = new Buffer('000102030405060708090A0B0C0D0E0F', 'hex');
 
-     var MYdec = MYpacket.decryptWithKeys(AppSKey, NwkSKey);
+    var MYdec = MYpacket.decryptWithKeys(AppSKey, NwkSKey);
 
-     console.log("MY Time: " + MYdec.readUInt32LE(0).toString() + " Battery: " + MYdec.readUInt8(4).toString() + " Temperature: " + MYdec.readUInt8(5).toString() + " Lat: " + MYdec.readUInt32LE(6).toString() + " - Long: " + MYdec.readUInt32LE(10).toString());
-  } else if(MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex')=="03ff0001") {
+    console.log("MY Time: " + MYdec.readUInt32LE(0).toString() + " Battery: " + MYdec.readUInt8(4).toString() + " Temperature: " + MYdec.readUInt8(5).toString() + " Lat: " + MYdec.readUInt32LE(6).toString() + " - Long: " + MYdec.readUInt32LE(10).toString());
+  } else if (MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex') == "03ff0001") {
     var NwkSKey = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
     var AppSKey = new Buffer('2B7E151628AED2A6ABF7158809CF4F3C', 'hex');
 
     var MYdec = MYpacket.decryptWithKeys(AppSKey, NwkSKey);
     console.log("MYdec: ", MYdec.toString('utf8'), " - ", MYdec.length);
-  }  else {
+  } else {
     console.log("New device: ", MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex'));
   }
 }

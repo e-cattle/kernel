@@ -64,8 +64,8 @@ app.use(function (req, res, next) {
 
 //Registrando as rotas
 app.use('/', indexRoute);
-app.use('/devices', deviceRoute);
-app.use('/measures', measureRoute);
+app.use('/device', deviceRoute);
+app.use('/measure', measureRoute);
 app.use('/info', infoRoute);
 app.use('/totem', totemRoute);
 

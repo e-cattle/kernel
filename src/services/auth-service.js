@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const DeviceRepository = require('../repositories/device-repository');
 
 /*
-Gera o token baseado nos dados "data", junto coma a chave privada global.SALT_KEY
+Gera o token baseado nos dados "data", junto com a chave privada global.SALT_KEY
 */
 var generateToken = async (data) => {
   return jwt.sign(data, global.SALT_KEY, { expiresIn: '1d' });

@@ -1,6 +1,7 @@
-'use strict';
-var config = require('../config');
-var sendgrid = require('sendgrid')(config.sendgridKey);
+'use strict'
+
+var config = require('../config')
+var sendgrid = require('sendgrid')(config.sendgridKey)
 
 exports.send = async (to, subject, body) => {
   sendgrid.send({
@@ -8,5 +9,5 @@ exports.send = async (to, subject, body) => {
     from: 'no-reply@ecattle.com',
     subject: subject,
     html: body
-  });
+  })
 }

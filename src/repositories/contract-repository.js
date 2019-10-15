@@ -1,17 +1,17 @@
-'use strict';
-const mongoose = require('mongoose');
-const Contract = mongoose.model('Contract');
+'use strict'
+
+const mongoose = require('mongoose')
+const Contract = mongoose.model('Contract')
 
 exports.create = async (data) => {
-  var contract = new Contract(data);
-  return await contract.save();
+  var contract = new Contract(data)
+  return contract.save()
 }
 
-
 exports.getAll = async () => {
-  return await Contract.find({});
+  return Contract.find({})
 }
 
 exports.getById = async (id) => {
-  return await Contract.findById(id);
+  return Contract.findById(id)
 }

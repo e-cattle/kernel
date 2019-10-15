@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const infoService = require('../services/info-service');
+const infoService = require('../services/info-service')
 
-const pkg = require('../../package.json');
+const pkg = require('../../package.json')
 
 router.get('/', (req, res, next) => {
   res.status(200).send({
@@ -13,24 +13,24 @@ router.get('/', (req, res, next) => {
     description: pkg.description,
     contributors: pkg.contributors,
     version: pkg.version
-  });
-});
+  })
+})
 
 router.get('/status', async (req, resp) => {
   try {
-    let online = await infoService.isOnline();
-    let mac = await infoService.getMacAddress();
-    let ips = await infoService.getIp();
+    const online = await infoService.isOnline()
+    const mac = await infoService.getMacAddress()
+    const ips = await infoService.getIp()
 
     resp.json({
       online: online,
       mac: mac,
       ips: ips
-    });
+    })
   } catch (error) {
-    console.log(error);
-    resp.status(500).send("Erro ao verificar o status do Kernel!");
+    console.log(error)
+    resp.status(500).send('Erro ao verificar o status do Kernel!')
   }
-});
+})
 
-module.exports = router;
+module.exports = router

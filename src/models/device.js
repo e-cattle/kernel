@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
 
 const device = new mongoose.Schema({
   name: {
@@ -55,17 +54,16 @@ const device = new mongoose.Schema({
       type: String,
       required: true
     }
-  }],
+  }]
   // contract: {
   //     type: Schema.Types.ObjectId,
   //     ref: 'Contract',
   //     required: true
   //   }
-});
+})
 
 // device.path('sensors').validate(function(v) {
-//     return v.length > 0;
-//   });
+//     return v.length > 0
+//   })
 
-
-module.exports = mongoose.model('Device', device);
+module.exports = mongoose.model('Device', device)

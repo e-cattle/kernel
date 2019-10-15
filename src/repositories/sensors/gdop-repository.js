@@ -1,18 +1,16 @@
-'use strict';
-const mongoose = require('mongoose');
-const GDOP = mongoose.model('GDOP');
+'use strict'
 
-exports.create = async(data) => {
-    var device = new SensorType(data);
-   return await device.save();
+const mongoose = require('mongoose')
+const Sensor = mongoose.model('GDOP')
+
+exports.create = async (data) => {
+  return (new Sensor(data)).save()
 }
 
-exports.getAll = async() => {
-    const res = await SensorType.find({});
-    return res;
+exports.getAll = async () => {
+  return Sensor.find({})
 }
 
-exports.getById = async(id) => {
-    const res = await SensorType.findById(id);
-    return res;
+exports.getById = async (id) => {
+  return Sensor.findById(id)
 }

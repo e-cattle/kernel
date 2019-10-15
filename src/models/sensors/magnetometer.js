@@ -1,43 +1,43 @@
-'use strict';
+'use strict'
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const magnetometer = new Schema({
-    deviceId: {
-        type: Schema.Types.ObjectId,
-        required:true
+  deviceId: {
+    type: Schema.Types.ObjectId,
+    required: true
+  },
+  value: [{
+    mx: {
+      type: Number,
+      required: true
     },
-    value:[{
-        mx:{
-            type:Number,
-            required:true
-        },
-        my:{
-            type:Number,
-            required:true
-        },
-        mz:{
-            type:Number,
-            required:true
-        }
-    }],
-    date:{
-        type:String,
-        required:true
+    my: {
+      type: Number,
+      required: true
     },
-    resource: {
-        type:String,
-        required:false
-    },
-    dataStorage:{
-        type:Date,
-        default: Date.now,
-        required:true
-    },
-    syncedAt:{
-        type: Date
-    },
-},{collection: "type-magnetometer"});
+    mz: {
+      type: Number,
+      required: true
+    }
+  }],
+  date: {
+    type: String,
+    required: true
+  },
+  resource: {
+    type: String,
+    required: false
+  },
+  dataStorage: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  syncedAt: {
+    type: Date
+  }
+}, { collection: 'type-magnetometer' })
 
-module.exports =  mongoose.model ('type-magnetometer', magnetometer);
+module.exports = mongoose.model('type-magnetometer', magnetometer)

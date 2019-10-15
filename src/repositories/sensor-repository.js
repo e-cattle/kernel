@@ -1,7 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const Sensor = mongoose.model('RetalTemperature')
+const Sensor = mongoose.model('Sensor')
 
 exports.create = async (data) => {
   return (new Sensor(data)).save()
@@ -13,4 +13,9 @@ exports.getAll = async () => {
 
 exports.getById = async (id) => {
   return Sensor.findById(id)
+}
+
+exports.getBySensorName = async (name) => {
+  const res = await Sensor.find({ name: name })
+  return res
 }

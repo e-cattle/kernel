@@ -1,43 +1,43 @@
-'use strict';
+'use strict'
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const accelerometer = new Schema({
-    deviceId: {
-        type: Schema.Types.ObjectId,
-        required:true
+  deviceId: {
+    type: Schema.Types.ObjectId,
+    required: true
+  },
+  value: [{
+    ax: {
+      type: Number,
+      required: true
     },
-    value:[{
-        ax:{
-            type:Number,
-            required:true
-        },
-        ay:{
-            type:Number,
-            required:true
-        },
-        az:{
-            type:Number,
-            required:true
-        }
-    }],
-    date:{
-        type:String,
-        required:true
+    ay: {
+      type: Number,
+      required: true
     },
-    resource: {
-        type:String,
-        required:false
-    },
-    dataStorage:{
-        type:Date,
-        default: Date.now,
-        required:true
-    },
-    syncedAt:{
-        type: Date
-    },
-},{collection: "type-accelerometer"});
+    az: {
+      type: Number,
+      required: true
+    }
+  }],
+  date: {
+    type: String,
+    required: true
+  },
+  resource: {
+    type: String,
+    required: false
+  },
+  dataStorage: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  syncedAt: {
+    type: Date
+  }
+}, { collection: 'type-accelerometer' })
 
-module.exports =  mongoose.model ('type-accelerometer', accelerometer);
+module.exports = mongoose.model('type-accelerometer', accelerometer)

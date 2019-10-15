@@ -6,7 +6,11 @@ const config = require('./src/config')
 var lorawan = require('lorawan-js')
 const dotenv = require('dotenv')
 
-dotenv.config()
+if (process.env.SNAP_USER_DATA) {
+  dotenv.config({ path: process.env.SNAP_USER_DATA + '/.env' })
+} else {
+  dotenv.config()
+}
 
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
@@ -41,7 +45,9 @@ app.on('ready', function () {
 
   console.log('### Loading Environment Variables ###')
 
-  console.log('NODE_ENV from command line: ' + process.env.NODE_ENV)
+  console.log('SNAP_USER_DATA from command line: ' + process.env.SNAP_USER_DATA)
+
+  console.log('NODE_ENV from .env file: ' + process.env.NODE_ENV)
 
   console.log('PK from .env file: ' + process.env.PK)
 

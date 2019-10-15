@@ -46,10 +46,6 @@ const device = new mongoose.Schema({
       type: String,
       required: true
     },
-    label: {
-      type: String,
-      required: true
-    },
     description: {
       type: String,
       required: true

@@ -17,7 +17,7 @@ async function validate (device) {
     const generalValidator = new GeneralValidator()
     const sensorValidator = new SensorValidator()
 
-    sensorValidator.validadeProperties(device)
+    sensorValidator.validateProperties(device)
 
     if (!sensorValidator.isPropertiesValid()) {
       return sensorValidator.propertieErrors()
@@ -28,7 +28,7 @@ async function validate (device) {
     generalValidator.hasMinLen(device.local, 3, 'A localização (local) deve conter pelo menos 3 caracteres!')
     generalValidator.isMac(device.mac, 'Mac inválido!')
 
-    sensorValidator.validadeSensors(device.sensors)
+    sensorValidator.validateSensors(device.sensors)
 
     if (!generalValidator.isValid() || !sensorValidator.isValid()) {
       return generalValidator.errors().concat(sensorValidator.errors())
@@ -36,7 +36,9 @@ async function validate (device) {
 
     return
   } catch (err) {
-    return err
+    console.log(err)
+
+    return 'Houve um erro no tratamento da requisição! Por favor, contacte o suporte.'
   }
 }
 
@@ -60,7 +62,7 @@ exports.save = async (req, res, next) => {
       device.local = req.body.local
       device.version = device.version + 1
       device.sensors = req.body.sensors
-      device.changed = undefined
+      device.changed = Date.now()
     }
 
     // Validação

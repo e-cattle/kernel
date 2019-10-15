@@ -5,7 +5,8 @@ const DeviceRepository = require('../repositories/device-repository')
 
 // Gera o token baseado nos dados "data", junto com a chave privada global.SALT_KEY
 var generateToken = async (data) => {
-  return jwt.sign(data, global.SALT_KEY, { expiresIn: '1d' })
+  console.log('Used PK: ' + process.env.PK)
+  return jwt.sign(data, process.env.PK)
 }
 
 exports.generateToken = generateToken

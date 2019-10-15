@@ -4,8 +4,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const gateOpened = new Schema({
-  deviceId: {
+  device: {
     type: Schema.Types.ObjectId,
+    ref: 'Device',
     required: true
   },
   value: {
@@ -20,13 +21,9 @@ const gateOpened = new Schema({
     type: String,
     required: false
   },
-  dataStorage: {
+  storaged: {
     type: Date,
-    default: Date.now,
-    required: true
-  },
-  syncedAt: {
-    type: Date
+    default: Date.now()
   }
 }, { collection: 'type-gate-opened' })
 

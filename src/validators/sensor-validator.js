@@ -11,25 +11,22 @@ function SensorValidator () {
 async function getTypeSensors () {
   // Importando mongoose
   var mongoose = require('mongoose')
-  // Lendo todas as collections crias pelo mongoose
+
+  // Lendo todas as collections criadas pelo mongoose
   var collections = mongoose.connections[0].collections
   var names = []
+
   // Filtrando as collection em array com as collection que iniciam com o
   // prefixo 'type-'
   for (let i = 0; i < Object.keys(collections).length; i++) {
     const e = Object.keys(collections)[i]
+
     if (e.indexOf('type-') === 0) {
       names.push(e)
     }
   }
-  return names
 
-  // Object.keys(collections).forEach(function(k, i) {
-  //     if (k.indexOf('type-')==0){
-  //         names.push(k)
-  //     }
-  //     if(i+1 == collections.length) return names
-  // })
+  return names
 }
 
 SensorValidator.prototype.getTypeSensors = getTypeSensors
@@ -49,6 +46,7 @@ SensorValidator.prototype.validateSensors = async (sensors) => {
         break
       }
     }
+
     // Resposta quando não encontra ou dá algum erro
     if (!found) {
       // Resposta quando não encontra o tipo informado na coleção valida
@@ -61,6 +59,7 @@ SensorValidator.prototype.validateSensors = async (sensors) => {
 }
 
 SensorValidator.prototype.validateProperties = (obj) => {
+  /*
   if (!('name' in obj)) {
     propertieErrors.push({
       message: 'Propriedade name não encontrada',
@@ -91,6 +90,8 @@ SensorValidator.prototype.validateProperties = (obj) => {
       name: 'PropertiesError'
     })
   }
+  */
+
   if (!('sensors' in obj)) {
     propertieErrors.push({
       message: 'Propriedade sensors não encontrada',
@@ -105,7 +106,7 @@ SensorValidator.prototype.validateProperties = (obj) => {
           name: 'PropertiesError'
         })
       }
-      if (!('descriptor' in sensor)) {
+      if (!('description' in sensor)) {
         propertieErrors.push({
           message: `Propriedade descriptor não encontrada na coleção sensors[${i}]`,
           name: 'PropertiesError'

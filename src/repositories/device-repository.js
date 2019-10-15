@@ -6,7 +6,9 @@ mongoose.model('Contract')
 
 exports.save = async (data) => {
   if (data._id) {
-    await Device.update(data)
+    // await Device.updateOne(data)
+    // return Device.findById(data._id)
+    await data.save()
     return Device.findById(data._id)
   } else {
     return new Device(data).save()

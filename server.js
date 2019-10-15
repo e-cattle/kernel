@@ -6,6 +6,7 @@ const config = require('./src/config')
 var lorawan = require('lorawan-js')
 const dotenv = require('dotenv')
 
+// Load .env from SNAP data directory for production environment
 if (process.env.SNAP_USER_DATA) {
   dotenv.config({ path: process.env.SNAP_USER_DATA + '/.env' })
 } else {
@@ -17,7 +18,7 @@ app.set('port', port)
 
 const delay = process.env.NODE_ENV === 'production' ? 30000 : 1
 
-// Connecta ao banco
+// DB connect
 setTimeout(function () {
   mongoose.set('useNewUrlParser', true)
   mongoose.set('useCreateIndex', true)

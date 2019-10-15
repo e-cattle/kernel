@@ -6,7 +6,8 @@ const Schema = mongoose.Schema
 const contract = new Schema({
   device: {
     type: Schema.Types.ObjectId,
-    ref: 'Device'
+    ref: 'Device',
+    required: true
   },
   name: {
     type: String,
@@ -40,10 +41,6 @@ const contract = new Schema({
       required: true
     },
     name: {
-      type: String,
-      required: true
-    },
-    label: {
       type: String,
       required: true
     },

@@ -8,7 +8,9 @@ exports.save = async (data) => {
   if (data._id) {
     await Device.update(data)
     return Device.findById(data._id)
-  } else return new Device(data).save()
+  } else {
+    return new Device(data).save()
+  }
 }
 
 exports.create = async (data) => {

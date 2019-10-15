@@ -3,11 +3,19 @@
 const mongoose = require('mongoose')
 
 const device = new mongoose.Schema({
+  enable: {
+    type: Boolean,
+    default: false
+  },
   name: {
     type: String,
-    required: [true, 'porque sem nome?']
+    required: true
   },
   description: {
+    type: String,
+    required: true
+  },
+  local: {
     type: String,
     required: true
   },
@@ -19,11 +27,6 @@ const device = new mongoose.Schema({
     type: String,
     required: true
   },
-  enable: {
-    type: Boolean,
-    default: true
-
-  },
   mac: {
     type: String,
     required: true,
@@ -34,36 +37,32 @@ const device = new mongoose.Schema({
     type: Number,
     required: true
   },
-  syncedAt: {
-    type: Date
-  },
-  hasToSync: {
-    type: Boolean,
-    default: true
-  },
   sensors: [{
     type: {
-      type: String,
-      required: true
-    },
-    descriptor: {
       type: String,
       required: true
     },
     name: {
       type: String,
       required: true
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
     }
-  }]
-  // contract: {
-  //     type: Schema.Types.ObjectId,
-  //     ref: 'Contract',
-  //     required: true
-  //   }
+  }],
+  created: {
+    type: Date,
+    default: Date.now()
+  },
+  changed: {
+    type: Date,
+    default: Date.now()
+  }
 })
-
-// device.path('sensors').validate(function(v) {
-//     return v.length > 0
-//   })
 
 module.exports = mongoose.model('Device', device)

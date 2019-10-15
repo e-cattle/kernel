@@ -1,36 +1,37 @@
 'use strict'
 
 // const fetch = require('node-fetch')
-const axios = require('axios')
+// const axios = require('axios')
 
-const ValidationContract = require('../validators/fluent-validator')
-
-const SensorTypeValidator = require('../validators/sensor-validator')
+const GeneralValidator = require('../validators/general-validator')
+const SensorValidator = require('../validators/sensor-validator')
 
 const deviceRepository = require('../repositories/device-repository')
-const configRepository = require('../repositories/config-repository')
 const contractRepository = require('../repositories/contract-repository')
 
 const authService = require('../services/auth-service')
-const infoService = require('../services/info-service')
+// const infoService = require('../services/info-service')
 
-async function validade (device) {
+async function validate (device) {
   try {
-    const contract = new ValidationContract()
-    const sensorTypeValidator = new SensorTypeValidator()
+    const generalValidator = new GeneralValidator()
+    const sensorValidator = new SensorValidator()
 
-    sensorTypeValidator.validadeProperties(device)
+    sensorValidator.validadeProperties(device)
 
-    if (!sensorTypeValidator.isPropertiesValid()) {
-      return sensorTypeValidator.propertieErrors()
+    if (!sensorValidator.isPropertiesValid()) {
+      return sensorValidator.propertieErrors()
     }
 
-    contract.hasMinLen(device.name, 3, 'O nome deve conter pelo menos 3 caracteres')
-    contract.isMac(device.mac, 'Mac inválido')
-    sensorTypeValidator.validadeSensors(device.sensors)
+    generalValidator.hasMinLen(device.name, 3, 'O nome (name) deve conter pelo menos 3 caracteres!')
+    generalValidator.hasMinLen(device.description, 3, 'A descrição (description) deve conter pelo menos 3 caracteres!')
+    generalValidator.hasMinLen(device.local, 3, 'A localização (local) deve conter pelo menos 3 caracteres!')
+    generalValidator.isMac(device.mac, 'Mac inválido!')
 
-    if (!contract.isValid() || !sensorTypeValidator.isValid()) {
-      return contract.errors().concat(sensorTypeValidator.errors())
+    sensorValidator.validadeSensors(device.sensors)
+
+    if (!generalValidator.isValid() || !sensorValidator.isValid()) {
+      return generalValidator.errors().concat(sensorValidator.errors())
     }
 
     return
@@ -49,43 +50,51 @@ exports.save = async (req, res, next) => {
     if (!device) {
       device = req.body
       device.version = 1
+      device.enable = undefined
+      device.created = undefined
+      device.changed = undefined
     } else {
       // Caso exista, pega a versão atual e gera uma nova
+      device.name = req.body.name
+      device.description = req.body.description
+      device.local = req.body.local
       device.version = device.version + 1
       device.sensors = req.body.sensors
-      device.hasToSync = true
+      device.changed = undefined
     }
 
     // Validação
-    const errors = await validade(device)
+    const errors = await validate(device)
+
     if (errors) {
       res.status(401).json({ message: errors })
+
       return
     }
 
     // Cadastra o Dispositivo
-    const deviceCreated = await deviceRepository.save(device)
+    const fresh = await deviceRepository.save(device)
 
     // Geração do Token
     // Gera o token valido para o dispositivo
     const token = await authService.generateToken({
-      id: deviceCreated._id,
-      name: deviceCreated.name,
-      mac: deviceCreated.mac
+      id: fresh._id,
+      name: fresh.name,
+      mac: fresh.mac,
+      date: fresh.changed
     })
 
     // Gera o Contrato
-    const contractCreated = await contractRepository.create({
-      name: deviceCreated.name,
-      mac: deviceCreated.mac,
-      version: deviceCreated.version,
-      devices: deviceCreated._id,
-      sensors: deviceCreated.sensors
+    await contractRepository.create({
+      device: fresh._id,
+      name: fresh.name,
+      description: fresh.description,
+      local: fresh.local,
+      mac: fresh.mac,
+      version: fresh.version,
+      sensors: fresh.sensors,
+      date: fresh.changed
     })
-
-    deviceCreated.contractDate = contractCreated.date
-    // deviceCreated.contractId = contractCreated._id
-    await deviceRepository.save(deviceCreated)
 
     // Envia o novo token para o dispositivo
     res.status(201).send({
@@ -112,6 +121,7 @@ exports.getAll = async (req, res, next) => {
   }
 }
 
+/*
 exports.syncDevices = async (req, res, next) => {
   try {
     let errors = ''
@@ -163,6 +173,7 @@ async function setSynced (mac) {
 
   return device
 }
+*/
 
 exports.enable = async (req, res, next) => {
   if (!req.params.mac) {

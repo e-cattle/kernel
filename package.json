@@ -30,7 +30,7 @@
     "lorawan-js": "^0.1.1",
     "macaddress": "^0.2.9",
     "md5": "^2.2.1",
-    "mongoose": "^5.7.1",
+    "mongoose": "^5.7.5",
     "node-fetch": "^2.6.0",
     "os-utils": "0.0.14",
     "sendgrid": "^5.2.3"
@@ -43,8 +43,8 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "mocha": "^6.2.0",
-    "nodemon": "^1.19.2",
+    "mocha": "^6.2.1",
+    "nodemon": "^1.19.3",
     "should": "^13.2.3",
     "supertest": "^4.0.2"
   }

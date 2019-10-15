@@ -4,6 +4,9 @@ const http = require('http')
 const mongoose = require('mongoose')
 const config = require('./src/config')
 var lorawan = require('lorawan-js')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
@@ -12,6 +15,10 @@ const delay = process.env.NODE_ENV === 'production' ? 30000 : 1
 
 // Connecta ao banco
 setTimeout(function () {
+  mongoose.set('useNewUrlParser', true)
+  mongoose.set('useCreateIndex', true)
+  mongoose.set('useUnifiedTopology', true)
+
   if (process.env.NODE_ENV === 'production') {
     mongoose.connect(config.db.production)
   } else if (process.env.NODE_ENV === 'docker') {
@@ -30,6 +37,18 @@ const server = http.createServer(app)
 const lora = new lorawan.Server({ port: 3005 })
 
 app.on('ready', function () {
+  console.log()
+
+  console.log('### Loading Environment Variables ###')
+
+  console.log('NODE_ENV from command line: ' + process.env.NODE_ENV)
+
+  console.log('PK from .env file: ' + process.env.PK)
+
+  console.log()
+
+  console.log('### Going Up Servers ###')
+
   // HTTP Server
   server.listen(port)
   server.on('error', onError)

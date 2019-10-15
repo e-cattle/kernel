@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+if [ ! -f "$SNAP_USER_DATA/.env" ]; then
+  KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+  echo "PK=$KEY" > $SNAP_USER_DATA/.env
+fi
+
+cp -f $SNAP_USER_DATA/.env $SNAP/

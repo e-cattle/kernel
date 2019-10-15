@@ -33,6 +33,8 @@ apps:
 hooks:
   install:
     plugs: [home, network, network-bind]
+  configure:
+    plugs: [home, network, network-bind]
 
 plugs:
   home:

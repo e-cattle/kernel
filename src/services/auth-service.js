@@ -3,9 +3,8 @@
 const jwt = require('jsonwebtoken')
 const DeviceRepository = require('../repositories/device-repository')
 
-// Gera o token baseado nos dados "data", junto com a chave privada global.SALT_KEY
+// Gera o token baseado nos dados "data", junto com a chave privada process.env.PK
 var generateToken = async (data) => {
-  console.log('Used PK: ' + process.env.PK)
   return jwt.sign(data, process.env.PK)
 }
 
@@ -13,7 +12,7 @@ exports.generateToken = generateToken
 
 // Retorna os dados decodificados inseridos no token
 var decodeToken = async (token) => {
-  var data = await jwt.verify(token, global.SALT_KEY)
+  var data = await jwt.verify(token, process.env.PK)
   return data
 }
 
@@ -26,25 +25,25 @@ exports.authorize = async function (req, res, next) {
 
   if (!token || !mac) {
     res.status(401).json({
-      message: 'Acesso Restrito'
+      message: 'Invalid (or empty) token or MAC address!'
     })
   } else {
-    jwt.verify(token, global.SALT_KEY, function (error, decoded) {
+    jwt.verify(token, process.env.PK, function (error, decoded) {
       if (error) {
         res.status(401).json({
-          message: 'Token inválido'
+          message: 'Invalid token!'
         })
       } else {
         decodeToken(token).then((device) => {
           if (mac === device.mac) next()
           else {
             res.status(401).json({
-              message: 'MAC não confere com o token: ' + mac + ' | ' + device.mac
+              message: 'MAC address in token is not valid! ' + mac + ' != ' + device.mac
             })
           }
         }).catch((err) => {
           res.status(500).json({
-            message: `Erro ao extrair o MAC do token: ${err}`
+            message: `Error to extract MAC inside token: ${err}`
           })
         })
       }
@@ -53,7 +52,7 @@ exports.authorize = async function (req, res, next) {
 }
 
 /*
-renova o token é de um device cadastrado e ativo, quando o token
+Renova o token é de um device cadastrado e ativo, quando o token
 estiver expirado
 */
 exports.renewToken = async function (req, res) {
@@ -61,7 +60,7 @@ exports.renewToken = async function (req, res) {
 
   if (!mac) {
     res.status(401).json({
-      message: 'O MAC do dispositivo deve ser informado'
+      message: 'You must inform MAC address in request!'
     })
 
     return
@@ -71,7 +70,7 @@ exports.renewToken = async function (req, res) {
 
   if (!device) {
     res.status(401).json({
-      message: 'Dispositivo não encontrado ou não habilitado'
+      message: 'Device not found or disabled!'
     })
 
     return
@@ -80,7 +79,8 @@ exports.renewToken = async function (req, res) {
   var token = await generateToken({
     id: device._id,
     name: device.name,
-    mac: device.mac
+    mac: device.mac,
+    date: device.changed
   })
 
   res.json({ token: token })

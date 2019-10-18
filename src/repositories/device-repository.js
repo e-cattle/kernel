@@ -6,8 +6,6 @@ mongoose.model('Contract')
 
 exports.save = async (data) => {
   if (data._id) {
-    // await Device.updateOne(data)
-    // return Device.findById(data._id)
     await data.save()
     return Device.findById(data._id)
   } else {
@@ -41,7 +39,7 @@ exports.getByMac = async (mac) => {
   })
   return res
 }
-
+/*
 exports.getAllUnsynced = async () => {
   return Device.find().or([{ syncedAt: undefined }, { hasToSync: true }])
 }
@@ -55,7 +53,7 @@ exports.setSyncedByMac = async (mac) => {
     throw Error('Device not found!')
   }
 }
-
+*/
 exports.getByMacEnabled = async (mac) => {
   const res = await Device.findOne({
     mac: mac,

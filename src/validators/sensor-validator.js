@@ -8,16 +8,14 @@ function SensorValidator () {
   propertieErrors = []
 }
 
-async function getTypeSensors () {
-  // Importando mongoose
+async function getSensorTypes () {
   var mongoose = require('mongoose')
 
-  // Lendo todas as collections criadas pelo mongoose
+  // Reading all Mongoose collections...
   var collections = mongoose.connections[0].collections
   var names = []
 
-  // Filtrando as collection em array com as collection que iniciam com o
-  // prefixo 'type-'
+  // Filtering collections with 'type' prefix...
   for (let i = 0; i < Object.keys(collections).length; i++) {
     const e = Object.keys(collections)[i]
 
@@ -29,94 +27,61 @@ async function getTypeSensors () {
   return names
 }
 
-SensorValidator.prototype.getTypeSensors = getTypeSensors
+SensorValidator.prototype.getTypeSensors = getSensorTypes
 
 SensorValidator.prototype.validateSensors = async (sensors) => {
-  const validCollections = await getTypeSensors()
+  const validCollections = await getSensorTypes()
 
-  // Validar o vetor de sensores vindo no json requestm(Sensor Type)
-  for (let index = 0; index < sensors.length; index++) {
-    const sensor = sensors[index]
+  const unique = []
 
-    // Valida se o Json tem os sensores validos (função contains)
-    let found = false
-    for (let i = 0; i < validCollections.length; i++) {
-      if (sensor.type === validCollections[i]) {
-        found = true
-        break
-      }
-    }
-
-    // Resposta quando não encontra ou dá algum erro
-    if (!found) {
-      // Resposta quando não encontra o tipo informado na coleção valida
+  // Validate sensors array in JSON of request body...
+  for (let i = 0; i < sensors.length; i++) {
+    if (!validCollections.includes(sensors[i].type)) {
       errors.push({
-        message: `Sensor Type inválido: ${sensor.type}`,
+        message: `Invalid sensor type '${sensors[i].type}'!`,
         name: 'ValidatorError'
       })
+    }
+
+    if (unique.includes(sensors[i].name)) {
+      errors.push({
+        message: `Sensor name must be unique but found duplicate declaration of '${sensors[i].name}'!`,
+        name: 'ValidatorError'
+      })
+    } else {
+      unique.push(sensors[i].name)
     }
   }
 }
 
 SensorValidator.prototype.validateProperties = (obj) => {
-  /*
-  if (!('name' in obj)) {
-    propertieErrors.push({
-      message: 'Propriedade name não encontrada',
-      name: 'PropertiesError'
-    })
+  let properties = ['name', 'description', 'branch', 'model', 'mac']
+
+  for (let i = 0; i < properties.length; i++) {
+    if (!(properties[i] in obj)) {
+      propertieErrors.push({
+        message: `Required field '${properties[i]}' not found!`,
+        name: 'PropertiesError'
+      })
+    }
   }
-  if (!('description' in obj)) {
-    propertieErrors.push({
-      message: 'Propriedade description não encontrada',
-      name: 'PropertiesError'
-    })
-  }
-  if (!('branch' in obj)) {
-    propertieErrors.push({
-      message: 'Propriedade branch não encontrada',
-      name: 'PropertiesError'
-    })
-  }
-  if (!('model' in obj)) {
-    propertieErrors.push({
-      message: 'Propriedade model não encontrada',
-      name: 'PropertiesError'
-    })
-  }
-  if (!('mac' in obj)) {
-    propertieErrors.push({
-      message: 'Propriedade mac não encontrada',
-      name: 'PropertiesError'
-    })
-  }
-  */
 
   if (!('sensors' in obj)) {
     propertieErrors.push({
-      message: 'Propriedade sensors não encontrada',
+      message: 'Required field \'sensors\' not found!',
       name: 'PropertiesError'
     })
   } else {
+    properties = ['type', 'description', 'name']
+
     for (let i = 0; i < obj.sensors.length; i++) {
-      const sensor = obj.sensors[i]
-      if (!('type' in sensor)) {
-        propertieErrors.push({
-          message: `Propriedade type não encontrada na coleção sensors[${i}]`,
-          name: 'PropertiesError'
-        })
-      }
-      if (!('description' in sensor)) {
-        propertieErrors.push({
-          message: `Propriedade descriptor não encontrada na coleção sensors[${i}]`,
-          name: 'PropertiesError'
-        })
-      }
-      if (!('name' in sensor)) {
-        propertieErrors.push({
-          message: `Propriedade name não encontrada na coleção sensors[${i}]`,
-          name: 'PropertiesError'
-        })
+      for (let j = 0; j < properties.length; j++) {
+        if (!(properties[j] in obj.sensors[i])) {
+          propertieErrors.push({
+            message: `Required field '${properties[j]}' not found in one of sensors!`,
+            name: 'PropertiesError'
+          })
+        }
       }
     }
   }

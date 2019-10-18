@@ -23,6 +23,7 @@ setTimeout(function () {
   mongoose.set('useNewUrlParser', true)
   mongoose.set('useCreateIndex', true)
   mongoose.set('useUnifiedTopology', true)
+  mongoose.set('useFindAndModify', false)
 
   if (process.env.NODE_ENV === 'production') {
     mongoose.connect(config.db.production)

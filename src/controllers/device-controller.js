@@ -28,7 +28,7 @@ async function validate (device) {
     generalValidator.hasMinLen(device.local, 3, 'A localização (local) deve conter pelo menos 3 caracteres!')
     generalValidator.isMac(device.mac, 'Mac inválido!')
 
-    sensorValidator.validateSensors(device.sensors)
+    await sensorValidator.validateSensors(device.sensors)
 
     if (!generalValidator.isValid() || !sensorValidator.isValid()) {
       return generalValidator.errors().concat(sensorValidator.errors())
@@ -110,105 +110,62 @@ exports.save = async (req, res, next) => {
   }
 }
 
-exports.getAll = async (req, res, next) => {
+exports.all = async (req, res, next) => {
   try {
     const devices = await deviceRepository.getAll()
+
     if (!devices) {
-      res.status(404).send({ message: 'Dipositivos não encontrados' })
+      res.status(404).send({ message: 'Dipositivos não encontrados!' })
       return
     }
+
     res.status(200).send(devices)
   } catch (e) {
-    res.status(500).send({ message: 'Falha na requisição', data: e })
+    res.status(500).send({ message: 'Falha na requisição!', data: e })
   }
 }
-
-/*
-exports.syncDevices = async (req, res, next) => {
-  try {
-    let errors = ''
-    const macaddress = await infoService.getMacAddress()
-    const devices = await deviceRepository.getAllUnsynced()
-    const config = await configRepository.getConfig()
-
-    if (devices.length <= 0) res.status(200).send('Todos os dispositivos sincronizados.<br>')
-
-    for (let i = 0; i < devices.length; i++) {
-      const device = devices[i]
-      device.kernelMac = macaddress
-      const body = { token: config.token, device: device, kernelMac: macaddress }
-      console.log(`Sincronizando dispositivo: ${device.name}`)
-      const response = await axios.post(`${config.apiAddressProtocol}${config.apiAddress}devices-sync/`, body)
-      if (!response.data.syncedAt) errors += `Erro ao sincronizar dispositivo: ${device.name}`
-      else setSynced(device.mac)
-    }
-
-    if (errors === '') res.send({ message: 'Todos os dispositivos foram sincronizados' })
-    else res.status(500).send({ errors: errors })
-
-    return
-  } catch (e) {
-    res.status(500).send('Erro ao sincronizar devices')
-    console.log(e)
-  }
-}
-
-exports.setSynced = async (req, res, next) => {
-  if (!req.params.mac) {
-    res.status(401).json({ message: 'MAC não fornecido' })
-  } else {
-    try {
-      await setSynced(req.params.mac)
-      res.send('Ok')
-    } catch (error) {
-      res.status(500).send('Erro ao atualizar device')
-    }
-  }
-}
-
-async function setSynced (mac) {
-  const device = await deviceRepository.setSyncedByMac(mac)
-
-  if (!device) {
-    throw new Error('Erro ao atualizar dispositivo: ' + mac)
-  }
-
-  return device
-}
-*/
 
 exports.enable = async (req, res, next) => {
   if (!req.params.mac) {
-    res.status(401).json({ message: 'MAC não fornecido' })
+    res.status(401).json({ message: 'MAC não fornecido!' })
     return
   }
+
   try {
     const mac = req.params.mac
+
     const device = await deviceRepository.enableByMac(mac)
+
     if (!device) {
-      res.status(404).json({ message: 'Dipositivo não encontrado' })
+      res.status(404).json({ message: 'Dipositivo não encontrado!' })
+
       return
     }
+
     res.status(200).json(device)
   } catch (e) {
-    res.status(500).json({ message: 'Falha na requisição', data: e })
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
   }
 }
 
 exports.disable = async (req, res, next) => {
   if (!req.params.mac) {
-    res.status(401).json({ message: 'MAC não fornecido' })
+    res.status(401).json({ message: 'MAC não fornecido!' })
     return
   }
+
   try {
     const mac = req.params.mac
+
     const device = await deviceRepository.disableByMac(mac)
+
     if (!device) {
-      res.status(404).json({ message: 'Dipositivo não encontrado' })
+      res.status(404).json({ message: 'Dipositivo não encontrado!' })
       return
     }
+
     res.status(200).json(device)
   } catch (e) {
-    res.status(500).json({ message: 'Falha na requisição', data: e })
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
   }
 }

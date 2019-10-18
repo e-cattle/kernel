@@ -44,6 +44,9 @@ const contract = new Schema({
       type: String,
       required: true
     },
+    label: {
+      type: String
+    },
     description: {
       type: String,
       required: true

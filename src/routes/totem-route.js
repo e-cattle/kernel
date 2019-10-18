@@ -18,10 +18,14 @@ router.get('/system', (req, res, next) => {
 })
 
 router.get('/disk', (req, res, next) => {
-  var mount = process.env.NODE_ENV != 'production' ? '/' : '/writable'
+  var mount = process.env.NODE_ENV !== 'production' ? '/' : '/writable'
 
   diskspace.check(mount, (err, result) => {
-    res.status(200).send(result)
+    if (err) {
+      res.status(500).send(err)
+    } else {
+      res.status(200).send(result)
+    }
   })
 })
 
@@ -33,20 +37,12 @@ router.get('/data-by-day', (req, res, next) => {
   res.status(200).send({})
 })
 
-const deviceRepository = require('../repositories/device-repository')
+const device = require('../controllers/device-controller')
 
-router.get('/devices', async (req, res, next) => {
-  try {
-    const devices = await deviceRepository.getAll()
+router.get('/devices', device.all)
 
-    if (!devices) {
-      res.status(404).send({ message: 'Dipositivos não encontrados' })
-      return
-    }
-    res.status(200).send(devices)
-  } catch (e) {
-    res.status(500).send({ message: 'Falha na requisição', data: e })
-  }
-})
+router.put('/device/enable/:mac', device.enable)
+
+router.put('/device/disable/:mac', device.disable)
 
 module.exports = router

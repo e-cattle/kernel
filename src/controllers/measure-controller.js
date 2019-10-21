@@ -3,22 +3,14 @@
 const mongoose = require('mongoose')
 const moment = require('moment')
 
-// const SensorTypeValidator = require('../validators/sensor-validator')
-
 const deviceRepository = require('../repositories/device-repository')
 require('../repositories/contract-repository')
-
-// require('../auth/device-auth')
 
 exports.collect = async (req, res, next) => {
   if (!req.mac) {
     res.status(401).send({ message: 'Error to get MAC Address from token!' })
     return
   }
-
-  console.log('MAC: ' + req.mac)
-
-  // const sensorTypeValidator = new SensorTypeValidator()
 
   const device = await deviceRepository.authenticate({ mac: req.mac })
 
@@ -29,7 +21,6 @@ exports.collect = async (req, res, next) => {
 
   const measures = req.body.measures
 
-  // Verifica se tem medidas
   if (!measures) {
     res.status(404).send({ message: 'Empty measures!' })
     return
@@ -46,21 +37,6 @@ exports.collect = async (req, res, next) => {
   } else {
     defaultDate = Date.now()
   }
-
-  /*
-  // Verifica se os sensores das medidas são válidos
-  try {
-    sensorTypeValidator.validateSensors(req.body.measures)
-
-    if (!sensorTypeValidator.isValid()) {
-      res.status(400).json(sensorTypeValidator.errors())
-      return
-    }
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: `Invalid sensor data type: ${err}` })
-  }
-  */
 
   try {
     const errors = []

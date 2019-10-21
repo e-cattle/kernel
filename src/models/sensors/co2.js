@@ -14,7 +14,7 @@ const co2 = new Schema({
     required: true
   },
   date: {
-    type: String,
+    type: Date,
     required: true
   },
   resource: {

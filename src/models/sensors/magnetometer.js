@@ -24,7 +24,7 @@ const magnetometer = new Schema({
     }
   }],
   date: {
-    type: String,
+    type: Date,
     required: true
   },
   resource: {

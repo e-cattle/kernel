@@ -23,7 +23,7 @@ const windSpeed = new Schema({
     }
   }],
   date: {
-    type: String,
+    type: Date,
     required: true
   },
   resource: {

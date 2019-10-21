@@ -1,23 +1,29 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const moment = require('moment')
 
-const SensorTypeValidator = require('../validators/sensor-validator')
+// const SensorTypeValidator = require('../validators/sensor-validator')
 
 const deviceRepository = require('../repositories/device-repository')
 require('../repositories/contract-repository')
 
-require('../services/auth-service')
+// require('../auth/device-auth')
 
-exports.create = async (req, res, next) => {
-  const sensorTypeValidator = new SensorTypeValidator()
+exports.collect = async (req, res, next) => {
+  if (!req.mac) {
+    res.status(401).send({ message: 'Error to get MAC Address from token!' })
+    return
+  }
 
-  // Le o mac do dispositivo e valida se existe
-  const device = await deviceRepository.authenticate({ mac: req.body.mac })
+  console.log('MAC: ' + req.mac)
 
-  // Envia mensagem de erro se não encontrar dispositivo
+  // const sensorTypeValidator = new SensorTypeValidator()
+
+  const device = await deviceRepository.authenticate({ mac: req.mac })
+
   if (!device) {
-    res.status(404).send({ message: 'Dispositivo Inválido ou Bloqueado' })
+    res.status(404).send({ message: 'Invalid or disable device!' })
     return
   }
 
@@ -25,13 +31,26 @@ exports.create = async (req, res, next) => {
 
   // Verifica se tem medidas
   if (!measures) {
-    res.status(404).send({ message: 'É necessário informar os dados sensoriais' })
+    res.status(404).send({ message: 'Empty measures!' })
     return
   }
 
+  const defaultResource = req.body.resource
+
+  let defaultDate = null
+
+  const aux = moment(req.body.date)
+
+  if (aux.isValid()) {
+    defaultDate = aux.toDate()
+  } else {
+    defaultDate = Date.now()
+  }
+
+  /*
   // Verifica se os sensores das medidas são válidos
   try {
-    sensorTypeValidator.validadeSensors(req.body.measures)
+    sensorTypeValidator.validateSensors(req.body.measures)
 
     if (!sensorTypeValidator.isValid()) {
       res.status(400).json(sensorTypeValidator.errors())
@@ -39,57 +58,77 @@ exports.create = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err)
-    res.status(500).json({ message: `Erro na validação dos dados sensoriais: ${err}` })
+    res.status(500).json({ message: `Invalid sensor data type: ${err}` })
   }
+  */
 
   try {
-    const sensorsError = []
-    const sensorsValid = []
-    const sensorsNoValid = []
+    const errors = []
+    const success = []
+    const invalids = []
 
-    // Salva os dados sensoriais
+    // Persist measures...
     for (let i = 0; i < measures.length; i++) {
-      const sensor = measures[i]
-      const sensorsContract = device.sensors
-      const deviceId = device._id
+      const measure = measures[i]
+
+      if (!measure.name || measure.name.length === 0) {
+        errors.push({ measure: measure, error: 'Attribute \'name\' is required!' })
+
+        continue
+      }
 
       let hasSensor = false
 
-      // Verifica se existe o sensor no contrato
-      for (let j = 0; j < sensorsContract.length; j++) {
-        if (sensorsContract[j].name === sensor.name) {
+      // Verify if measure sensor type is in contratct...
+      for (let j = 0; j < device.sensors.length; j++) {
+        if (device.sensors[j].name === measure.name) {
           hasSensor = true
 
-          // var guid = require('crypto').randomBytes(30).toString('base64')
-          sensor.datas = { deviceId: deviceId, value: sensor.value, date: sensor.date, resource: sensor.resource }
+          const Schema = mongoose.model(device.sensors[j].type)
 
-          const Schema = mongoose.model(sensorsContract[j].type)
-          const newMeasure = new Schema(sensor.datas)
-          const savedMeasure = await newMeasure.save()
+          let date = null
 
-          if (savedMeasure) {
-            sensorsValid.push(sensorsContract[j].type)
+          if (measure.date) {
+            const aux = moment(measure.date)
+
+            if (aux.isValid()) {
+              date = aux.toDate()
+            }
+          }
+
+          const newMeasure = new Schema({
+            device: device._id,
+            value: measure.value,
+            date: date || defaultDate,
+            resource: measure.resource || defaultResource
+          })
+
+          const result = await newMeasure.save()
+
+          if (result) {
+            success.push(measure)
           } else {
-            sensorsError.push(savedMeasure)
+            errors.push({ measure: measure, error: result })
           }
         }
       }
 
       if (!hasSensor) {
-        sensorsNoValid.push(sensor.name)
+        invalids.push(measure)
       }
     }
 
-    if (sensorsNoValid.length === 0 && sensorsError === 0) {
-      res.status(201).send({ message: 'Todos os dados sensoriais foram salvos com sucesso' })
+    if (invalids.length === 0 && errors.length === 0) {
+      res.status(201).send({ message: 'All measures collected by sensors has been saved!' })
     } else {
-      res.status(500).send({ sucess: sensorsValid, notfound: sensorsNoValid, erros: sensorsError })
+      res.status(207).send({ sucess: success, invalid: invalids, error: errors })
     }
   } catch (err) {
     res.status(500).json({ message: `${err}` })
   }
 }
 
+/*
 exports.getAll = async (req, res, next) => {
   try {
     const devices = await deviceRepository.getAll()
@@ -142,3 +181,4 @@ exports.setSynced = async (req, res, next) => {
     res.status(500).json({ message: 'Falha na requisição', data: e })
   }
 }
+*/

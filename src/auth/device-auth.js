@@ -10,6 +10,7 @@ var generateToken = async (data) => {
 
 exports.generateToken = generateToken
 
+/*
 // Retorna os dados decodificados inseridos no token
 var decodeToken = async (token) => {
   var data = await jwt.verify(token, process.env.PK)
@@ -17,38 +18,35 @@ var decodeToken = async (token) => {
 }
 
 exports.decodeToken = decodeToken
+*/
 
 // Valida se o token é valido
 exports.authorize = async function (req, res, next) {
-  const token = req.body.token || req.query.token || req.headers['x-access-token']
-  const mac = req.body.mac || req.query.mac
+  let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization
 
-  if (!token || !mac) {
+  if (!token) {
     res.status(401).json({
-      message: 'Invalid (or empty) token or MAC address!'
+      message: 'Invalid (or empty) token!'
     })
-  } else {
-    jwt.verify(token, process.env.PK, function (error, decoded) {
-      if (error) {
-        res.status(401).json({
-          message: 'Invalid token!'
-        })
-      } else {
-        decodeToken(token).then((device) => {
-          if (mac === device.mac) next()
-          else {
-            res.status(401).json({
-              message: 'MAC address in token is not valid! ' + mac + ' != ' + device.mac
-            })
-          }
-        }).catch((err) => {
-          res.status(500).json({
-            message: `Error to extract MAC inside token: ${err}`
-          })
-        })
-      }
-    })
+
+    return
   }
+
+  token = token.replace('Bearer ', '')
+
+  await jwt.verify(token, process.env.PK, function (error, decoded) {
+    if (error) {
+      res.status(401).json({
+        message: 'Invalid token!'
+      })
+
+      return
+    }
+
+    req.mac = decoded.mac
+
+    next()
+  })
 }
 
 /*

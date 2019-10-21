@@ -9,7 +9,7 @@ const SensorValidator = require('../validators/sensor-validator')
 const deviceRepository = require('../repositories/device-repository')
 const contractRepository = require('../repositories/contract-repository')
 
-const authService = require('../services/auth-service')
+const deviceAuth = require('../auth/device-auth')
 // const infoService = require('../services/info-service')
 
 async function validate (device) {
@@ -79,7 +79,7 @@ exports.save = async (req, res, next) => {
 
     // Geração do Token
     // Gera o token valido para o dispositivo
-    const token = await authService.generateToken({
+    const token = await deviceAuth.generateToken({
       id: fresh._id,
       name: fresh.name,
       mac: fresh.mac,

@@ -4,14 +4,6 @@ const http = require('http')
 const mongoose = require('mongoose')
 const config = require('./src/config')
 var lorawan = require('lorawan-js')
-const dotenv = require('dotenv')
-
-// Load .env from SNAP data directory for production environment
-if (process.env.SNAP_USER_DATA) {
-  dotenv.config({ path: process.env.SNAP_USER_DATA + '/.env' })
-} else {
-  dotenv.config()
-}
 
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
@@ -43,20 +35,6 @@ const server = http.createServer(app)
 const lora = new lorawan.Server({ port: 3005 })
 
 app.on('ready', function () {
-  console.log()
-
-  console.log('### Loading Environment Variables ###')
-
-  console.log('SNAP_USER_DATA from command line: ' + process.env.SNAP_USER_DATA)
-
-  console.log('NODE_ENV from .env file: ' + process.env.NODE_ENV)
-
-  console.log('PK from .env file: ' + process.env.PK)
-
-  console.log()
-
-  console.log('### Going Up Servers ###')
-
   // HTTP Server
   server.listen(port)
   server.on('error', onError)

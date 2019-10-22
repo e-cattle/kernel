@@ -3,6 +3,8 @@
 const express = require('express')
 const router = express.Router()
 
+const totemAuth = require('../auth/totem-auth')
+
 const os = require('os')
 const osUtils = require('os-utils')
 const diskspace = require('diskspace')
@@ -39,10 +41,10 @@ router.get('/data-by-day', (req, res, next) => {
 
 const device = require('../controllers/device-controller')
 
-router.get('/devices', device.all)
+router.get('/devices', totemAuth.authorize, device.all)
 
-router.put('/device/enable/:mac', device.enable)
+router.put('/device/enable/:mac', totemAuth.authorize, device.enable)
 
-router.put('/device/disable/:mac', device.disable)
+router.put('/device/disable/:mac', totemAuth.authorize, device.disable)
 
 module.exports = router

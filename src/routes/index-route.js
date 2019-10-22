@@ -1,5 +1,7 @@
 'use strict'
 
+const mid = require('machine-id')
+
 const express = require('express')
 const router = express.Router()
 
@@ -28,8 +30,25 @@ router.get('/status', async (req, resp) => {
       ips: ips
     })
   } catch (error) {
-    console.log(error)
-    resp.status(500).send('Erro ao verificar o status do Kernel!')
+    resp.status(500).send('Error to get Kernel status: ' + error)
+  }
+})
+
+router.get('/id', async (req, resp) => {
+  try {
+    const ip = req.connection.remoteAddress
+
+    if (['::1', '127.0.0.1', '0.0.0.0'].indexOf(ip) < 0) {
+      resp.status(401).send('Accessible only via localhost! Your IP is \'' + ip + '\'.')
+
+      return
+    }
+
+    resp.json({
+      id: mid()
+    })
+  } catch (error) {
+    resp.status(500).send('Error to get Machine ID: ' + error)
   }
 })
 

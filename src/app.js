@@ -7,7 +7,6 @@ const app = express()
 // Entity Models
 require('./models/device')
 require('./models/contract')
-require('./models/config')
 
 // Sensors Models
 require('./models/sensors/accelerometer')
@@ -58,7 +57,6 @@ app.use(function (req, res, next) {
 const indexRoute = require('./routes/index-route')
 const deviceRoute = require('./routes/device-route')
 const measureRoute = require('./routes/measure-route')
-const infoRoute = require('./routes/info-route')
 const totemRoute = require('./routes/totem-route')
 
 // Routes Scope
@@ -66,7 +64,6 @@ const totemRoute = require('./routes/totem-route')
 app.use('/', indexRoute)
 app.use('/device', deviceRoute)
 app.use('/measure', measureRoute)
-app.use('/info', infoRoute)
 app.use('/totem', totemRoute)
 
 module.exports = app

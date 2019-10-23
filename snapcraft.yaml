@@ -16,13 +16,13 @@ environment:
 # architectures: [amd64, arm64]
 
 apps:
-  mongo:
-    command: env LC_ALL=C mongod --bind_ip 0.0.0.0 --port=27017 --pidfilepath $SNAP_USER_DATA/mongod.pid --journal --dbpath $SNAP_USER_DATA/mongo
+  node:
+    command: env NODE_ENV=production node $SNAP/server.js
     daemon: simple
     restart-condition: always
 
-  node:
-    command: env NODE_ENV=production node $SNAP/server.js
+  mongo:
+    command: env LC_ALL=C mongod --bind_ip 0.0.0.0 --port=27017 --pidfilepath $SNAP_USER_DATA/mongod.pid --journal --dbpath $SNAP_USER_DATA/mongo
     daemon: simple
     restart-condition: always
 

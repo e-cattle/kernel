@@ -8,27 +8,20 @@ var lorawan = require('lorawan-js')
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
-const delay = process.env.NODE_ENV === 'production' ? 30000 : 1
+console.log('Starting server to environment \'' + process.env.NODE_ENV + '\'...')
 
-// DB connect
-setTimeout(function () {
-  mongoose.set('useNewUrlParser', true)
-  mongoose.set('useCreateIndex', true)
-  mongoose.set('useUnifiedTopology', true)
-  mongoose.set('useFindAndModify', false)
+// const delay = process.env.NODE_ENV === 'production' ? 30000 : 1000
 
-  if (process.env.NODE_ENV === 'production') {
-    mongoose.connect(config.db.production)
-  } else if (process.env.NODE_ENV === 'docker') {
-    mongoose.connect(config.db.docker)
-  } else {
-    mongoose.connect(config.db.development)
-  }
+const uri = config.db[process.env.NODE_ENV]
 
-  mongoose.connection.once('open', function () {
-    app.emit('ready')
-  })
-}, delay)
+if (!uri) {
+  console.log('Invalid URI for MongoDB connection: ' + uri)
+  process.exit(1)
+}
+
+console.log('Trying connect to MongoDB: ' + uri)
+
+connect()
 
 const server = http.createServer(app)
 
@@ -48,6 +41,22 @@ app.on('ready', function () {
     console.log('API LoRa Ready: ', info)
   })
 })
+
+function connect () {
+  mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    connectTimeoutMS: 12000
+  }).then(() => {
+    console.log('MongoDB connected!')
+    app.emit('ready')
+  }).catch((error) => {
+    console.log('Error on MongoDB connection: ' + error)
+    setTimeout(connect, 6000)
+  })
+}
 
 function normalizePort (val) {
   const port = parseInt(val, 10)

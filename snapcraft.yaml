@@ -25,16 +25,10 @@ apps:
     command: env NODE_ENV=production node $SNAP/server.js
     daemon: simple
     restart-condition: always
-    after: [mongo]
-
-#  backup:
-#    command: mongodump --db e-cattle --archive
 
 hooks:
   install:
     plugs: [home, network, network-bind]
-#  configure:
-#    plugs: [home, network, network-bind]
 
 plugs:
   home:

@@ -18,8 +18,8 @@ environment:
 apps:
   node:
     command: env NODE_ENV=production node $SNAP/server.js
-    daemon: simple
-    restart-condition: always
+#    daemon: simple
+#    restart-condition: always
 
   mongo:
     command: env LC_ALL=C mongod --bind_ip 0.0.0.0 --port=27017 --pidfilepath $SNAP_USER_DATA/mongod.pid --journal --dbpath $SNAP_USER_DATA/mongo

@@ -22,7 +22,7 @@ apps:
     restart-condition: always
 
   node:
-    command: env NODE_ENV=production node $SNAP/server.js
+    command: env NODE_ENV=production bin/node $SNAP/server.js
     daemon: simple
     restart-condition: always
     after: [mongo]

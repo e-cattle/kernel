@@ -16,15 +16,16 @@ environment:
 # architectures: [amd64, arm64]
 
 apps:
-  node:
-    command: env NODE_ENV=production node $SNAP/server.js
-#    daemon: simple
-#    restart-condition: always
-
   mongo:
     command: env LC_ALL=C mongod --bind_ip 0.0.0.0 --port=27017 --pidfilepath $SNAP_USER_DATA/mongod.pid --journal --dbpath $SNAP_USER_DATA/mongo
     daemon: simple
     restart-condition: always
+
+  node:
+    command: env NODE_ENV=production node $SNAP/server.js
+    daemon: simple
+    restart-condition: always
+    after: [mongo]
 
 hooks:
   install:
@@ -39,6 +40,7 @@ parts:
   kernel:
     source: .
     plugin: nodejs
+    nodejs-version: 12.13.0
     nodejs-package-manager: npm
     stage-packages:
       - mongodb-server

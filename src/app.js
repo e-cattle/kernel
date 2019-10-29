@@ -1,12 +1,18 @@
 'use strict'
 
+console.log('APP - Including Express and BodyParser...')
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 
+console.log('APP - Including models of Device and Contract...')
+
 // Entity Models
 require('./models/device')
 require('./models/contract')
+
+console.log('APP - Including models of all sensors...')
 
 // Sensors Models
 require('./models/sensors/accelerometer')
@@ -38,6 +44,8 @@ require('./models/sensors/solar-radiation')
 require('./models/sensors/water-temperature')
 require('./models/sensors/wet-bulb-temperature')
 require('./models/sensors/wind-speed')
+
+console.log('APP - All models included!')
 
 // JSON Converter
 app.use(bodyParser.json())

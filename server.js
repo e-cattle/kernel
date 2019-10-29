@@ -1,10 +1,21 @@
-console.log('Including dependencies...')
+console.log('Including dependencies:')
 
+console.log('Trying app...')
 const app = require('./src/app')
+
+console.log('Trying http...')
 const http = require('http')
+
+console.log('Trying mongoose...')
 const mongoose = require('mongoose')
+
+console.log('Trying config...')
 const config = require('./src/config')
+
+console.log('Trying lorawan...')
 var lorawan = require('lorawan-js')
+
+console.log('All dependencies included!')
 
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)

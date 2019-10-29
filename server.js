@@ -1,5 +1,6 @@
+console.log('Including dependencies...')
+
 const app = require('./src/app')
-const debug = require('debug')('e-cattle:server')
 const http = require('http')
 const mongoose = require('mongoose')
 const config = require('./src/config')
@@ -100,7 +101,7 @@ function onListening () {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port
-  debug('Listening on ' + bind)
+  console.log('Listening on ' + bind)
 }
 
 function onPushData (message, clientInfo) {

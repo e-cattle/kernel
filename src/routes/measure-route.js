@@ -1,5 +1,7 @@
 'use strict'
 
+console.log('MEASURE - Trying load routes/measure-route.js')
+
 const express = require('express')
 const router = express.Router()
 const controller = require('../controllers/measure-controller')

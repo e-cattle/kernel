@@ -1,5 +1,7 @@
 'use strict'
 
+console.log('INDEX - Trying load routes/index-route.js')
+
 const mid = require('machine-id')
 
 const express = require('express')

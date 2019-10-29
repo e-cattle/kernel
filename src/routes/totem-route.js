@@ -1,5 +1,7 @@
 'use strict'
 
+console.log('TOTEM - Trying load routes/totem-route.js')
+
 const express = require('express')
 const router = express.Router()
 

@@ -53,6 +53,8 @@ app.use(bodyParser.urlencoded({
   extended: false
 }))
 
+console.log('APP - Configuring CORS...')
+
 // CORS
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -61,17 +63,22 @@ app.use(function (req, res, next) {
   next()
 })
 
+console.log('APP - Including routes...')
+
 // Routes
 const indexRoute = require('./routes/index-route')
 const deviceRoute = require('./routes/device-route')
 const measureRoute = require('./routes/measure-route')
 const totemRoute = require('./routes/totem-route')
 
-// Routes Scope
+console.log('APP - Registering routes...')
 
+// Routes Scope
 app.use('/', indexRoute)
 app.use('/device', deviceRoute)
 app.use('/measure', measureRoute)
 app.use('/totem', totemRoute)
+
+console.log('APP - All done!')
 
 module.exports = app

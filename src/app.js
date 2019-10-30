@@ -47,11 +47,20 @@ require('./models/sensors/wind-speed')
 
 console.log('APP - All models included!')
 
+console.log('APP - Starting middleware of Body Parser...')
+
 // JSON Converter
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: false
-}))
+console.log('APP - Loading JSON...')
+const json = bodyParser.json()
+
+console.log('APP - Loading URL Encode...')
+const url = bodyParser.urlencoded({ extended: false })
+
+console.log('APP - Setting JSON...')
+app.use(json)
+
+console.log('APP - Setting URL Encode...')
+app.use(url)
 
 console.log('APP - Configuring CORS...')
 

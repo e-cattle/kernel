@@ -29,21 +29,19 @@ exports.authorize = async function (req, res, next) {
 }
 
 exports.token = async function (req, res) {
-  try {
-    const ip = req.connection.remoteAddress
+  const ip = req.connection.remoteAddress
 
-    if (['::1', '127.0.0.1', '0.0.0.0', '::ffff:127.0.0.1'].indexOf(ip) < 0) {
-      res.status(401).send('Accessible only via localhost! Your IP is \'' + ip + '\'.')
+  if (['::1', '127.0.0.1', '0.0.0.0', '::ffff:127.0.0.1'].indexOf(ip) < 0) {
+    res.status(401).json({
+      message: 'Accessible only via localhost! Your IP is \'' + ip + '\'.'
+    })
 
-      return
-    }
-
-    var token = await jwt.sign({
-      date: new Date().toISOString()
-    }, process.env.TOTEM_PK)
-
-    res.json({ token: token })
-  } catch (error) {
-    res.status(500).send('Error to get Machine ID: ' + error)
+    return
   }
+
+  var token = await jwt.sign({
+    date: new Date().toISOString()
+  }, process.env.TOTEM_PK)
+
+  res.json({ token: token })
 }

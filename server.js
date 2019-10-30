@@ -1,38 +1,40 @@
 
-console.log('Including dependencies:')
+const __ = require('./src/services/log-service')
 
-console.log('Trying app...')
+__('Including dependencies:')
+
+__('Trying app...')
 const app = require('./src/app')
 
-console.log('Trying http...')
+__('Trying http...')
 const http = require('http')
 
-console.log('Trying mongoose...')
+__('Trying mongoose...')
 const mongoose = require('mongoose')
 
-console.log('Trying config...')
+__('Trying config...')
 const config = require('./src/config')
 
-console.log('Trying lorawan...')
+__('Trying lorawan...')
 var lorawan = require('lorawan-js')
 
-console.log('All dependencies included!')
+__('All dependencies included!')
 
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
-console.log('Starting server to environment \'' + process.env.NODE_ENV + '\'...')
+__('Starting server to environment \'' + process.env.NODE_ENV + '\'...')
 
 // const delay = process.env.NODE_ENV === 'production' ? 30000 : 1000
 
 const uri = config.db[process.env.NODE_ENV]
 
 if (!uri) {
-  console.log('Invalid URI for MongoDB connection: ' + uri)
+  __('Invalid URI for MongoDB connection: ' + uri)
   process.exit(1)
 }
 
-console.log('Trying connect to MongoDB: ' + uri)
+__('Trying connect to MongoDB: ' + uri)
 
 connect()
 
@@ -45,13 +47,13 @@ app.on('ready', function () {
   server.listen(port)
   server.on('error', onError)
   server.on('listening', onListening)
-  console.log('API HTTP Ready. Port: ', port)
+  __('API HTTP Ready. Port: ', port)
 
   // LoRa Server
   lora.start()
   lora.on('pushdata_rxpk', onPushData)
   lora.on('ready', (info, loraServer) => {
-    console.log('API LoRa Ready: ', info)
+    __('API LoRa Ready: ', info)
   })
 })
 
@@ -63,10 +65,10 @@ function connect () {
     useFindAndModify: false,
     connectTimeoutMS: 12000
   }).then(() => {
-    console.log('MongoDB connected!')
+    __('MongoDB connected!')
     app.emit('ready')
   }).catch((error) => {
-    console.log('Error on MongoDB connection: ' + error)
+    __('Error on MongoDB connection: ' + error)
     setTimeout(connect, 6000)
   })
 }
@@ -113,17 +115,17 @@ function onListening () {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port
-  console.log('Listening on ' + bind)
+  __('Listening on ' + bind)
 }
 
 function onPushData (message, clientInfo) {
-  console.log('clientInfo: ', clientInfo)
+  __('clientInfo: ', clientInfo)
   var pdata = message.data.rxpk[0].data
   var buff = Buffer.from(pdata, 'Base64')
 
   var MYpacket = lorawan.Packet(buff)
 
-  console.log('[Upstream] IN pushdata RXPK - ', MYpacket.MType.Description, ' from: ', MYpacket.Buffers.MACPayload.FHDR.DevAddr)
+  __('[Upstream] IN pushdata RXPK - ', MYpacket.MType.Description, ' from: ', MYpacket.Buffers.MACPayload.FHDR.DevAddr)
 
   let NwkSKey = null
   let AppSKey = null
@@ -136,14 +138,14 @@ function onPushData (message, clientInfo) {
 
     MYdec = MYpacket.decryptWithKeys(AppSKey, NwkSKey)
 
-    console.log('MY Time: ' + MYdec.readUInt32LE(0).toString() + ' Battery: ' + MYdec.readUInt8(4).toString() + ' Temperature: ' + MYdec.readUInt8(5).toString() + ' Lat: ' + MYdec.readUInt32LE(6).toString() + ' - Long: ' + MYdec.readUInt32LE(10).toString())
+    __('MY Time: ' + MYdec.readUInt32LE(0).toString() + ' Battery: ' + MYdec.readUInt8(4).toString() + ' Temperature: ' + MYdec.readUInt8(5).toString() + ' Lat: ' + MYdec.readUInt32LE(6).toString() + ' - Long: ' + MYdec.readUInt32LE(10).toString())
   } else if (MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex') === '03ff0001') {
     NwkSKey = Buffer.from('2B7E151628AED2A6ABF7158809CF4F3C', 'hex')
     AppSKey = Buffer.from('2B7E151628AED2A6ABF7158809CF4F3C', 'hex')
 
     MYdec = MYpacket.decryptWithKeys(AppSKey, NwkSKey)
-    console.log('MYdec: ', MYdec.toString('utf8'), ' - ', MYdec.length)
+    __('MYdec: ', MYdec.toString('utf8'), ' - ', MYdec.length)
   } else {
-    console.log('New device: ', MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex'))
+    __('New device: ', MYpacket.Buffers.MACPayload.FHDR.DevAddr.toString('hex'))
   }
 }

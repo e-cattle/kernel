@@ -1,8 +1,14 @@
 'use strict'
 
-console.log('INDEX - Trying load routes/index-route.js')
+const __ = require('../services/log-service')
+
+__('Trying load routes/index-route.js')
+
+__('Trying to load Machine ID library...')
 
 const mid = require('machine-id')
+
+__('Machine ID library loaded!')
 
 const express = require('express')
 const router = express.Router()
@@ -10,6 +16,8 @@ const router = express.Router()
 const infoService = require('../services/info-service')
 
 const pkg = require('../../package.json')
+
+__('Registering GET / route...')
 
 router.get('/', (req, res, next) => {
   res.status(200).send({
@@ -19,6 +27,8 @@ router.get('/', (req, res, next) => {
     version: pkg.version
   })
 })
+
+__('Registering GET /status route...')
 
 router.get('/status', async (req, resp) => {
   try {
@@ -35,6 +45,8 @@ router.get('/status', async (req, resp) => {
     resp.status(500).send('Error to get Kernel status: ' + error)
   }
 })
+
+__('Registering GET /id route...')
 
 router.get('/id', async (req, resp) => {
   try {
@@ -53,5 +65,7 @@ router.get('/id', async (req, resp) => {
     resp.status(500).send('Error to get Machine ID: ' + error)
   }
 })
+
+__('All done!')
 
 module.exports = router

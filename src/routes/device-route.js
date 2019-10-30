@@ -1,6 +1,8 @@
 'use strict'
 
-console.log('DEVICE - Trying load routes/device-route.js')
+const __ = require('../services/log-service')
+
+__('Trying load routes/device-route.js')
 
 const express = require('express')
 const router = express.Router()

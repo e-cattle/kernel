@@ -1,18 +1,20 @@
 'use strict'
 
-console.log('APP - Including Express and BodyParser...')
+const __ = require('./services/log-service')
+
+__('Including Express and BodyParser...')
 
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 
-console.log('APP - Including models of Device and Contract...')
+__('Including models of Device and Contract...')
 
 // Entity Models
 require('./models/device')
 require('./models/contract')
 
-console.log('APP - Including models of all sensors...')
+__('Including models of all sensors...')
 
 // Sensors Models
 require('./models/sensors/accelerometer')
@@ -45,24 +47,24 @@ require('./models/sensors/water-temperature')
 require('./models/sensors/wet-bulb-temperature')
 require('./models/sensors/wind-speed')
 
-console.log('APP - All models included!')
+__('All models included!')
 
-console.log('APP - Starting middleware of Body Parser...')
+__('Starting middleware of Body Parser...')
 
 // JSON Converter
-console.log('APP - Loading JSON...')
+__('Loading JSON...')
 const json = bodyParser.json()
 
-console.log('APP - Loading URL Encode...')
+__('Loading URL Encode...')
 const url = bodyParser.urlencoded({ extended: false })
 
-console.log('APP - Setting JSON...')
+__('Setting JSON...')
 app.use(json)
 
-console.log('APP - Setting URL Encode...')
+__('Setting URL Encode...')
 app.use(url)
 
-console.log('APP - Configuring CORS...')
+__('Configuring CORS...')
 
 // CORS
 app.use(function (req, res, next) {
@@ -72,7 +74,7 @@ app.use(function (req, res, next) {
   next()
 })
 
-console.log('APP - Including routes...')
+__('Including routes...')
 
 // Routes
 const indexRoute = require('./routes/index-route')
@@ -80,7 +82,7 @@ const deviceRoute = require('./routes/device-route')
 const measureRoute = require('./routes/measure-route')
 const totemRoute = require('./routes/totem-route')
 
-console.log('APP - Registering routes...')
+__('Registering routes...')
 
 // Routes Scope
 app.use('/', indexRoute)
@@ -88,6 +90,6 @@ app.use('/device', deviceRoute)
 app.use('/measure', measureRoute)
 app.use('/totem', totemRoute)
 
-console.log('APP - All done!')
+__('All done!')
 
 module.exports = app

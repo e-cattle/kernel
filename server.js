@@ -18,7 +18,23 @@ const config = require('./src/config')
 __('Trying lorawan...')
 var lorawan = require('lorawan-js')
 
+__('Trying dotenv...')
+const dotenv = require('dotenv')
+
 __('All dependencies included!')
+
+__('Loading .env settings...')
+if (process.env.SNAP_USER_DATA) {
+  dotenv.config({ path: process.env.SNAP_USER_DATA + '/.env' })
+} else {
+  dotenv.config()
+}
+
+__('Settings loaded for \'' + process.env.NODE_ENV + '\'', {
+  device: process.env.DEVICE_PK,
+  totem: process.env.TOTEM_PK,
+  app: process.env.APP_PK
+})
 
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)

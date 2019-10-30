@@ -1,13 +1,12 @@
 'use strict'
 
 const jwt = require('jsonwebtoken')
-const mid = require('machine-id')
 
 const DeviceRepository = require('../repositories/device-repository')
 
 // Gera o token baseado nos dados "data", utilizando o Machine ID como chave privada
 var generateToken = async (data) => {
-  return jwt.sign(data, mid())
+  return jwt.sign(data, process.env.DEVICE_PK)
 }
 
 exports.generateToken = generateToken
@@ -26,7 +25,7 @@ exports.authorize = async function (req, res, next) {
 
   token = token.replace('Bearer ', '')
 
-  await jwt.verify(token, mid(), function (error, decoded) {
+  await jwt.verify(token, process.env.DEVICE_PK, function (error, decoded) {
     if (error) {
       res.status(401).json({
         message: 'Invalid token!'

@@ -1,7 +1,6 @@
 'use strict'
 
 const jwt = require('jsonwebtoken')
-const mid = require('machine-id')
 
 exports.authorize = async function (req, res, next) {
   let token = req.headers.authorization
@@ -16,7 +15,7 @@ exports.authorize = async function (req, res, next) {
 
   token = token.replace('Bearer ', '')
 
-  await jwt.verify(token, mid(), function (error, decoded) {
+  await jwt.verify(token, process.env.TOTEM_PK, function (error, decoded) {
     if (error) {
       res.status(401).json({
         message: 'Invalid token!'
@@ -27,4 +26,24 @@ exports.authorize = async function (req, res, next) {
 
     next()
   })
+}
+
+exports.token = async function (req, res) {
+  try {
+    const ip = req.connection.remoteAddress
+
+    if (['::1', '127.0.0.1', '0.0.0.0', '::ffff:127.0.0.1'].indexOf(ip) < 0) {
+      res.status(401).send('Accessible only via localhost! Your IP is \'' + ip + '\'.')
+
+      return
+    }
+
+    var token = await jwt.sign({
+      date: new Date().toISOString()
+    }, process.env.TOTEM_PK)
+
+    res.json({ token: token })
+  } catch (error) {
+    res.status(500).send('Error to get Machine ID: ' + error)
+  }
 }

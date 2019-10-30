@@ -51,6 +51,10 @@ router.get('/data-by-day', (req, res, next) => {
   res.status(200).send({})
 })
 
+__('Registering GET /totem/token route...')
+
+router.get('/token', totemAuth.token)
+
 const device = require('../controllers/device-controller')
 
 __('Registering GET /totem/devices route...')

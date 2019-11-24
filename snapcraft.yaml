@@ -22,7 +22,7 @@ apps:
     restart-condition: always
 
   node:
-    command: env SNAP_USER_DATA=$SNAP_USER_DATA node $SNAP/server.js
+    command: env SNAP_USER_DATA=$SNAP_COMMON node $SNAP/server.js
     daemon: simple
     restart-condition: always
     after: [mongo]
@@ -32,6 +32,13 @@ hooks:
     plugs: [home, network, network-bind]
   configure:
     plugs: [home, network, network-bind]
+
+slots:
+  tokens:
+    content: tokens
+    interface: content
+    read:
+      - $SNAP_COMMON
 
 plugs:
   home:

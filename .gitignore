@@ -7,3 +7,6 @@ package-lock.json
 parts/
 prime/
 stage/
+Dockerfile
+.dockerignore
+.env

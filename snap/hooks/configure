@@ -1,16 +1,17 @@
 #!/bin/sh -e
 
-if [ ! -f "$SNAP_USER_DATA/.env" ]; then
+if [ ! -f "$SNAP_COMMON/.env" ]; then
+  
   echo "Creating .env file..."
 
-  echo "NODE_ENV=production" > $SNAP_USER_DATA/.env
+  echo "NODE_ENV=production" > $SNAP_COMMON/.env
 
   DEVICE_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-  echo "DEVICE_PK=$DEVICE_KEY" >> $SNAP_USER_DATA/.env
+  echo "DEVICE_PK=$DEVICE_KEY" >> $SNAP_COMMON/.env
 
   TOTEM_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-  echo "TOTEM_PK=$TOTEM_KEY" >> $SNAP_USER_DATA/.env
+  echo "TOTEM_PK=$TOTEM_KEY" >> $SNAP_COMMON/.env
 
   APP_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-  echo "APP_PK=$APP_KEY" >> $SNAP_USER_DATA/.env
+  echo "APP_PK=$APP_KEY" >> $SNAP_COMMON/.env
 fi

@@ -8,6 +8,7 @@ const express = require('express')
 const router = express.Router()
 
 const totemAuth = require('../auth/totem-auth')
+const qrAuth = require('../auth/qr-auth')
 
 const os = require('os')
 const osUtils = require('os-utils')
@@ -54,6 +55,10 @@ router.get('/data-by-day', (req, res, next) => {
 __('Registering GET /totem/token route...')
 
 router.get('/token', totemAuth.token)
+
+__('Registering GET /totem/qr route...')
+
+router.get('/qr', qrAuth.token)
 
 const device = require('../controllers/device-controller')
 

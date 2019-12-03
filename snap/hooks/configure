@@ -14,4 +14,7 @@ if [ ! -f "$SNAP_COMMON/.env" ]; then
 
   APP_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
   echo "APP_PK=$APP_KEY" >> $SNAP_COMMON/.env
+
+  TRANSIENT_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+  echo "TRANSIENT_PK=$TRANSIENT_KEY" >> $SNAP_COMMON/.env
 fi

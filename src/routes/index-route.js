@@ -28,12 +28,12 @@ router.get('/status', async (req, resp) => {
   try {
     const online = await infoService.isOnline()
     const mac = await infoService.getMacAddress()
-    const ips = await infoService.getIp()
+    const ip = await infoService.getIp()
 
     resp.json({
       online: online,
       mac: mac,
-      ips: ips
+      ip: ip
     })
   } catch (error) {
     resp.status(500).send('Error to get Kernel status: ' + error)

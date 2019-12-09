@@ -33,7 +33,8 @@ if (process.env.SNAP_USER_DATA) {
 __('Settings loaded for \'' + process.env.NODE_ENV + '\'', {
   device: process.env.DEVICE_PK,
   totem: process.env.TOTEM_PK,
-  app: process.env.APP_PK
+  app: process.env.APP_PK,
+  qr: process.env.TRANSIENT_PK
 })
 
 const port = normalizePort(process.env.PORT || '3000')

@@ -13,6 +13,7 @@ __('Including models of Device and Contract...')
 // Entity Models
 require('./models/device')
 require('./models/contract')
+require('./models/application')
 
 __('Including models of all sensors...')
 

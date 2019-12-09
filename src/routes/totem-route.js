@@ -9,6 +9,7 @@ const router = express.Router()
 
 const totemAuth = require('../auth/totem-auth')
 const qrAuth = require('../auth/qr-auth')
+const appAuth = require('../auth/application-auth')
 
 const os = require('os')
 const osUtils = require('os-utils')
@@ -73,5 +74,13 @@ router.put('/device/enable/:mac', totemAuth.authorize, device.enable)
 __('Registering PUT /totem/device/disable/:mac route...')
 
 router.put('/device/disable/:mac', totemAuth.authorize, device.disable)
+
+const application = require('../controllers/application-controller')
+
+__('Registering POST /totem/connect route...')
+router.post('/connect', appAuth.authorize, application.save)
+
+__('Registering GET /totem/applications route...')
+router.get('/applications', totemAuth.authorize, application.all)
 
 module.exports = router

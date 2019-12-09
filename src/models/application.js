@@ -19,22 +19,20 @@ const application = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  user:[ {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    picture: {
-      type: String,
-      trim: true,
-    },
-  }],
+  user: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  picture: {
+    type: String,
+    trim: true,
+  },
   created: {
     type: Date,
     default: Date.now()

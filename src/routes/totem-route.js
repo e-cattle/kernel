@@ -83,4 +83,12 @@ router.post('/connect', appAuth.authorize, application.save)
 __('Registering GET /totem/applications route...')
 router.get('/applications', totemAuth.authorize, application.all)
 
+__('Registering PUT /totem/application/enable/:_id route...')
+
+router.put('/application/enable/:_id', totemAuth.authorize, application.enable)
+
+__('Registering PUT /totem/application/disable/:_id route...')
+
+router.put('/application/disable/:_id', totemAuth.authorize, application.disable)
+
 module.exports = router

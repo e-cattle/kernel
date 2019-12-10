@@ -24,3 +24,12 @@ exports.getById = async (id) => {
   return Application.findById(id)
 }
 
+exports.enableById = async (id) => {
+  const res = await Application.findById(id)
+  return res.update({ enable: true })
+}
+
+exports.disableById = async (id) => {
+  const res = await Application.findById(id)
+  return res.update({ enable: false })
+}

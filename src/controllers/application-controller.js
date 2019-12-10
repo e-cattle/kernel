@@ -46,47 +46,47 @@ exports.all = async (req, res, next) => {
   }
 }
 
-// exports.enable = async (req, res, next) => {
-//   if (!req.params.mac) {
-//     res.status(401).json({ message: 'MAC não fornecido!' })
-//     return
-//   }
+exports.enable = async (req, res, next) => {
+  if (!req.params._id) {
+    res.status(401).json({ message: 'ID não fornecido!' })
+    return
+  }
 
-//   try {
-//     const mac = req.params.mac
+  try {
+    const _id = req.params._id
 
-//     const device = await deviceRepository.enableByMac(mac)
+    const application = await applicationRepository.enableById(_id)
 
-//     if (!device) {
-//       res.status(404).json({ message: 'Dipositivo não encontrado!' })
+    if (!application) {
+      res.status(404).json({ message: 'App não encontrada!' })
 
-//       return
-//     }
+      return
+    }
 
-//     res.status(200).json(device)
-//   } catch (e) {
-//     res.status(500).json({ message: 'Falha na requisição!', data: e })
-//   }
-// }
+    res.status(200).json(application)
+  } catch (e) {
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
+  }
+}
 
-// exports.disable = async (req, res, next) => {
-//   if (!req.params.mac) {
-//     res.status(401).json({ message: 'MAC não fornecido!' })
-//     return
-//   }
+exports.disable = async (req, res, next) => {
+  if (!req.params._id) {
+    res.status(401).json({ message: 'ID não fornecido!' })
+    return
+  }
 
-//   try {
-//     const mac = req.params.mac
+  try {
+    const id = req.params._id
 
-//     const device = await deviceRepository.disableByMac(mac)
+    const application = await applicationRepository.disableById(id)
 
-//     if (!device) {
-//       res.status(404).json({ message: 'Dipositivo não encontrado!' })
-//       return
-//     }
+    if (!application) {
+      res.status(404).json({ message: 'App não encontrada!' })
+      return
+    }
 
-//     res.status(200).json(device)
-//   } catch (e) {
-//     res.status(500).json({ message: 'Falha na requisição!', data: e })
-//   }
-// }
+    res.status(200).json(application)
+  } catch (e) {
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
+  }
+}

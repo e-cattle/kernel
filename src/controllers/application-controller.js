@@ -53,9 +53,9 @@ exports.enable = async (req, res, next) => {
   }
 
   try {
-    const _id = req.params._id
+    const id = req.params._id
 
-    const application = await applicationRepository.enableById(_id)
+    const application = await applicationRepository.enableById(id)
 
     if (!application) {
       res.status(404).json({ message: 'App não encontrada!' })
@@ -98,7 +98,9 @@ exports.remove = async (req, res, next) => {
   }
 
   try {
-    const application = await applicationRepository.removeById(req.params._id)
+    const id = req.params._id
+
+    const application = await applicationRepository.removeById(id)
 
     if (!application) {
       res.status(404).json({ message: 'App não encontrada!' })

@@ -34,7 +34,7 @@ exports.disableById = async (id) => {
   return res
 }
 
-exports.removeById = async (_id) => {
-  const res = await Application.findByIdAndDelete({_id})
+exports.removeById = async (id) => {
+  const res = await Application.findByIdAndDelete({_id: id})
   return res
 }

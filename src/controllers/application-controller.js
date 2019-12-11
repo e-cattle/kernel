@@ -90,3 +90,23 @@ exports.disable = async (req, res, next) => {
     res.status(500).json({ message: 'Falha na requisição!', data: e })
   }
 }
+
+exports.remove = async (req, res, next) => {
+  if (!req.params._id) {
+    res.status(401).json({ message: 'ID não fornecido!' })
+    return
+  }
+
+  try {
+    const application = await applicationRepository.removeById(req.params._id)
+
+    if (!application) {
+      res.status(404).json({ message: 'App não encontrada!' })
+      return
+    }
+
+    res.status(200).json(application)
+  } catch (e) {
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
+  }
+}

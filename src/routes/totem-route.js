@@ -91,4 +91,8 @@ __('Registering PUT /totem/application/disable/:_id route...')
 
 router.put('/application/disable/:_id', totemAuth.authorize, application.disable)
 
+__('Registering DELETE /totem/application/disable/:_id route...')
+
+router.delete('/application/remove/:_id', totemAuth.authorize, application.remove)
+
 module.exports = router

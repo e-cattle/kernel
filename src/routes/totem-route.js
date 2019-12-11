@@ -21,7 +21,7 @@ router.get('/system', (req, res, next) => {
   osUtils.cpuUsage((cpu) => {
     res.status(200).send({
       uptime: os.uptime(),
-      memory: 100 - osUtils.freememPercentage(),
+      memory: 100 -  (osUtils.freememPercentage() * 100),
       cpu: cpu
     })
   })

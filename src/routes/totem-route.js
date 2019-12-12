@@ -14,15 +14,22 @@ const appAuth = require('../auth/application-auth')
 const os = require('os')
 const osUtils = require('os-utils')
 const diskspace = require('diskspace')
+const si = require('systeminformation')
 
 __('Registering GET /totem/system route...')
 
 router.get('/system', (req, res, next) => {
+
+
   osUtils.cpuUsage((cpu) => {
-    res.status(200).send({
-      uptime: os.uptime(),
-      memory: 100 -  (osUtils.freememPercentage() * 100),
-      cpu: cpu
+    si.networkStats(function(nwstats) {
+      res.status(200).send({
+        uptime: os.uptime(),
+        memory: 100 -  (osUtils.freememPercentage() * 100),
+        cpu: cpu,
+        tx: (nwstats[0].tx_bytes * 0.000001),
+        rx: (nwstats[0].rx_bytes * 0.000001),
+      })
     })
   })
 })

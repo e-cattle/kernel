@@ -33,14 +33,10 @@ const application = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  created: {
-    type: Date,
-    default: Date.now()
-  },
-  changed: {
-    type: Date,
-    default: Date.now()
-  }
-})
+},
+{
+  timestamps: true,
+},
+)
 
 module.exports = mongoose.model('Application', application)

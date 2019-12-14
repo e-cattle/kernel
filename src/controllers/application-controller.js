@@ -14,7 +14,7 @@ exports.save = async (req, res, next) => {
     // Geração do Token
     // Gera o token valido para o dispositivo
     const token = await applicationAuth.generateToken({
-      date: newApplication.changed,
+      date: newApplication.updatedAt,
       id: newApplication._id,
       name: newApplication.name,
     })

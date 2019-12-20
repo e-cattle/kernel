@@ -21,12 +21,6 @@ const contract = new Schema({
     type: String,
     required: true
   },
-  mac: {
-    type: String,
-    required: true,
-    index: true,
-    unique: true
-  },
   date: {
     type: Date,
     required: true

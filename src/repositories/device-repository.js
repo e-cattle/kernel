@@ -1,5 +1,7 @@
 'use strict'
 
+const __ = require('../services/log-service')
+
 const mongoose = require('mongoose')
 const Device = mongoose.model('Device')
 mongoose.model('Contract')
@@ -24,7 +26,7 @@ exports.update = async (data) => {
 }
 
 exports.getAll = async () => {
-  const res = await Device.find({})
+  const res = await Device.find({ delete: false })
   return res
 }
 
@@ -57,14 +59,15 @@ exports.setSyncedByMac = async (mac) => {
 exports.getByMacEnabled = async (mac) => {
   const res = await Device.findOne({
     mac: mac,
-    enable: true
+    enable: true,
+    delete: false
   })
   return res
 }
 
 exports.enableByMac = async (mac) => {
   const res = await Device.findOneAndUpdate(
-    { mac: mac },
+    { mac: mac, delete: false },
     { enable: true }
   )
   return res
@@ -72,7 +75,7 @@ exports.enableByMac = async (mac) => {
 
 exports.disableByMac = async (mac) => {
   const res = await Device.findOneAndUpdate(
-    { mac: mac },
+    { mac: mac, delete: false },
     { enable: false }
   )
   return res
@@ -81,7 +84,17 @@ exports.disableByMac = async (mac) => {
 exports.authenticate = async (data) => {
   const res = await Device.findOne({
     mac: data.mac,
-    enable: true
+    enable: true,
+    delete: false
   })
+  return res
+}
+
+exports.deleteByMac = async (mac) => {
+  __('Trying to delete ' + mac + '...')
+  const res = await Device.findOneAndUpdate(
+    { mac: mac },
+    { enable: false, delete: true }
+  )
   return res
 }

@@ -7,6 +7,10 @@ const device = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  delete: {
+    type: Boolean,
+    default: false
+  },
   name: {
     type: String,
     required: true

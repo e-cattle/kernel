@@ -1,7 +1,6 @@
 'use strict'
 
-// const fetch = require('node-fetch')
-// const axios = require('axios')
+const __ = require('../services/log-service')
 
 const GeneralValidator = require('../validators/general-validator')
 const SensorValidator = require('../validators/sensor-validator')
@@ -10,7 +9,6 @@ const deviceRepository = require('../repositories/device-repository')
 const contractRepository = require('../repositories/contract-repository')
 
 const deviceAuth = require('../auth/device-auth')
-// const infoService = require('../services/info-service')
 
 async function validate (device) {
   try {
@@ -55,6 +53,7 @@ exports.save = async (req, res, next) => {
       device.enable = undefined
       device.created = undefined
       device.changed = undefined
+      device.delete = false
     } else {
       // Caso exista, pega a versão atual e gera uma nova
       device.name = req.body.name
@@ -63,6 +62,7 @@ exports.save = async (req, res, next) => {
       device.version = device.version + 1
       device.sensors = req.body.sensors
       device.changed = Date.now()
+      device.delete = false
     }
 
     // Validação
@@ -77,24 +77,23 @@ exports.save = async (req, res, next) => {
     // Cadastra o Dispositivo
     const fresh = await deviceRepository.save(device)
 
-    // Geração do Token
-    // Gera o token valido para o dispositivo
-    const token = await deviceAuth.generateToken({
-      id: fresh._id,
-      name: fresh.name,
-      mac: fresh.mac,
-      date: fresh.changed
-    })
-
     // Gera o Contrato
     await contractRepository.create({
       device: fresh._id,
       name: fresh.name,
       description: fresh.description,
       local: fresh.local,
-      mac: fresh.mac,
       version: fresh.version,
       sensors: fresh.sensors,
+      date: fresh.changed
+    })
+
+    // Geração do Token
+    // Gera o token valido para o dispositivo
+    const token = await deviceAuth.generateToken({
+      id: fresh._id,
+      name: fresh.name,
+      mac: fresh.mac,
       date: fresh.changed
     })
 
@@ -158,6 +157,30 @@ exports.disable = async (req, res, next) => {
     const mac = req.params.mac
 
     const device = await deviceRepository.disableByMac(mac)
+
+    if (!device) {
+      res.status(404).json({ message: 'Dipositivo não encontrado!' })
+      return
+    }
+
+    res.status(200).json(device)
+  } catch (e) {
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
+  }
+}
+
+exports.delete = async (req, res, next) => {
+  __('Calling controller DELETE...')
+
+  if (!req.params.mac) {
+    res.status(401).json({ message: 'MAC não fornecido!' })
+    return
+  }
+
+  try {
+    const mac = req.params.mac
+
+    const device = await deviceRepository.deleteByMac(mac)
 
     if (!device) {
       res.status(404).json({ message: 'Dipositivo não encontrado!' })

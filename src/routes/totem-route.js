@@ -82,6 +82,10 @@ __('Registering PUT /totem/device/disable/:mac route...')
 
 router.put('/device/disable/:mac', totemAuth.authorize, device.disable)
 
+__('Registering DELETE /totem/device/:mac route...')
+
+router.delete('/device/:mac', totemAuth.authorize, device.delete)
+
 const application = require('../controllers/application-controller')
 
 __('Registering POST /totem/connect route...')

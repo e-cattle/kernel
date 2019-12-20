@@ -11,7 +11,7 @@ const animalWeight = new Schema({
   },
   value: {
     type: Number,
-    min: 0,
+    min: 10,
     max: 1999,
     validate: /^\d{0,4}(\.\d{1,2})?$/,
     required: true

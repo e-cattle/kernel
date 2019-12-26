@@ -37,7 +37,7 @@ router.get('/system', (req, res, next) => {
 __('Registering GET /totem/disk route...')
 
 router.get('/disk', (req, res, next) => {
-  var mount = process.env.NODE_ENV !== 'production' ? '/' : '/writable'
+  var mount = process.env.NODE_ENV === 'production' ? '/writable' : '/'
 
   diskspace.check(mount, (err, result) => {
     if (err) {

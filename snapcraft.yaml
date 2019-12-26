@@ -20,7 +20,7 @@ apps:
     restart-condition: always
 
   node:
-    command: env SNAP_USER_DATA=$SNAP_COMMON node $SNAP/server.js
+    command: env SNAP_USER_DATA=$SNAP_COMMON env NODE_ENV=production node $SNAP/server.js
     daemon: simple
     restart-condition: always
     after: [mongo]

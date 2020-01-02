@@ -38,23 +38,7 @@ __('Registering GET /totem/disk route...')
 
 router.get('/disk', (req, res, next) => {
 
-var d = require('diskinfo');
-
-d.getDrives(function(err, aDrives) {
-
-      for (var i = 0; i < aDrives.length; i++) {
-            console.log('Drive ' + aDrives[i].filesystem);
-            console.log('blocks ' + aDrives[i].blocks);
-            console.log('used ' + aDrives[i].used);
-            console.log('available ' + aDrives[i].available);
-            console.log('capacity ' + aDrives[i].capacity);
-            console.log('mounted ' + aDrives[i].mounted);
-            console.log('-----------------------------------------');
-      }
-
-});
-
-  var mount = os.arch() !== 'arm64' ? '/' : '/writable'
+  var mount = os.arch() !== 'arm64' ? '/' : '/home'
 
   diskspace.check(mount, (err, result) => {
     if (err) {

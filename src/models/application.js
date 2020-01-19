@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const application = new mongoose.Schema(
   {
@@ -39,4 +39,4 @@ const application = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Application", application);
+module.exports = mongoose.model('Application', application)

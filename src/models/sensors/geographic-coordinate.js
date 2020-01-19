@@ -18,14 +18,14 @@ const geographicCoordinate = new Schema({
       type: Number,
       min: -90,
       max: 90,
-      validate: /^-?\d{0,2}(\.\d{1,6})?$/,
+      validate: /^-?\d{0,2}(\.\d{1,8})?$/,
       required: false
     },
     longitude: {
       type: Number,
       min: -180,
       max: 180,
-      validate: /^-?\d{0,3}(\.\d{1,6})?$/,
+      validate: /^-?\d{0,3}(\.\d{1,8})?$/,
       required: false
     }
   }],

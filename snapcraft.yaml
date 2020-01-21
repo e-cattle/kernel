@@ -48,6 +48,6 @@ parts:
     source: .
     plugin: nodejs
     nodejs-version: 12.13.0
-    nodejs-package-manager: npm
+    # nodejs-package-manager: npm
     stage-packages:
       - mongodb-server

@@ -7,11 +7,13 @@ description: |
   for IoT applications in livetstock farms. This module, named Kernel, has the role to collect
   sensor data and persist it.
 
-grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+# grade: devel # must be 'stable' to release into candidate/stable channels
+# confinement: devmode # use 'strict' once you have the right plugs and slots
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 environment:
-  SNAPCRAFT_ENABLE_DEVELOPER_DEBUG: "yes"
+  SNAPCRAFT_ENABLE_DEVELOPER_DEBUG: "no"
 
 apps:
   mongo:

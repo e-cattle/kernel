@@ -18,7 +18,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "debug": "^4.1.1",
     "diskspace": "^2.0.0",
@@ -26,16 +26,17 @@
     "express": "^4.17.1",
     "ip": "^1.1.5",
     "is-online": "^8.2.1",
+    "is-reachable": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "lorawan-js": "^0.1.1",
     "macaddress": "^0.2.9",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.8.9",
+    "mongoose": "^5.8.10",
     "node-fetch": "^2.6.0",
     "os-utils": "0.0.14",
-    "systeminformation": "^4.19.2"
+    "systeminformation": "^4.21.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

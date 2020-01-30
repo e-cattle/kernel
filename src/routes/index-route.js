@@ -27,11 +27,13 @@ __('Registering GET /status route...')
 router.get('/status', async (req, resp) => {
   try {
     const online = await infoService.isOnline()
+    const reachable = await infoService.isReachable()
     const mac = await infoService.getMacAddress()
     const ip = await infoService.getIp()
 
     resp.json({
       online: online,
+      cloud: reachable,
       mac: mac,
       ip: ip
     })

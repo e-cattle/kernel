@@ -1,0 +1,4 @@
+{
+  "db": "mongodb://localhost:27017/e-cattle",
+  "cloud": "http://e-cattle.cnpgc.embrapa.br"
+}

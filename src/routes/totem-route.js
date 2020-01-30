@@ -19,16 +19,14 @@ const si = require('systeminformation')
 __('Registering GET /totem/system route...')
 
 router.get('/system', (req, res, next) => {
-
-
   osUtils.cpuUsage((cpu) => {
-    si.networkStats(function(nwstats) {
+    si.networkStats((nwstats) => {
       res.status(200).send({
         uptime: os.uptime(),
-        memory: 100 -  (osUtils.freememPercentage() * 100),
+        memory: 100 - (osUtils.freememPercentage() * 100),
         cpu: cpu,
         tx: (nwstats[0].tx_bytes * 0.000001),
-        rx: (nwstats[0].rx_bytes * 0.000001),
+        rx: (nwstats[0].rx_bytes * 0.000001)
       })
     })
   })
@@ -37,7 +35,6 @@ router.get('/system', (req, res, next) => {
 __('Registering GET /totem/disk route...')
 
 router.get('/disk', (req, res, next) => {
-
   var mount = os.arch() !== 'arm64' ? '/' : '/home'
 
   diskspace.check(mount, (err, result) => {

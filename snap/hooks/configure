@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 if [ ! -f "$SNAP_COMMON/.env" ]; then
-  
+
   echo "Creating .env file..."
 
   echo "NODE_ENV=production" > $SNAP_COMMON/.env

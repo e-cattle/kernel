@@ -12,9 +12,6 @@ const http = require('http')
 __('Trying mongoose...')
 const mongoose = require('mongoose')
 
-__('Trying config...')
-const config = require('./src/config')
-
 __('Trying lorawan...')
 var lorawan = require('lorawan-js')
 
@@ -37,14 +34,15 @@ __('Settings loaded for \'' + process.env.NODE_ENV + '\'', {
   transient: process.env.TRANSIENT_PK
 })
 
+__('Trying loading settings to ' + process.env.NODE_ENV + '...')
+const settings = require('./settings/' + process.env.NODE_ENV + '.json')
+
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
 __('Starting server to environment \'' + process.env.NODE_ENV + '\'...')
 
-// const delay = process.env.NODE_ENV === 'production' ? 30000 : 1000
-
-const uri = config.db[process.env.NODE_ENV]
+const uri = settings.db
 
 if (!uri) {
   __('Invalid URI for MongoDB connection: ' + uri)

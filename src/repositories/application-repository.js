@@ -25,16 +25,16 @@ exports.getById = async (id) => {
 }
 
 exports.enableById = async (id) => {
-  const res = await Application.findByIdAndUpdate({_id: id}, { enable: true })
+  const res = await Application.findByIdAndUpdate({ _id: id }, { enable: true })
   return res
 }
 
 exports.disableById = async (id) => {
-  const res = await Application.findByIdAndUpdate({_id: id}, { enable: false })
+  const res = await Application.findByIdAndUpdate({ _id: id }, { enable: false })
   return res
 }
 
 exports.removeById = async (id) => {
-  const res = await Application.findByIdAndDelete({_id: id})
+  const res = await Application.findByIdAndDelete({ _id: id })
   return res
 }

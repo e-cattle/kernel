@@ -6,7 +6,7 @@ const applicationAuth = require('../auth/application-auth')
 // Cadastra ou Altera o Application
 exports.save = async (req, res, next) => {
   try {
-    let application = req.body
+    const application = req.body
 
     // Cadastra o Aplicativo
     const newApplication = await applicationRepository.save(application)
@@ -16,7 +16,7 @@ exports.save = async (req, res, next) => {
     const token = await applicationAuth.generateToken({
       date: newApplication.updatedAt,
       id: newApplication._id,
-      name: newApplication.name,
+      name: newApplication.name
     })
 
     // Envia o novo token para o dispositivo

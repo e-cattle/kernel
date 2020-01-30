@@ -20,7 +20,7 @@ apps:
     restart-condition: always
 
   node:
-    command: env SNAP_USER_DATA=$SNAP_COMMON node $SNAP/server.js
+    command: env SNAP_COMMON=$SNAP_COMMON SNAP_DATA=$SNAP_DATA node $SNAP/server.js
     daemon: simple
     restart-condition: always
     after: [mongo]
@@ -51,4 +51,3 @@ parts:
     # nodejs-package-manager: npm
     stage-packages:
       - mongodb-server
-      

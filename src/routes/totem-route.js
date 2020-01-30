@@ -84,6 +84,10 @@ __('Registering DELETE /totem/device/:mac route...')
 
 router.delete('/device/:mac', totemAuth.authorize, device.delete)
 
+/*
+ * Application
+ */
+
 const application = require('../controllers/application-controller')
 
 __('Registering POST /totem/connect route...')
@@ -103,5 +107,24 @@ router.put('/application/disable/:_id', totemAuth.authorize, application.disable
 __('Registering DELETE /totem/application/disable/:_id route...')
 
 router.delete('/application/remove/:_id', totemAuth.authorize, application.remove)
+
+/*
+ * Cloud
+ */
+
+const cloud = require('../controllers/cloud-controller')
+
+__('Registering GET /totem/cloud/token route...')
+router.get('/cloud/token', async (req, res, next) => {
+  try {
+    await cloud.setToken()
+
+    res.json({
+      ok: 'ok'
+    })
+  } catch (error) {
+    res.status(500).send('Error to get Kernel status: ' + error)
+  }
+})
 
 module.exports = router

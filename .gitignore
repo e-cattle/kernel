@@ -10,3 +10,4 @@ stage/
 Dockerfile
 .dockerignore
 .env
+.node-persist

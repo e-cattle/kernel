@@ -18,13 +18,26 @@ var lorawan = require('lorawan-js')
 __('Trying dotenv...')
 const dotenv = require('dotenv')
 
+__('Trying node-persist...')
+const storage = require('node-persist')
+
 __('All dependencies included!')
 
 __('Loading .env settings...')
-if (process.env.SNAP_USER_DATA) {
-  dotenv.config({ path: process.env.SNAP_USER_DATA + '/.env' })
+
+__('SNAP_COMMON=' + process.env.SNAP_COMMON)
+__('SNAP_DATA=' + process.env.SNAP_DATA)
+
+if (process.env.SNAP_COMMON) {
+  dotenv.config({ path: process.env.SNAP_COMMON + '/.env' })
 } else {
   dotenv.config()
+}
+
+if (process.env.SNAP_DATA) {
+  storage.init({ dir: process.env.SNAP_DATA })
+} else {
+  storage.init()
 }
 
 __('Settings loaded for \'' + process.env.NODE_ENV + '\'', {

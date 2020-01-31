@@ -3,25 +3,8 @@ const __ = require('./src/services/log-service')
 
 __('Including dependencies:')
 
-__('Trying app...')
-const app = require('./src/app')
-
-__('Trying http...')
-const http = require('http')
-
-__('Trying mongoose...')
-const mongoose = require('mongoose')
-
-__('Trying lorawan...')
-var lorawan = require('lorawan-js')
-
 __('Trying dotenv...')
 const dotenv = require('dotenv')
-
-__('Trying node-persist...')
-const storage = require('node-persist')
-
-__('All dependencies included!')
 
 __('Loading .env settings...')
 
@@ -34,12 +17,6 @@ if (process.env.SNAP_COMMON) {
   dotenv.config()
 }
 
-if (process.env.SNAP_DATA) {
-  storage.init({ dir: process.env.SNAP_DATA })
-} else {
-  storage.init()
-}
-
 __('Settings loaded for \'' + process.env.NODE_ENV + '\'', {
   device: process.env.DEVICE_PK,
   totem: process.env.TOTEM_PK,
@@ -47,13 +24,36 @@ __('Settings loaded for \'' + process.env.NODE_ENV + '\'', {
   transient: process.env.TRANSIENT_PK
 })
 
-__('Trying loading settings to ' + process.env.NODE_ENV + '...')
-const settings = require('./settings/' + process.env.NODE_ENV + '.json')
+__('Trying app...')
+const app = require('./src/app')
+
+__('Trying http...')
+const http = require('http')
+
+__('Trying mongoose...')
+const mongoose = require('mongoose')
+
+__('Trying lorawan...')
+var lorawan = require('lorawan-js')
+
+__('Trying node-persist...')
+const storage = require('node-persist')
+
+__('All dependencies included!')
+
+if (process.env.SNAP_DATA) {
+  storage.init({ dir: process.env.SNAP_DATA })
+} else {
+  storage.init()
+}
 
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
 __('Starting server to environment \'' + process.env.NODE_ENV + '\'...')
+
+__('Trying loading settings to ' + process.env.NODE_ENV + '...')
+const settings = require('./settings/' + process.env.NODE_ENV + '.json')
 
 const uri = settings.db
 

@@ -8,11 +8,11 @@ const dotenv = require('dotenv')
 
 __('Loading .env settings...')
 
-__('SNAP_COMMON=' + process.env.SNAP_COMMON)
-__('SNAP_DATA=' + process.env.SNAP_DATA)
+__('SNAP_COMMON=' + process.env.SNAP_COMMON + ' (without backup)')
+__('SNAP_DATA=' + process.env.SNAP_DATA + ' (with backup)')
 
-if (process.env.SNAP_COMMON) {
-  dotenv.config({ path: process.env.SNAP_COMMON + '/.env' })
+if (process.env.SNAP_DATA) {
+  dotenv.config({ path: process.env.SNAP_DATA + '/.env' })
 } else {
   dotenv.config()
 }
@@ -42,7 +42,7 @@ const storage = require('node-persist')
 __('All dependencies included!')
 
 if (process.env.SNAP_DATA) {
-  storage.init({ dir: process.env.SNAP_DATA })
+  storage.init({ dir: process.env.SNAP_DATA + '/storage' })
 } else {
   storage.init()
 }

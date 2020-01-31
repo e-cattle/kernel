@@ -36,7 +36,7 @@ slots:
     content: tokens
     interface: content
     read:
-      - $SNAP_COMMON
+      - $SNAP_DATA
 
 plugs:
   home:
@@ -48,6 +48,5 @@ parts:
     source: .
     plugin: nodejs
     nodejs-version: 12.13.0
-    # nodejs-package-manager: npm
     stage-packages:
       - mongodb-server

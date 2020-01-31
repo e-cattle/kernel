@@ -112,15 +112,62 @@ router.delete('/application/remove/:_id', totemAuth.authorize, application.remov
  * Cloud
  */
 
-const cloud = require('../controllers/cloud-controller')
+const cloudController = require('../controllers/cloud-controller')
+const infoService = require('../services/info-service')
+
+__('Registering GET /totem/cloud/overview route...')
+router.get('/cloud/overview', async (req, res, next) => {
+  /*
+  res.json({
+    online: true,
+    cloud: true,
+    register: true,
+    active: false,
+    farm: 123
+  })
+  */
+
+  const online = await infoService.isOnline()
+  const reachable = await infoService.isReachable()
+
+  var cloud = false
+
+  if (reachable) {
+    cloud = await cloudController.status()
+  }
+
+  const registered = await cloudController.isRegistered()
+
+  var active = false
+
+  if (registered) {
+    active = await cloudController.isActive()
+  }
+
+  var farm = null
+
+  if (registered) {
+    farm = await cloudController.getFarm()
+  }
+
+  res.json({
+    online: online,
+    cloud: cloud,
+    register: registered,
+    active: active,
+    farm: farm
+  })
+})
 
 __('Registering GET /totem/cloud/token route...')
-router.get('/cloud/token', async (req, res, next) => {
+router.get('/cloud/token/:farm', async (req, res, next) => {
+  const mac = await infoService.getMacAddress()
+
   try {
-    await cloud.setToken()
+    const token = await cloudController.register(req.params.farm, mac)
 
     res.json({
-      ok: 'ok'
+      token: token
     })
   } catch (error) {
     res.status(500).send('Error to get Kernel status: ' + error)

@@ -17,12 +17,12 @@ apps:
   mongo:
     command: env LC_ALL=C mongod --bind_ip 0.0.0.0 --port=27017 --pidfilepath $SNAP_USER_DATA/mongod.pid --journal --dbpath $SNAP_USER_DATA/mongo
     daemon: simple
-    restart-condition: always
+    restart-condition: never
 
   node:
     command: env SNAP_COMMON=$SNAP_COMMON SNAP_DATA=$SNAP_DATA node $SNAP/server.js
     daemon: simple
-    restart-condition: always
+    restart-condition: never
     after: [mongo]
 
 hooks:

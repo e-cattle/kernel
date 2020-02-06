@@ -42,7 +42,7 @@ exports.isActive = async () => {
   })
 }
 
-exports.getFarm = async () => {
+exports.getFarmId = async () => {
   return storage.getItem('FARM')
 }
 
@@ -57,4 +57,9 @@ exports.register = async (farm, mac) => {
 
     return null
   })
+}
+
+exports.unregister = async () => {
+  await storage.removeItem('FARM')
+  await storage.removeItem('TOKEN')
 }

@@ -116,7 +116,7 @@ const cloudController = require('../controllers/cloud-controller')
 const infoService = require('../services/info-service')
 
 __('Registering GET /totem/cloud/overview route...')
-router.get('/cloud/overview', async (req, res, next) => {
+router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
   /*
   res.json({
     online: true,
@@ -144,33 +144,45 @@ router.get('/cloud/overview', async (req, res, next) => {
     active = await cloudController.isActive()
   }
 
-  var farm = null
+  var id = null
 
   if (registered) {
-    farm = await cloudController.getFarm()
+    id = await cloudController.getFarmId()
   }
 
+  const mac = await infoService.getMacAddress()
+
   res.json({
+    mac: mac,
     online: online,
     cloud: cloud,
     register: registered,
     active: active,
-    farm: farm
+    id: id
   })
 })
 
-__('Registering GET /totem/cloud/token route...')
-router.get('/cloud/token/:farm', async (req, res, next) => {
+__('Registering GET /totem/cloud/connect/:farm route...')
+router.get('/cloud/connect/:farm', totemAuth.authorize, async (req, res, next) => {
   const mac = await infoService.getMacAddress()
 
   try {
-    const token = await cloudController.register(req.params.farm, mac)
+    await cloudController.register(req.params.farm, mac)
 
-    res.json({
-      token: token
-    })
+    res.status(200)
   } catch (error) {
-    res.status(500).send('Error to get Kernel status: ' + error)
+    res.status(500).send('Error to connect: ' + error)
+  }
+})
+
+__('Registering GET /totem/cloud/disconnect route...')
+router.get('/cloud/disconnect', totemAuth.authorize, async (req, res, next) => {
+  try {
+    await cloudController.unregister()
+
+    res.status(200)
+  } catch (error) {
+    res.status(500).send('Error to disconnect: ' + error)
   }
 })
 

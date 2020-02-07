@@ -27,18 +27,19 @@ exports.isRegistered = async () => {
 }
 
 exports.isActive = async () => {
-  const token = await storage.getItem('TOKEN')
-
   const options = {
-    headers: { Authorization: 'Bearer ' + token }
+    headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
   }
 
-  return axios.get(settings.cloud + '/gateway/active', options).then(response => {
-    return true
+  return axios.get(settings.cloud + '/gateway/status', options).then(response => {
+    return response.data
   }).catch(error => {
     console.log(error)
 
-    return false
+    return {
+      active: false,
+      approve: false
+    }
   })
 }
 
@@ -47,7 +48,7 @@ exports.getFarmId = async () => {
 }
 
 exports.register = async (farm, mac) => {
-  return axios.post(settings.cloud + '/gateway/token/' + farm, { mac: mac }).then(response => {
+  return axios.post(settings.cloud + '/gateway/register', { farm: farm, mac: mac }).then(response => {
     storage.setItem('FARM', farm)
     storage.setItem('TOKEN', response.data.token)
 
@@ -60,6 +61,14 @@ exports.register = async (farm, mac) => {
 }
 
 exports.unregister = async () => {
-  await storage.removeItem('FARM')
-  await storage.removeItem('TOKEN')
+  const config = {
+    headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
+  }
+
+  return axios.post(settings.cloud + '/gateway/unregister', {}, config).then(response => {
+    storage.removeItem('FARM')
+    storage.removeItem('TOKEN')
+  }).catch(error => {
+    console.log(error)
+  })
 }

@@ -139,9 +139,13 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
   const registered = await cloudController.isRegistered()
 
   var active = false
+  var approve = false
 
   if (registered) {
-    active = await cloudController.isActive()
+    var aux = await cloudController.isActive()
+
+    active = aux.active
+    approve = aux.approve
   }
 
   var id = null
@@ -157,30 +161,33 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
     online: online,
     cloud: cloud,
     register: registered,
+    approve: approve,
     active: active,
     id: id
   })
 })
 
-__('Registering GET /totem/cloud/connect/:farm route...')
-router.get('/cloud/connect/:farm', totemAuth.authorize, async (req, res, next) => {
+__('Registering POST /totem/cloud/connect route...')
+router.post('/cloud/connect', totemAuth.authorize, async (req, res, next) => {
   const mac = await infoService.getMacAddress()
 
   try {
-    await cloudController.register(req.params.farm, mac)
+    await cloudController.register(req.body.farm, mac)
 
-    res.status(200)
+    res.json({})
   } catch (error) {
     res.status(500).send('Error to connect: ' + error)
   }
 })
 
-__('Registering GET /totem/cloud/disconnect route...')
-router.get('/cloud/disconnect', totemAuth.authorize, async (req, res, next) => {
+__('Registering POST /totem/cloud/disconnect route...')
+router.post('/cloud/disconnect', totemAuth.authorize, async (req, res, next) => {
   try {
+    console.log('ok')
+
     await cloudController.unregister()
 
-    res.status(200)
+    res.json({})
   } catch (error) {
     res.status(500).send('Error to disconnect: ' + error)
   }

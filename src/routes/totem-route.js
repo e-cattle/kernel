@@ -58,6 +58,35 @@ router.get('/data-by-day', (req, res, next) => {
   res.status(200).send({})
 })
 
+__('Registering GET /totem/shutdown route...')
+
+router.get('/shutdown', (req, res, next) => {
+
+  var exec = require('child_process').exec;
+  exec('ssh -i /home/bigboxx/.ssh/id_rsa -o "StrictHostKeyChecking=no" bigboxx@localhost -C sudo /sbin/shutdown -h now', (err, result, stderr) => {
+    if (err) {
+      res.status(500).send(err, stderr)
+    } else {
+      res.status(200).send(result)
+    }
+  })
+})
+
+__('Registering GET /totem/reboot route...')
+
+router.get('/reboot', (req, res, next) => {
+
+  var exec = require('child_process').exec;
+  exec('ssh -i /home/bigboxx/.ssh/id_rsa -o "StrictHostKeyChecking=no" bigboxx@localhost -C sudo /sbin/shutdown -r now', (err, result, stderr) => {
+    if (err) {
+      res.status(500).send(err, stderr)
+    } else {
+      res.status(200).send(result)
+    }
+  })
+
+})
+
 __('Registering GET /totem/token route...')
 
 router.get('/token', totemAuth.token)

@@ -61,8 +61,7 @@ router.get('/data-by-day', (req, res, next) => {
 __('Registering GET /totem/shutdown route...')
 
 router.get('/shutdown', (req, res, next) => {
-
-  var exec = require('child_process').exec;
+  var exec = require('child_process').exec
   exec('ssh -i /home/bigboxx/.ssh/id_rsa -o "StrictHostKeyChecking=no" bigboxx@localhost -C sudo /sbin/shutdown -h now', (err, result, stderr) => {
     if (err) {
       res.status(500).send(err, stderr)
@@ -75,8 +74,7 @@ router.get('/shutdown', (req, res, next) => {
 __('Registering GET /totem/reboot route...')
 
 router.get('/reboot', (req, res, next) => {
-
-  var exec = require('child_process').exec;
+  var exec = require('child_process').exec
   exec('ssh -i /home/bigboxx/.ssh/id_rsa -o "StrictHostKeyChecking=no" bigboxx@localhost -C sudo /sbin/shutdown -r now', (err, result, stderr) => {
     if (err) {
       res.status(500).send(err, stderr)
@@ -84,7 +82,6 @@ router.get('/reboot', (req, res, next) => {
       res.status(200).send(result)
     }
   })
-
 })
 
 __('Registering GET /totem/token route...')
@@ -183,6 +180,16 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
     id = await cloudController.getFarmId()
   }
 
+  var farm = {
+    name: '',
+    location: '',
+    country: ''
+  }
+
+  if (registered) {
+    farm = await cloudController.getFarm()
+  }
+
   const mac = await infoService.getMacAddress()
 
   res.json({
@@ -192,7 +199,8 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
     register: registered,
     approve: approve,
     active: active,
-    id: id
+    id: id,
+    farm: farm
   })
 })
 

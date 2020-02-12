@@ -47,6 +47,22 @@ exports.getFarmId = async () => {
   return storage.getItem('FARM')
 }
 
+exports.getFarm = async () => {
+  const config = {
+    headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
+  }
+
+  return axios.get(settings.cloud + '/gateway/farm/synopsis', config).then(response => {
+    return {
+      name: response.data.name,
+      location: response.data.location,
+      country: response.data.country
+    }
+  }).catch(error => {
+    console.log(error)
+  })
+}
+
 exports.register = async (farm, mac) => {
   return axios.post(settings.cloud + '/gateway/register', { farm: farm, mac: mac }).then(response => {
     storage.setItem('FARM', farm)

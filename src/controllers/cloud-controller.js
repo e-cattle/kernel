@@ -60,6 +60,8 @@ exports.getFarm = async () => {
     }
   }).catch(error => {
     console.log(error)
+
+    return null
   })
 }
 

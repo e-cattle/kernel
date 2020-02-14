@@ -153,6 +153,8 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
   })
   */
 
+  var aux = null
+
   const online = await infoService.isOnline()
   const reachable = await infoService.isReachable()
 
@@ -168,7 +170,7 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
   var approve = false
 
   if (registered) {
-    var aux = await cloudController.isActive()
+    aux = await cloudController.isActive()
 
     active = aux.active
     approve = aux.approve
@@ -187,7 +189,11 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
   }
 
   if (registered) {
-    farm = await cloudController.getFarm()
+    aux = await cloudController.getFarm()
+
+    if (aux) {
+      farm = aux
+    }
   }
 
   const mac = await infoService.getMacAddress()

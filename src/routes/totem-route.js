@@ -26,7 +26,8 @@ router.get('/system', (req, res, next) => {
         memory: 100 - (osUtils.freememPercentage() * 100),
         cpu: cpu,
         tx: (nwstats[0].tx_bytes * 0.000001),
-        rx: (nwstats[0].rx_bytes * 0.000001)
+        rx: (nwstats[0].rx_bytes * 0.000001),
+        iface: (nwstats[0].iface)
       })
     })
   })

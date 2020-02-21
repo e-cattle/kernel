@@ -47,11 +47,11 @@ router.get('/disk', (req, res, next) => {
   })
 })
 
-__('Registering GET /totem/data-by-type route...')
+const graph = require('../controllers/graph-controller')
 
-router.get('/data-by-type', (req, res, next) => {
-  res.status(200).send({})
-})
+__('Registering GET /totem/count-by-type route...')
+
+router.get('/count-by-type', totemAuth.authorize, graph.countByType)
 
 __('Registering GET /totem/data-by-day route...')
 

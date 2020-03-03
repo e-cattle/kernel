@@ -15,7 +15,7 @@ exports.authorize = async function (req, res, next) {
 
   token = token.replace('Bearer ', '')
 
-  await jwt.verify(token, process.env.TRANSIENT_PK, function (error, decoded) {
+  await jwt.verify(token, process.env.APP_PK, function (error, decoded) {
     if (error) {
       res.status(401).json({
         message: 'Invalid token!'
@@ -24,11 +24,12 @@ exports.authorize = async function (req, res, next) {
       return
     }
 
+    req.code = decoded.code
+
     next()
   })
 }
 
-exports.generateToken = async (data) =>{
+exports.generateToken = async (data) => {
   return jwt.sign(data, process.env.APP_PK)
-
 }

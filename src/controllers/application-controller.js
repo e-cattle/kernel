@@ -3,20 +3,108 @@
 const applicationRepository = require('../repositories/application-repository')
 const applicationAuth = require('../auth/application-auth')
 
-// Cadastra ou Altera o Application
-exports.save = async (req, res, next) => {
-  try {
-    const application = req.body
+const GeneralValidator = require('../validators/general-validator')
 
-    // Cadastra o Aplicativo
-    const newApplication = await applicationRepository.save(application)
+async function validate (app) {
+  try {
+    const generalValidator = new GeneralValidator()
+
+    generalValidator.hasMinLen(app.name, 3, 'O nome (name) deve conter pelo menos 3 caracteres!')
+    generalValidator.hasMinLen(app.description, 3, 'A descrição (description) deve conter pelo menos 3 caracteres!')
+    generalValidator.hasMinLen(app.user, 3, 'O nome do usuário deve conter pelo menos 3 caracteres!')
+    generalValidator.isRequired(app.email, 'Informe um e-mail válido para o usuário!')
+    generalValidator.isEmail(app.email, 'Informe um e-mail válido para o usuário!')
+    generalValidator.isRequired(app.picture, 'Informe uma foto de perfil válida para o usuário!')
+
+    if (!generalValidator.isValid()) {
+      return generalValidator.errors()
+    }
+
+    return
+  } catch (err) {
+    console.log(err)
+
+    return 'Houve um erro no tratamento da requisição! Por favor, contacte o suporte.'
+  }
+}
+
+// Cadastra um novo aplicativo
+exports.create = async (req, res, next) => {
+  try {
+    const app = req.body
+
+    // Validação
+    const errors = await validate(app)
+
+    if (errors) {
+      res.status(401).json({ message: errors })
+
+      return
+    }
+
+    app.code = undefined
+    app.enable = true
+    app.backup = false
+    app.cleanup = false
+    app.created = undefined
+    app.changed = undefined
+
+    // Cadastra o aplicativo
+    const newApp = await applicationRepository.create(app)
 
     // Geração do Token
     // Gera o token valido para o dispositivo
     const token = await applicationAuth.generateToken({
-      date: newApplication.updatedAt,
-      id: newApplication._id,
-      name: newApplication.name
+      date: newApp.changed,
+      code: newApp.code
+    })
+
+    // Envia o novo token para o dispositivo
+    res.status(201).send({
+      token: token
+    })
+
+    return
+  } catch (error) {
+    res.status(500).send(error)
+    throw error
+  }
+}
+
+exports.modify = async (req, res, next) => {
+  try {
+    const app = req.body
+
+    // Validação
+    const errors = await validate(app)
+
+    if (errors) {
+      res.status(401).json({ message: errors })
+
+      return
+    }
+
+    if (!req.code || req.code.length <= 0) {
+      res.status(401).json({ message: 'A chave privada de autenticação (token) é inválida! Ela não contém o identificador do aplicativo.' })
+
+      return
+    }
+
+    app.code = req.code
+    delete app.enable
+    delete app.backup
+    delete app.cleanup
+    delete app.created
+    app.changed = Date.now()
+
+    // Cadastra o aplicativo
+    const newApp = await applicationRepository.save(app)
+
+    // Geração do Token
+    // Gera o token valido para o dispositivo
+    const token = await applicationAuth.generateToken({
+      date: newApp.changed,
+      code: newApp.code
     })
 
     // Envia o novo token para o dispositivo

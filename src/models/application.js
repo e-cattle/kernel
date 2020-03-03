@@ -1,9 +1,18 @@
-'use strict';
+'use strict'
 
-const mongoose = require('mongoose');
+var uuid = require('uuid/v1')
+
+const mongoose = require('mongoose')
 
 const application = new mongoose.Schema(
   {
+    code: {
+      type: String,
+      required: true,
+      unique: true,
+      default: uuid,
+      index: true
+    },
     enable: {
       type: Boolean,
       required: true,
@@ -13,6 +22,10 @@ const application = new mongoose.Schema(
       type: String,
       required: true,
       trim: true
+    },
+    description: {
+      type: String,
+      required: true
     },
     device: {
       type: String,
@@ -32,11 +45,26 @@ const application = new mongoose.Schema(
     picture: {
       type: String,
       trim: true
+    },
+    backup: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    cleanup: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    created: {
+      type: Date,
+      default: Date.now()
+    },
+    changed: {
+      type: Date,
+      default: Date.now()
     }
-  },
-  {
-    timestamps: true
   }
-);
+)
 
 module.exports = mongoose.model('Application', application)

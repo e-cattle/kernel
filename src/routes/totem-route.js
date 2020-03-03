@@ -118,7 +118,10 @@ router.delete('/device/:mac', totemAuth.authorize, device.delete)
 const application = require('../controllers/application-controller')
 
 __('Registering POST /totem/connect route...')
-router.post('/connect', appAuth.authorize, application.save)
+router.post('/application/connect', qrAuth.authorize, application.create)
+
+__('Registering POST /totem/update route...')
+router.post('/application/update', appAuth.authorize, application.modify)
 
 __('Registering GET /totem/applications route...')
 router.get('/applications', totemAuth.authorize, application.all)

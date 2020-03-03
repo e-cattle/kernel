@@ -4,11 +4,12 @@ const mongoose = require('mongoose')
 const Application = mongoose.model('Application')
 
 exports.save = async (data) => {
-  if (data._id) {
-    await data.save()
-    return Application.findById(data._id)
+  if (data.code) {
+    await Application.findOneAndUpdate({ code: data.code }, data)
+
+    return Application.find({ code: data.code })
   } else {
-    return new Application(data).save()
+    return (new Application(data)).save()
   }
 }
 

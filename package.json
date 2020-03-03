@@ -1,6 +1,6 @@
 {
   "name": "ecattle-bigboxx-kernel",
-  "version": "1.20.4-1",
+  "version": "1.20.4-2",
   "description": "e-Cattle BigBoxx: Kernel Module",
   "main": "index.js",
   "scripts": {
@@ -37,7 +37,8 @@
     "node-fetch": "^2.6.0",
     "node-persist": "^3.0.5",
     "os-utils": "0.0.14",
-    "systeminformation": "^4.21.0"
+    "systeminformation": "^4.21.0",
+    "uuid": "^7.0.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",

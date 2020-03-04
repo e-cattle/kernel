@@ -108,7 +108,7 @@ exports.modify = async (req, res, next) => {
     })
 
     // Envia o novo token para o dispositivo
-    res.status(201).send({
+    res.status(200).send({
       token: token
     })
 
@@ -196,6 +196,54 @@ exports.remove = async (req, res, next) => {
     }
 
     res.status(200).json(application)
+  } catch (e) {
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
+  }
+}
+
+exports.backup = async (req, res, next) => {
+  if (!req.params._id || !req.params.state) {
+    res.status(401).json({ message: 'ID e/ou novo estado não fornecido!' })
+    return
+  }
+
+  try {
+    const id = req.params._id
+    const state = (req.params.state === 'enable')
+
+    const application = await applicationRepository.changeBackupById(id, state)
+
+    if (!application) {
+      res.status(404).json({ message: 'Aplicativo não encontrado!' })
+
+      return
+    }
+
+    res.status(200).json({})
+  } catch (e) {
+    res.status(500).json({ message: 'Falha na requisição!', data: e })
+  }
+}
+
+exports.cleanup = async (req, res, next) => {
+  if (!req.params._id || !req.params.state) {
+    res.status(401).json({ message: 'ID e/ou novo estado não fornecido!' })
+    return
+  }
+
+  try {
+    const id = req.params._id
+    const state = (req.params.state === 'enable')
+
+    const application = await applicationRepository.changeCleanUpById(id, state)
+
+    if (!application) {
+      res.status(404).json({ message: 'Aplicativo não encontrado!' })
+
+      return
+    }
+
+    res.status(200).json({})
   } catch (e) {
     res.status(500).json({ message: 'Falha na requisição!', data: e })
   }

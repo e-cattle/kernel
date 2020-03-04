@@ -18,6 +18,9 @@ const application = new mongoose.Schema(
       required: true,
       default: true
     },
+    logo: {
+      type: String
+    },
     name: {
       type: String,
       required: true,

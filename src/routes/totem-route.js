@@ -138,6 +138,14 @@ __('Registering DELETE /totem/application/disable/:_id route...')
 
 router.delete('/application/remove/:_id', totemAuth.authorize, application.remove)
 
+__('Registering PUT /totem/application/backup/:state/:_id route...')
+
+router.put('/application/backup/:state/:_id', totemAuth.authorize, application.backup)
+
+__('Registering PUT /totem/application/cleanup/:state/:_id route...')
+
+router.put('/application/cleanup/:state/:_id', totemAuth.authorize, application.cleanup)
+
 /*
  * Cloud
  */

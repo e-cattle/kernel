@@ -6,6 +6,8 @@ const moment = require('moment')
 const deviceRepository = require('../repositories/device-repository')
 require('../repositories/contract-repository')
 
+const { pubsub } = require('../services/pubsub-service')
+
 exports.collect = async (req, res, next) => {
   if (!req.mac) {
     res.status(401).send({ message: 'Error to get MAC Address from token!' })
@@ -80,6 +82,11 @@ exports.collect = async (req, res, next) => {
           })
 
           const result = await newMeasure.save()
+          
+          // Publish Subscription Query
+          pubsub.publish( measure.name+'_CREATED', {
+            node: result
+          })
 
           if (result) {
             success.push(measure)

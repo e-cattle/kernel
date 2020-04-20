@@ -1,7 +1,7 @@
 const  RedisPubSub = require('node-redis-pubsub')
 const Redis = require('redis')
 
-const { REDIS_HOST = 'ecattle-redis', REDIS_PORT = 6379 } = process.env
+const { REDIS_HOST = 'localhost', REDIS_PORT = 6379 } = process.env
 const config = {
   host: REDIS_HOST,
   port: REDIS_PORT,

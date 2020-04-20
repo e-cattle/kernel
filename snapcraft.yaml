@@ -19,11 +19,17 @@ apps:
     daemon: simple
     restart-condition: never
 
+  redis:
+    command: env LC_ALL=C redis-server
+    daemon: simple
+    restart-condition: never
+    after: [mongo]
+
   node:
     command: env SNAP_COMMON=$SNAP_COMMON SNAP_DATA=$SNAP_DATA node $SNAP/server.js
     daemon: simple
     restart-condition: never
-    after: [mongo]
+    after: [redis]
 
 hooks:
   install:
@@ -50,3 +56,4 @@ parts:
     nodejs-version: 12.13.0
     stage-packages:
       - mongodb-server
+      - redis-server

@@ -1,5 +1,6 @@
 node_modules
 package-lock.json
+yarn.lock
 *.snap
 .vscode
 .vagrant
@@ -7,7 +8,5 @@ package-lock.json
 parts/
 prime/
 stage/
-Dockerfile
-.dockerignore
 .env
 .node-persist

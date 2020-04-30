@@ -1,4 +1,4 @@
 {
-  "db": "mongodb://localhost:27017/e-cattle",
+  "db": "mongodb://ecattle-mongo:27017/e-cattle",
   "cloud": "http://localhost:9080"
 }

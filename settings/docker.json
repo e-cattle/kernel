@@ -1,4 +1,0 @@
-{
-  "db": "mongodb://root:root@ecattle-mongo:27017/e-cattle?authSource=admin",
-  "cloud": "http://localhost:9080"
-}

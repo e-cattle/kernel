@@ -8,7 +8,5 @@ yarn.lock
 parts/
 prime/
 stage/
-Dockerfile
-.dockerignore
 .env
 .node-persist

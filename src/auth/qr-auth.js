@@ -32,7 +32,7 @@ exports.authorize = async function (req, res, next) {
 exports.token = async function (req, res) {
   const ip = req.connection.remoteAddress
 
-  if (['::1', '127.0.0.1', '0.0.0.0', '::ffff:127.0.0.1'].indexOf(ip) < 0) {
+  if (['::1', '127.0.0.1', '0.0.0.0', '::ffff:127.0.0.1'].indexOf(ip) < 0 && process.env.NODE_ENV === 'production') {
     res.status(401).json({
       message: 'Accessible only via localhost! Your IP is \'' + ip + '\'.'
     })

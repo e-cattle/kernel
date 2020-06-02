@@ -1,10 +1,9 @@
-const  RedisPubSub = require('node-redis-pubsub')
+const RedisPubSub = require('node-redis-pubsub')
 const Redis = require('redis')
+const settings = require('../../settings/' + process.env.NODE_ENV + '.json')
 
-const { REDIS_HOST = 'localhost', REDIS_PORT = 6379 } = process.env
 const config = {
-  host: REDIS_HOST,
-  port: REDIS_PORT,
+  host: settings.redis,
 }
 const emitter = new Redis.createClient(config)
 const receiver = new Redis.createClient(config)

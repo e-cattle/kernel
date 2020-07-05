@@ -1,5 +1,5 @@
 name: bigboxx-kernel
-base: core18
+base: core20
 version: git
 summary: Kernel module of IoT middleware from e-Cattle platform for livestock farms
 description: |

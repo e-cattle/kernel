@@ -55,7 +55,7 @@ __('Starting server to environment \'' + process.env.NODE_ENV + '\'...')
 __('Trying loading settings to ' + process.env.NODE_ENV + '...')
 const settings = require('./settings/' + process.env.NODE_ENV + '.json')
 
-const uri = settings.db
+const uri = process.env.DB_CLOUD || settings.db
 
 if (!uri) {
   __('Invalid URI for MongoDB connection: ' + uri)

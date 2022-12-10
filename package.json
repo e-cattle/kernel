@@ -23,7 +23,7 @@
     "debug": "^4.1.1",
     "diskspace": "^2.0.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "ip": "^1.1.5",
     "is-online": "^8.2.1",
     "is-reachable": "^4.0.0",

@@ -27,7 +27,7 @@
     "ip": "^1.1.5",
     "is-online": "^8.2.1",
     "is-reachable": "^4.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.15",
     "lorawan-js": "^0.1.1",
     "macaddress": "^0.2.9",

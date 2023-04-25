@@ -82,6 +82,7 @@ const indexRoute = require('./routes/index-route')
 const deviceRoute = require('./routes/device-route')
 const measureRoute = require('./routes/measure-route')
 const totemRoute = require('./routes/totem-route')
+const cloudRoute = require('./routes/cloud-route')
 
 __('Registering routes...')
 
@@ -90,6 +91,7 @@ app.use('/', indexRoute)
 app.use('/device', deviceRoute)
 app.use('/measure', measureRoute)
 app.use('/totem', totemRoute)
+app.use('/cloud', cloudRoute)
 
 __('All done!')
 

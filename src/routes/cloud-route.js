@@ -7,8 +7,9 @@ __('Trying load routes/cloud-route.js')
 const express = require('express')
 const router = express.Router()
 const controller = require('../controllers/cloud-controller')
+const cloudAuth = require('../auth/cloud-auth')
 
-router.post('/contracts', controller.syncContract)
-router.post('/sensors', controller.syncContract)
-
+router.post('/contracts', cloudAuth.authorize, controller.syncContract)
+router.post('/sensors', cloudAuth.authorize, controller.syncSensor)
+router.post('/devices', cloudAuth.authorize, controller.syncDevice)
 module.exports = router

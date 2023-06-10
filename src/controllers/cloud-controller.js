@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 const { EJSON } = require('bson')
 
 exports.status = async () => {
-  return axios.get(process.env.API_CLOUD || settings.cloud + '/status').then(response => {
+  return axios.get((process.env.API_CLOUD || settings.cloud) + '/status').then(response => {
     return true
   }).catch(error => {
     console.log(error)
@@ -34,7 +34,7 @@ exports.isActive = async () => {
     headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
   }
 
-  return axios.get(process.env.API_CLOUD || settings.cloud + '/gateway/status', options).then(response => {
+  return axios.get((process.env.API_CLOUD || settings.cloud) + '/gateway/status', options).then(response => {
     return response.data
   }).catch(error => {
     console.log(error)
@@ -55,7 +55,7 @@ exports.getFarm = async () => {
     headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
   }
 
-  return axios.get(process.env.API_CLOUD || settings.cloud + '/gateway/farm/synopsis', config).then(response => {
+  return axios.get((process.env.API_CLOUD || settings.cloud) + '/gateway/farm/synopsis', config).then(response => {
     return {
       name: response.data.name,
       location: response.data.location,
@@ -69,7 +69,7 @@ exports.getFarm = async () => {
 }
 
 exports.register = async (farm, mac) => {
-  return axios.post(process.env.API_CLOUD || settings.cloud + '/gateway/register', { farm: farm, mac: mac }).then(response => {
+  return axios.post((process.env.API_CLOUD || settings.cloud) + '/gateway/register', { farm: farm, mac: mac }).then(response => {
     storage.setItem('FARM', farm)
     storage.setItem('TOKEN', response.data.token)
 
@@ -86,7 +86,7 @@ exports.unregister = async () => {
     headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
   }
 
-  return axios.post(process.env.API_CLOUD || settings.cloud + '/gateway/unregister', {}, config).then(response => {
+  return axios.post((process.env.API_CLOUD || settings.cloud) + '/gateway/unregister', {}, config).then(response => {
     storage.removeItem('FARM')
     storage.removeItem('TOKEN')
   }).catch(error => {

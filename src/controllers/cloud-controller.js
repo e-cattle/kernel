@@ -7,6 +7,7 @@ const axios = require('axios')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const { EJSON } = require('bson')
+const infoService = require('../services/info-service')
 
 exports.status = async () => {
   return axios.get((process.env.API_CLOUD || settings.cloud) + '/status').then(response => {
@@ -30,11 +31,16 @@ exports.isRegistered = async () => {
 }
 
 exports.isActive = async () => {
-  const options = {
-    headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
-  }
+  const axiosInstance = axios.create({
+    headers: {
+      Authorization : 'Bearer ' + await storage.getItem('TOKEN')
+      }
+    })
+  
+  const code = await storage.getItem('FARM')
+  const mac = await infoService.getMacAddress()
 
-  return axios.get((process.env.API_CLOUD || settings.cloud) + '/gateway/status', options).then(response => {
+  return axiosInstance.get((process.env.API_CLOUD || settings.cloud) + '/gateway/status', { params: { mac, code } }).then(response => {
     return response.data
   }).catch(error => {
     console.log(error)
@@ -51,11 +57,16 @@ exports.getFarmId = async () => {
 }
 
 exports.getFarm = async () => {
-  const config = {
-    headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
-  }
+  const axiosInstance = axios.create({
+    headers: {
+      Authorization : 'Bearer ' + await storage.getItem('TOKEN')
+      }
+    })
+  
+  const code = await storage.getItem('FARM')
+  const mac = await infoService.getMacAddress()
 
-  return axios.get((process.env.API_CLOUD || settings.cloud) + '/gateway/farm/synopsis', config).then(response => {
+  return axiosInstance.get((process.env.API_CLOUD || settings.cloud) + '/gateway/farm/synopsis', { params: { mac, code } }).then(response => {
     return {
       name: response.data.name,
       location: response.data.location,
@@ -86,7 +97,10 @@ exports.unregister = async () => {
     headers: { Authorization: 'Bearer ' + await storage.getItem('TOKEN') }
   }
 
-  return axios.post((process.env.API_CLOUD || settings.cloud) + '/gateway/unregister', {}, config).then(response => {
+  const code = await storage.getItem('FARM')
+  const mac = await infoService.getMacAddress()
+
+  return axios.post((process.env.API_CLOUD || settings.cloud) + '/gateway/unregister', { code, mac }, config).then(response => {
     storage.removeItem('FARM')
     storage.removeItem('TOKEN')
   }).catch(error => {

@@ -218,7 +218,8 @@ router.get('/cloud/overview', totemAuth.authorize, async (req, res, next) => {
     approve: approve,
     active: active,
     id: id,
-    farm: farm
+    farm: farm,
+    sync: approve
   })
 })
 

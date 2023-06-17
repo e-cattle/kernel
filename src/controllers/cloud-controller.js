@@ -60,8 +60,8 @@ exports.getFarm = async () => {
   const axiosInstance = axios.create({
     headers: {
       Authorization : 'Bearer ' + await storage.getItem('TOKEN')
-      }
-    })
+    }
+  })
   
   const code = await storage.getItem('FARM')
   const mac = await infoService.getMacAddress()

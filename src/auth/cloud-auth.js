@@ -14,8 +14,8 @@ exports.authorize = async function (req, res, next) {
   }
 
   token = token.replace('Bearer ', '')
-  //pegar o mac que (requisição) + code da farm (local) pra fazer o verify
-  await jwt.verify(token, `${req.body.mac}${process.env.CODE_FARM}`, function (error, decoded) {
+
+  await jwt.verify(token, `${req.body.mac}${req.body.code}`, function (error, decoded) {
     if (error) {
       res.status(401).json({
         message: 'Invalid token!'

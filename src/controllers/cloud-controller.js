@@ -4,7 +4,6 @@ const settings = require('../../settings/' + process.env.NODE_ENV + '.json')
 
 const storage = require('node-persist')
 const axios = require('axios')
-const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const { EJSON } = require('bson')
 const infoService = require('../services/info-service')
@@ -33,10 +32,10 @@ exports.isRegistered = async () => {
 exports.isActive = async () => {
   const axiosInstance = axios.create({
     headers: {
-      Authorization : 'Bearer ' + await storage.getItem('TOKEN')
-      }
-    })
-  
+      Authorization: 'Bearer ' + await storage.getItem('TOKEN')
+    }
+  })
+
   const code = await storage.getItem('FARM')
   const mac = await infoService.getMacAddress()
 
@@ -59,10 +58,10 @@ exports.getFarmId = async () => {
 exports.getFarm = async () => {
   const axiosInstance = axios.create({
     headers: {
-      Authorization : 'Bearer ' + await storage.getItem('TOKEN')
+      Authorization: 'Bearer ' + await storage.getItem('TOKEN')
     }
   })
-  
+
   const code = await storage.getItem('FARM')
   const mac = await infoService.getMacAddress()
 
@@ -107,19 +106,19 @@ exports.unregister = async () => {
     console.log(error)
   })
 }
-exports.syncDevice = async (req, res) => {
-  // expiração e codigo farm
-  if (!req.body.sensors) {
-    res.status(401).json({ message: 'Sensores não fornecidos' })
-    return
-  }
+exports.syncContract = async (req, res) => {
+  console.log(req.body.sensors)
   try {
     const Contract = mongoose.model('Contract')
-    const contracts = EJSON.parse(EJSON.stringify(req.body.data))
-    
+    const contracts = EJSON.parse(req.body.data)
+
     let notSynced = new Array()
     let synced = new Array()
     for (const contract of contracts) {
+      if (!contract.sensors) {
+        notSynced.push({ contract, error: 'Contratos não fornecidos' })
+        continue
+      }
       await Contract.findOneAndUpdate({ _id: contract._id }, contract, function (error) {
         if (error)
           notSynced.push({ contract, error })
@@ -138,19 +137,17 @@ exports.syncDevice = async (req, res) => {
   }
 }
 
-exports.syncContract = async (req, res) => {
-  // expiração e codigo farm
-  if (!req.body.sensors) {
-    res.status(401).json({ message: 'Sensores não fornecidos' })
-    return
-  }
+exports.syncDevice = async (req, res) => {
   try {
     const Device = mongoose.model('Device')
-    const devices = EJSON.parse(EJSON.stringify(req.body.data))
-    
+    const devices = EJSON.parse(req.body.data)
+
     let notSynced = new Array()
     let synced = new Array()
     for (const device of devices) {
+      if (!device.sensors) {
+        notSynced.push({ device, error: 'Sensores não fornecidos' })
+      }
       await Device.findOneAndUpdate({ _id: device._id }, device, function (error) {
         if (error)
           notSynced.push({ device, error })
@@ -175,7 +172,7 @@ exports.syncSensor = async (req, res) => {
     return
   }
   try {
-    const sensor = EJSON.parse(EJSON.stringify(req.body.data))
+    const sensor = EJSON.parse(req.body.data)
     const type = req.body.type
     const Sensor = mongoose.model(type)
     await Sensor.findOneAndUpdate({ _id: sensor._id }, sensor, function (error) {
@@ -185,25 +182,7 @@ exports.syncSensor = async (req, res) => {
         res.status(200).json({ message: 'Dados atualizados com sucesso' })
     })
   } catch (e) {
-    res.status(500).json({ message: 'Falha na requisição', data: e })
-  }
-}
-
-exports.syncDevice = async (req, res) => {
-  if (!req.body.data) {
-    res.status(401).json({ message: 'Dados do dispositivo não fornecido' })
-    return
-  }
-  try {
-    const device = EJSON.parse(EJSON.stringify(req.body.data))
-    const Device = mongoose.model('Device')
-    await Device.findOneAndUpdate({ mac: device.mac }, device, function (error) {
-      if (error)
-        res.status(400).json({ message: 'Falha ao salvar dados do dispositivo', data: error })
-      else
-        res.status(200).json({ message: 'Dados atualizados com sucesso' })
-    })
-  } catch (e) {
+    console.log(e)
     res.status(500).json({ message: 'Falha na requisição', data: e })
   }
 }

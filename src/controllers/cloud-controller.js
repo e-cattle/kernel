@@ -119,14 +119,14 @@ exports.syncContract = async (req, res) => {
         notSynced.push({ contract, error: 'Contratos não fornecidos' })
         continue
       }
-      await Contract.findOneAndUpdate({ _id: contract._id }, contract, function (error) {
+      await Contract.findOneAndUpdate({ _id: contract._id }, { $set: contract }, { upsert: true, setDefaultsOnInsert: true }, function (error) {
         if (error)
           notSynced.push({ contract, error })
         else
           synced.push(contract)
       })
     }
-    if (notSynced.length === 0)
+    if (notSynced.length === 0 && synced.length > 0)
       res.status(200).json({ message: 'Dados sincronizados com sucesso' })
     else if (synced.length > 0)
       res.status(207).json({ message: 'Dados parcialmente sincronizados', data: { synced, notSynced } })
@@ -148,14 +148,14 @@ exports.syncDevice = async (req, res) => {
       if (!device.sensors) {
         notSynced.push({ device, error: 'Sensores não fornecidos' })
       }
-      await Device.findOneAndUpdate({ _id: device._id }, device, function (error) {
+      await Device.findOneAndUpdate({ _id: device._id }, { $set: device }, { upsert: true, setDefaultsOnInsert: true }, function (error) {
         if (error)
           notSynced.push({ device, error })
         else
           synced.push(device)
       })
     }
-    if (notSynced.length === 0)
+    if (notSynced.length === 0 && synced.length > 0)
       res.status(200).json({ message: 'Dados sincronizados com sucesso' })
     else if (synced.length > 0)
       res.status(207).json({ message: 'Dados parcialmente sincronizados', data: { synced, notSynced } })
@@ -175,7 +175,7 @@ exports.syncSensor = async (req, res) => {
     const sensor = EJSON.parse(req.body.data)
     const type = req.body.type
     const Sensor = mongoose.model(type)
-    await Sensor.findOneAndUpdate({ _id: sensor._id }, sensor, function (error) {
+    await Sensor.findOneAndUpdate({ _id: sensor._id }, { $set: sensor }, { upsert: true, setDefaultsOnInsert: true }, function (error) {
       if (error)
         res.status(400).json({ message: 'Falha ao salvar dados sensoriais', data: error })
       else

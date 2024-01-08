@@ -56,4 +56,6 @@ parts:
     nodejs-version: 16.20.1
     stage-packages:
       - mongodb-server
+      - mongodb-clients 
+      - mongodb-server-core
       - redis-server

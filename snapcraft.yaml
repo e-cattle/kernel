@@ -53,7 +53,7 @@ parts:
   kernel:
     source: .
     plugin: nodejs
-    nodejs-version: 12.13.0
+    nodejs-version: 16.20.1
     stage-packages:
       - mongodb-server
       - redis-server

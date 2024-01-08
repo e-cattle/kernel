@@ -1,6 +1,7 @@
 'use strict'
 
-const settings = require('../../settings/' + process.env.NODE_ENV + '.json')
+const folder = process.env.SNAP_DATA ? process.env.SNAP_DATA + '/settings/' : '../../settings/'
+const settings = require(folder + process.env.NODE_ENV + '.json')
 const ipaddress = require('ip')
 const isOnline = require('is-online')
 const isReachable = require('is-reachable')

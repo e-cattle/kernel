@@ -17,4 +17,7 @@ if [ ! -f "$SNAP_DATA/.env" ]; then
 
   TRANSIENT_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
   echo "TRANSIENT_PK=$TRANSIENT_KEY" >> $SNAP_DATA/.env
+
+  cp -r $SNAP/settings/ $SNAP_DATA/settings/ 
+
 fi

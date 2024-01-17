@@ -12,7 +12,7 @@ exports.isOnline = async () => {
 }
 
 exports.isReachable = async () => {
-  return isReachable(settings.cloud)
+  return isReachable((process.env.API_CLOUD || settings.cloud))
 }
 
 exports.getMacAddress = () => {

@@ -21,7 +21,8 @@ __('Settings loaded for \'' + process.env.NODE_ENV + '\'', {
   device: process.env.DEVICE_PK,
   totem: process.env.TOTEM_PK,
   app: process.env.APP_PK,
-  transient: process.env.TRANSIENT_PK
+  transient: process.env.TRANSIENT_PK,
+  cloud: process.env.API_CLOUD
 })
 
 __('Trying app...')

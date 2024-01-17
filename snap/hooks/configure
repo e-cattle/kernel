@@ -18,6 +18,11 @@ if [ ! -f "$SNAP_DATA/.env" ]; then
   TRANSIENT_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
   echo "TRANSIENT_PK=$TRANSIENT_KEY" >> $SNAP_DATA/.env
 
-  cp -r $SNAP/settings/ $SNAP_DATA/settings/ 
+fi
 
+API_CLOUD="$(snapctl get cloud)"
+
+if [ -n "$API_CLOUD" ]; then
+    echo "API_CLOUD=$API_CLOUD" >> $SNAP_DATA/.env
+    snapctl restart bigboxx-kernel
 fi
